@@ -353,7 +353,7 @@
             db.collection("EBF").add(formData)
                 .then((docRef) => {
                     console.log("Documento escrito com ID: ", docRef.id);
-                    alert('Inscrição realizada com sucesso!');
+                    window.location.href = 'obrigado.html';
                     this.reset();
                     // Resetar campos adicionais
                     document.getElementById('outraIgrejaDiv').style.display = 'none';
