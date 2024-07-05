@@ -111,6 +111,10 @@
         .whatsapp-link:hover {
             text-decoration: underline;
         }
+        .dropdown-rede {
+            background-color: white;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -146,7 +150,20 @@
                 <input type="tel" class="form-control" id="telefone" required>
             </div>
             <div class="form-group">
-                <label>Função</label>
+                <label for="rede">Rede</label>
+                <select class="form-control dropdown-rede" id="rede" required>
+                    <option value="">Selecione uma rede</option>
+                    <option value="Laranja">Laranja</option>
+                    <option value="Roxa">Roxa</option>
+                    <option value="Black">Black</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Amarela">Amarela</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Vermelha">Vermelha</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Equipe de Serviço:</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="funcaoCantina">
                     <label class="form-check-label" for="funcaoCantina">Cantina</label>
@@ -190,6 +207,10 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="funcaoRodizio">
                     <label class="form-check-label" for="funcaoRodizio">Rodízio</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="funcaoSemEquipe">
+                    <label class="form-check-label" for="funcaoSemEquipe">Sem Equipe</label>
                 </div>
             </div>
             <div class="form-group">
@@ -252,6 +273,34 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Função para verificar se o nome já existe
+        function checkNomeExistente(nome) {
+            return db.collection("EBF-TRABALHADORES")
+                .where("nome", "==", nome)
+                .get()
+                .then((querySnapshot) => {
+                    return !querySnapshot.empty;
+                })
+                .catch((error) => {
+                    console.log("Erro ao verificar nome:", error);
+                    return false;
+                });
+        }
+
+        // Adicionar evento para verificar nome existente
+        document.getElementById('nome').addEventListener('blur', function() {
+            const nome = this.value.trim().toUpperCase();
+            if (nome) {
+                checkNomeExistente(nome).then(exists => {
+                    if (exists) {
+                        alert("Este nome já está cadastrado. Por favor, use um nome diferente ou entre em contato com a organização se acredita que isso é um erro.");
+                        this.value = ''; // Limpa o campo
+                        this.focus(); // Coloca o foco de volta no campo
+                    }
+                });
+            }
+        });
+
         // Função para converter texto para maiúsculas
         function toUpperCase(input) {
             input.value = input.value.toUpperCase();
@@ -283,47 +332,85 @@
         // Definir data de preenchimento
         document.getElementById('dtpreenchimento').value = new Date().toLocaleDateString('pt-BR');
 
+        // Adicionar evento para mudar a cor do dropdown
+        document.getElementById('rede').addEventListener('change', function() {
+            const colorMap = {
+                'Laranja': { bg: 'orange', text: 'black' },
+                'Roxa': { bg: 'purple', text: 'white' },
+                'Black': { bg: 'black', text: 'white' },
+                'Azul': { bg: 'blue', text: 'white' },
+                'Amarela': { bg: 'yellow', text: 'black' },
+                'Verde': { bg: 'green', text: 'white' },
+                'Vermelha': { bg: 'red', text: 'white' }
+            };
+
+            const selectedColor = colorMap[this.value];
+            if (selectedColor) {
+                this.style.backgroundColor = selectedColor.bg;
+                this.style.color = selectedColor.text;
+            } else {
+                this.style.backgroundColor = 'white';
+                this.style.color = 'black';
+            }
+        });
+
         document.getElementById('ebfForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const funcoes = [];
-            if (document.getElementById('funcaoCantina').checked) funcoes.push('Cantina');
-            if (document.getElementById('funcaoCircuito').checked) funcoes.push('Circuito');
-            if (document.getElementById('funcaoIntercessao').checked) funcoes.push('Intercessão');
-            if (document.getElementById('funcaoLouvor').checked) funcoes.push('Louvor');
-            if (document.getElementById('funcaoMidia').checked) funcoes.push('Mídia');
-            if (document.getElementById('funcaoSalasInfantis').checked) funcoes.push('Salas Infantis');
-            if (document.getElementById('funcaoSecretaria').checked) funcoes.push('Secretária');
-            if (document.getElementById('funcaoSeguranca').checked) funcoes.push('Segurança');
-            if (document.getElementById('funcaoSom').checked) funcoes.push('Som');
-            if (document.getElementById('funcaoGincana').checked) funcoes.push('Gincana');
-            if (document.getElementById('funcaoRodizio').checked) funcoes.push('Rodízio');
+            const nome = document.getElementById('nome').value.trim().toUpperCase();
 
-            const formData = {
-                nome: document.getElementById('nome').value,
-                dtnasc: document.getElementById('dtnasc').value,
-                idade: document.getElementById('idade').value,
-                telefone: document.getElementById('telefone').value,
-                funcao: funcoes.join(', '),
-                autorizaimagem: document.getElementById('autorizaimagem').checked,
-                pago: document.getElementById('pago').checked,
-                nomePagante: document.getElementById('nomePagante').value,
-                anoebf: document.getElementById('anoebf').value,
-                dtpreenchimento: document.getElementById('dtpreenchimento').value,
-                dtRegistro: new Date().toISOString()
-            };
+            checkNomeExistente(nome).then(exists => {
+                if (exists) {
+                    alert("Este nome já está cadastrado. Por favor, use um nome diferente ou entre em contato com a organização se acredita que isso é um erro.");
+                    return;
+                }
 
-            db.collection("EBF-TRABALHADORES").add(formData)
-                .then((docRef) => {
-                    console.log("Documento escrito com ID: ", docRef.id);
-                    window.location.href = '/obrigado.html'; // Redireciona para obrigado.html na raiz do projeto
-                    this.reset();
-                })
-                .catch((error) => {
-                    console.error("Erro ao adicionar documento: ", error);
-                    console.log(error);
-                    alert('Erro ao realizar inscrição. Por favor, tente novamente.');
-                });
+                const funcoes = [];
+                if (document.getElementById('funcaoCantina').checked) funcoes.push('Cantina');
+                if (document.getElementById('funcaoCircuito').checked) funcoes.push('Circuito');
+                if (document.getElementById('funcaoIntercessao').checked) funcoes.push('Intercessão');
+                if (document.getElementById('funcaoLouvor').checked) funcoes.push('Louvor');
+                if (document.getElementById('funcaoMidia').checked) funcoes.push('Mídia');
+                if (document.getElementById('funcaoSalasInfantis').checked) funcoes.push('Salas Infantis');
+                if (document.getElementById('funcaoSecretaria').checked) funcoes.push('Secretária');
+                if (document.getElementById('funcaoSeguranca').checked) funcoes.push('Segurança');
+                if (document.getElementById('funcaoSom').checked) funcoes.push('Som');
+                if (document.getElementById('funcaoGincana').checked) funcoes.push('Gincana');
+                if (document.getElementById('funcaoRodizio').checked) funcoes.push('Rodízio');
+                if (document.getElementById('funcaoSemEquipe').checked) funcoes.push('Sem Equipe');
+
+                // Formatar a data de nascimento
+                const dtnasc = document.getElementById('dtnasc').value;
+                const dateParts = dtnasc.split('-');
+                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+                const formData = {
+                    nome: nome,
+                    dtnasc: formattedDate,
+                    idade: document.getElementById('idade').value,
+                    telefone: document.getElementById('telefone').value,
+                    rede: document.getElementById('rede').value,
+                    funcao: funcoes.join(', '),
+                    autorizaimagem: document.getElementById('autorizaimagem').checked,
+                    pago: document.getElementById('pago').checked,
+                    nomePagante: document.getElementById('nomePagante').value,
+                    anoebf: document.getElementById('anoebf').value,
+                    dtpreenchimento: document.getElementById('dtpreenchimento').value,
+                    dtRegistro: new Date().toISOString()
+                };
+
+                db.collection("EBF-TRABALHADORES").add(formData)
+                    .then((docRef) => {
+                        console.log("Documento escrito com ID: ", docRef.id);
+                        window.location.href = '/obrigado.html';
+                        this.reset();
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao adicionar documento: ", error);
+                        console.log(error);
+                        alert('Erro ao realizar inscrição. Por favor, tente novamente.');
+                    });
+            });
         });
     </script>
 </body>
