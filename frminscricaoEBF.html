@@ -235,6 +235,8 @@
                 verificarNomeExistente(nome).then(existe => {
                     if (existe) {
                         alert('Este nome já está cadastrado para a EBF 2024.');
+                        this.value = ''; // Limpa o campo
+                        this.focus(); // Redireciona o cursor para o campo
                         document.getElementById('cadastrarBtn').disabled = true;
                     } else {
                         document.getElementById('cadastrarBtn').disabled = false;
