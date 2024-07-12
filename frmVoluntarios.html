@@ -240,6 +240,12 @@
                         <span class="slider"></span>
                     </label>
                 </label>
+                <label style="margin-left: 20px;">Isento?
+                    <label class="switch">
+                        <input type="checkbox" id="isentopgto">
+                        <span class="slider"></span>
+                    </label>
+                </label>
             </div>
             <div class="form-group" id="nomePaganteDiv">
                 <label for="nomePagante">Nome no Comprovante de quem Fez ou Fará o Pix</label>
@@ -393,6 +399,7 @@
                     funcao: funcoes.join(', '),
                     autorizaimagem: document.getElementById('autorizaimagem').checked,
                     pago: document.getElementById('pago').checked,
+                    isentopgto: document.getElementById('isentopgto').checked,
                     nomePagante: document.getElementById('nomePagante').value,
                     anoebf: document.getElementById('anoebf').value,
                     dtpreenchimento: document.getElementById('dtpreenchimento').value,
@@ -411,6 +418,29 @@
                         alert('Erro ao realizar inscrição. Por favor, tente novamente.');
                     });
             });
+        });
+    
+        document.getElementById('isentopgto').addEventListener('change', function() {
+            const pagoCheckbox = document.getElementById('pago');
+            const nomePaganteInput = document.getElementById('nomePagante');
+            if (this.checked) {
+                pagoCheckbox.checked = false;
+                pagoCheckbox.disabled = true;
+                nomePaganteInput.value = '';
+                nomePaganteInput.disabled = true;
+            } else {
+                pagoCheckbox.disabled = false;
+                nomePaganteInput.disabled = false;
+            }
+        });
+
+        document.getElementById('pago').addEventListener('change', function() {
+            const isentoCheckbox = document.getElementById('isentopgto');
+            const nomePaganteInput = document.getElementById('nomePagante');
+            if (this.checked) {
+                isentoCheckbox.checked = false;
+                nomePaganteInput.disabled = false;
+            }
         });
     </script>
 </body>
