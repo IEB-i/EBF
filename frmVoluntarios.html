@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOLUNTÁRIOS EBF 2024</title>
-    <link rel="shortcut icon" href="3.ico" type="image/x-icon">
+    <title>VOLUNTÁRIOS EBF 2025</title>
+    <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         body {
-            background-image: url('/EBF.jpg');
+            /* background-image: url('/EBF.jpg'); */
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -119,10 +119,10 @@
 </head>
 <body>
     <div class="header">
-        <img src="LogoBranco.png" alt="Logo da EBF 2024">
+        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2025">
     </div>
     <div class="container">
-        <h2 class="text-center mb-4 font-weight-bold">VOLUNTÁRIOS EBF 2024</h2>
+        <h2 class="text-center mb-4 font-weight-bold">VOLUNTÁRIOS EBF 2025</h2>
         
         <div class="info-box">
             <p><strong>Pré-requisito:</strong> maior de 14 anos</p>
@@ -253,7 +253,7 @@
             </div>
             <div class="form-group">
                 <label for="anoebf">Ano EBF</label>
-                <input type="text" class="form-control" id="anoebf" value="2024" readonly>
+                <input type="text" class="form-control" id="anoebf" value="2025" readonly>
             </div>
             <div class="form-group">
                 <label for="dtpreenchimento">Data de Preenchimento</label>
@@ -281,7 +281,7 @@
 
         // Função para verificar se o nome já existe
         function checkNomeExistente(nome) {
-            return db.collection("EBF-TRABALHADORES")
+            return db.collection("Eventos").doc("EBF2025").collection("trabalhadores")
                 .where("nome", "==", nome)
                 .get()
                 .then((querySnapshot) => {
@@ -406,7 +406,7 @@
                     dtRegistro: new Date().toISOString()
                 };
 
-                db.collection("EBF-TRABALHADORES").add(formData)
+                db.collection("Eventos").doc("EBF2025").collection("trabalhadores").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigado.html';

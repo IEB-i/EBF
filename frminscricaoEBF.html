@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSCRIÇÕES EBF 2024</title>
-    <link rel="shortcut icon" href="3.ico" type="image/x-icon">
+    <title>INSCRIÇÕES EBF 2025</title>
+    <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         body {
-            background-image: url('/EBF.jpg');
+            /* background-image: url('/EBF.jpg'); */
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -101,10 +101,10 @@
 </head>
 <body>
     <div class="header">
-        <img src="LogoBranco.png" alt="Logo da EBF 2024">
+        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2025">
     </div>
     <div class="container">
-        <h2 class="text-center mb-4 font-weight-bold">INSCRIÇÕES EBF 2024</h2>
+        <h2 class="text-center mb-4 font-weight-bold">INSCRIÇÕES EBF 2025</h2>
         <div class="divider"></div>
         <form id="ebfForm">
             <div class="form-group">
@@ -219,9 +219,9 @@
 
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
-            return db.collection("EBF")
+            return db.collection("Eventos").doc("EBF2025").collection("criancas")
                 .where("nomeCrianca", "==", nome)
-                .where("anoEBF", "==", "2024")
+                .where("anoEBF", "==", "2025")
                 .get()
                 .then((querySnapshot) => {
                     return !querySnapshot.empty;
@@ -234,7 +234,7 @@
             if (nome) {
                 verificarNomeExistente(nome).then(existe => {
                     if (existe) {
-                        alert('Este nome já está cadastrado para a EBF 2024.');
+                        alert('Este nome já está cadastrado para a EBF 2025.');
                         this.value = ''; // Limpa o campo
                         this.focus(); // Redireciona o cursor para o campo
                         document.getElementById('cadastrarBtn').disabled = true;
@@ -361,7 +361,7 @@
             const nome = document.getElementById('nomeCrianca').value.trim().toUpperCase();
             verificarNomeExistente(nome).then(existe => {
                 if (existe) {
-                    alert('Este nome já está cadastrado para a EBF 2024. Não é possível prosseguir com o cadastro.');
+                    alert('Este nome já está cadastrado para a EBF 2025. Não é possível prosseguir com o cadastro.');
                     return;
                 }
 
@@ -384,11 +384,11 @@
                     pago: document.getElementById('pago').checked,
                     nomePagante: document.getElementById('nomePagante').value,
                     dataPreenchimento: document.getElementById('dataPreenchimento').value,
-                    anoEBF: '2024',
+                    anoEBF: '2025',
                     dtRegistro: new Date().toISOString()
                 };
 
-                db.collection("EBF").add(formData)
+                db.collection("Eventos").doc("EBF2025").collection("criancas").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigado.html';
