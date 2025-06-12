@@ -484,10 +484,10 @@
 
                         // Linhas ao DataTable
                         dataTable.row.add([
-                            participante.nomeCrianca,
+                            participante.nome,
                             participante.idade,
-                            participante.responsavel1,        // Nome do responsável
-                            participante.foneResponsavel,    // Celular do responsável
+                            participante.responsavel1,
+                            participante.foneResponsavel,
                             participante.igreja === 'Outra' ? participante.outraIgreja : participante.igreja,
                             `<span class="badge ${participante.statusPagamento === 'pago' ? 'badge-pago' : 'badge-pendente'}">${participante.statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span>`,
                             `<button class="btn btn-info btn-sm" onclick="verDetalhes('${doc.id}')">Ver</button>`
@@ -531,8 +531,8 @@
                         const p = doc.data();
 
                         // Informações Pessoais
-                        $('#modalNome').text(p.nomeCrianca || 'N/A');
-                        $('#modalDtNasc').text(formatarData(p.dtnascCrianca) || 'N/A');
+                        $('#modalNome').text(p.nome || 'N/A');
+                        $('#modalDtNasc').text(formatarData(p.dtnasc) || 'N/A');
                         $('#modalIdade').text(p.idade || 'N/A');
                         $('#modalAlergia').text(p.alergia || 'N/A');
                         $('#modalquaisAlergias').text(p.quaisAlergias || 'N/A');
