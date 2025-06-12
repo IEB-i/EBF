@@ -219,9 +219,9 @@
 
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
-            return db.collection("Eventos").doc("EBF2025").collection("criancas")
+            return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
                 .where("nomeCrianca", "==", nome)
-                .where("anoEBF", "==", "2025")
+                .where("anoevento", "==", "2025")
                 .get()
                 .then((querySnapshot) => {
                     return !querySnapshot.empty;
@@ -384,11 +384,11 @@
                     pago: document.getElementById('pago').checked,
                     nomePagante: document.getElementById('nomePagante').value,
                     dataPreenchimento: document.getElementById('dataPreenchimento').value,
-                    anoEBF: '2025',
+                    anoevento: '2025',
                     dtRegistro: new Date().toISOString()
                 };
 
-                db.collection("Eventos").doc("EBF2025").collection("criancas").add(formData)
+                db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigado.html';

@@ -224,8 +224,8 @@
 
             <div class="info-box">
                 <h4>Pagamento em Cartão ou no Pix:</h4>
-                <p>Adeildes Pereira da Silva<br>
-                Chave: 8391118901</p>
+                <p>Maria Adeildes Ferreira Carneiro<br>
+                Chave: 83991118901</p>
                 <p>Enviar comprovante para WhatsApp de 
                     <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
                 </p>
@@ -250,8 +250,8 @@
                 <input type="text" class="form-control" id="nomePagante">
             </div>
             <div class="form-group">
-                <label for="anoebf">Ano EBF</label>
-                <input type="text" class="form-control" id="anoebf" value="2025" readonly>
+                <label for="anoevento">Ano EBF</label>
+                <input type="text" class="form-control" id="anoevento" value="2025" readonly>
             </div>
             <div class="form-group">
                 <label for="dtpreenchimento">Data de Preenchimento</label>
@@ -279,7 +279,7 @@
 
         // Função para verificar se o nome já existe
         function checkNomeExistente(nome) {
-            return db.collection("Eventos").doc("EBF2025").collection("trabalhadores")
+            return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
                 .where("nome", "==", nome)
                 .get()
                 .then((querySnapshot) => {
@@ -399,12 +399,12 @@
                     pago: document.getElementById('pago').checked,
                     isentopgto: document.getElementById('isentopgto').checked,
                     nomePagante: document.getElementById('nomePagante').value,
-                    anoebf: document.getElementById('anoebf').value,
+                    anoevento: document.getElementById('anoevento').value,
                     dtpreenchimento: document.getElementById('dtpreenchimento').value,
                     dtRegistro: new Date().toISOString()
                 };
 
-                db.collection("Eventos").doc("EBF2025").collection("trabalhadores").add(formData)
+                db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigado.html';
