@@ -385,7 +385,8 @@
                     nomePagante: document.getElementById('nomePagante').value,
                     dataPreenchimento: document.getElementById('dataPreenchimento').value,
                     anoevento: '2025',
-                    dtRegistro: new Date().toISOString()
+                    dtRegistro: new Date().toISOString(),
+                    tipoInsc: 'criancas'
                 };
 
                 db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)

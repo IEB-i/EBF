@@ -401,7 +401,8 @@
                     nomePagante: document.getElementById('nomePagante').value,
                     anoevento: document.getElementById('anoevento').value,
                     dtpreenchimento: document.getElementById('dtpreenchimento').value,
-                    dtRegistro: new Date().toISOString()
+                    dtRegistro: new Date().toISOString(),
+                    tipoInsc: 'trabalhadores'
                 };
 
                 db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
