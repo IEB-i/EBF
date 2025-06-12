@@ -264,34 +264,38 @@
 
         // Função para carregar estatísticas gerais
         function carregarEstatisticas() {
-            // Carregar Crianças
-            db.collection("Eventos").doc("EBF2025").collection("criancas")
+            // Carregar todas as inscrições e filtrar por tipo
+            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
                 .where("anoevento", "==", "2025")
                 .get()
                 .then((querySnapshot) => {
-                    let totalInscritos = querySnapshot.size;
+                    let totalCriancas = 0;
+                    let totalTrabalhadores = 0;
 
-                    // Atualizar contadores
-                    document.getElementById('totalInscritos').textContent = totalInscritos;
-                })
-                .catch((error) => {
-                    console.error("Erro ao carregar estatísticas das crianças: ", error);
-                });
+                    // Contar por tipo de inscrição
+                    querySnapshot.forEach((doc) => {
+                        const participante = doc.data();
 
-            // Carregar Trabalhadores
-            db.collection("Eventos").doc("EBF2025").collection("trabalhadores")
-                .where("anoevento", "==", "2025")
-                .get()
-                .then((querySnapshot) => {
-                    let totalTrabalhadores = querySnapshot.size;
+                        if (participante.tipoInsc === 'criancas') {
+                            totalCriancas++;
+                        } else if (participante.tipoInsc === 'trabalhadores') {
+                            totalTrabalhadores++;
+                        }
+                    });
 
-                    // Atualizar contadores
+                    // Atualizar contadores nos cards
+                    document.getElementById('totalInscritos').textContent = totalCriancas;
                     document.getElementById('totalTrabalhadores').textContent = totalTrabalhadores;
                 })
                 .catch((error) => {
-                    console.error("Erro ao carregar estatísticas de Trabalhadores: ", error);
+                    console.error("Erro ao carregar estatísticas: ", error);
+
+                    // Em caso de erro, mostrar 0
+                    document.getElementById('totalInscritos').textContent = '0';
+                    document.getElementById('totalTrabalhadores').textContent = '0';
                 });
         }
+
         // Função para atualizar todos os dados a cada 5 minutos
         setInterval(function () {
             carregarEstatisticas();

@@ -184,28 +184,6 @@
         <!-- Filtros -->
         <div class="filter-card">
             <form id="filterForm" class="row">
-                <!-- Filtro Igreja -->
-                <div class="form-group col-md-3">
-                    <label for="filterIgreja">Igreja</label>
-                    <select class="form-control" id="filterIgreja">
-                        <option value="">Todas</option>
-                        <option value="IEB Intermares">IEB Intermares</option>
-                        <option value="IEB Cidade Verde">IEB Cidade Verde</option>
-                        <option value="IEB Vila Feliz">IEB Vila Feliz</option>
-                        <option value="Outra">Outra Igreja</option>
-                    </select>
-                </div>
-                <!-- Filtro Faixa Etária -->
-                <div class="form-group col-md-3">
-                    <label for="filterIdade">Faixa Etária</label>
-                    <select class="form-control" id="filterIdade">
-                        <option value="">Todas</option>
-                        <option value="05-08">05-08 anos</option>
-                        <option value="09-10">09-10 anos</option>
-                        <option value="11-12">11-12 anos</option>
-                        <option value="13+">13+ anos</option>
-                    </select>
-                </div>
                 <!-- Filtro Status de Pagamento -->
                 <div class="form-group col-md-3">
                     <label for="filterPagamento">Status Pagamento</label>
@@ -428,7 +406,7 @@
                     dadosAtualizacao.formaPagamento = ''; // Limpa a forma de pagamento se status for pendente
                 }
 
-                db.collection("Eventos").doc("EBF2025").collection("criancas").doc(participanteId)
+                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
                     .update(dadosAtualizacao)
                     .then(() => {
                         alert('Status de pagamento atualizado com sucesso!');
@@ -468,8 +446,9 @@
 
         // Função para Carregar participante
         function carregarParticipantes() {
-            db.collection("Eventos").doc("EBF2025").collection("criancas")
+            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
                 .where("anoevento", "==", "2025")
+                .where("tipoInsc", "==", "criancas")
                 .get()
                 .then((querySnapshot) => {
 
@@ -524,7 +503,7 @@
         }
 
         function verDetalhes(participanteId) {
-            db.collection("Eventos").doc("EBF2025").collection("criancas").doc(participanteId)
+            db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
                 .get()
                 .then((doc) => {
                     if (doc.exists) {
@@ -593,46 +572,9 @@
         }
 
         function aplicarFiltros() {
-            const filtroIgreja = $('#filterIgreja').val();
-            const filtroIdade = $('#filterIdade').val();
             const filtroPagamento = $('#filterPagamento').val();
 
             dataTable.search('').columns().search('').draw();
-
-            if (filtroIgreja) {
-                dataTable.column(4).search(
-                    filtroIgreja === 'Outra' ? '(Outra)' : filtroIgreja, true, false
-                ).draw();
-            }
-
-            if (filtroIdade) {
-                // Filtro personalizado para idade
-                $.fn.dataTable.ext.search.push(
-                    function (settings, data, dataIndex) {
-                        const idade = parseInt(data[1].replace(' anos', ''));
-
-                        if (filtroIdade === '18+') {
-                            // Para "Acima de 17", verificar se idade > 17
-                            return idade > 17;
-                        } else {
-                            // Para as outras faixas etárias, manter o comportamento atual
-                            const [min, max] = filtroIdade.split('-');
-                            const minIdade = parseInt(min);
-                            const maxIdade = parseInt(max);
-
-                            if ((isNaN(minIdade) && isNaN(maxIdade)) ||
-                                (isNaN(minIdade) && idade <= maxIdade) ||
-                                (minIdade <= idade && isNaN(maxIdade)) ||
-                                (minIdade <= idade && idade <= maxIdade)) {
-                                return true;
-                            }
-                            return false;
-                        }
-                    }
-                );
-
-                dataTable.draw();
-            }
 
             if (filtroPagamento) {
                 dataTable.column(5).search(
@@ -659,7 +601,7 @@
             }
 
             if (confirm("Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.")) {
-                db.collection("Eventos").doc("EBF2025").collection("criancas").doc(participanteId)
+                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
                     .delete()
                     .then(() => {
                         alert("Participante excluído com sucesso!");
