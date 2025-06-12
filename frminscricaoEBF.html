@@ -108,8 +108,8 @@
         <div class="divider"></div>
         <form id="ebfForm">
             <div class="form-group">
-                <label for="nomeCrianca">Nome da Criança</label>
-                <input type="text" class="form-control" id="nomeCrianca" required>
+                <label for="nome">Nome da Criança</label>
+                <input type="text" class="form-control" id="nome" required>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -208,7 +208,7 @@
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
             return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("nomeCrianca", "==", nome)
+                .where("nome", "==", nome)
                 .where("anoevento", "==", "2025")
                 .get()
                 .then((querySnapshot) => {
@@ -216,8 +216,8 @@
                 });
         }
 
-        // Adicionar evento 'blur' ao campo 'nomeCrianca'
-        document.getElementById('nomeCrianca').addEventListener('blur', function() {
+        // Adicionar evento 'blur' ao campo 'nome'
+        document.getElementById('nome').addEventListener('blur', function() {
             const nome = this.value.trim().toUpperCase();
             if (nome) {
                 verificarNomeExistente(nome).then(existe => {
@@ -346,7 +346,7 @@
             }
 
             // Verificar novamente se o nome já existe antes de enviar
-            const nome = document.getElementById('nomeCrianca').value.trim().toUpperCase();
+            const nome = document.getElementById('nome').value.trim().toUpperCase();
             verificarNomeExistente(nome).then(existe => {
                 if (existe) {
                     alert('Este nome já está cadastrado para a EBF 2025. Não é possível prosseguir com o cadastro.');
@@ -355,7 +355,7 @@
 
                 // Se o nome não existir, continuar com o envio do formulário
                 const formData = {
-                    nomeCrianca: nome,
+                    nome: nome,
                     dtnascCrianca: document.getElementById('dtnascCrianca').value,
                     idade: document.getElementById('idade').value,
                     responsavel1: document.getElementById('responsavel1').value,
