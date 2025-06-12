@@ -230,25 +230,6 @@
                     <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
                 </p>
             </div>
-
-            <div class="form-group">
-                <label>Pago?
-                    <label class="switch">
-                        <input type="checkbox" id="pago">
-                        <span class="slider"></span>
-                    </label>
-                </label>
-                <label style="margin-left: 20px;">Isento?
-                    <label class="switch">
-                        <input type="checkbox" id="isentopgto">
-                        <span class="slider"></span>
-                    </label>
-                </label>
-            </div>
-            <div class="form-group" id="nomePaganteDiv">
-                <label for="nomePagante">Nome no Comprovante de quem Fez ou Fará o Pix</label>
-                <input type="text" class="form-control" id="nomePagante">
-            </div>
             <div class="form-group">
                 <label for="anoevento">Ano EBF</label>
                 <input type="text" class="form-control" id="anoevento" value="2025" readonly>
@@ -396,7 +377,6 @@
                     rede: document.getElementById('rede').value,
                     funcao: funcoes.join(', '),
                     autorizaimagem: document.getElementById('autorizaimagem').checked,
-                    pago: document.getElementById('pago').checked,
                     isentopgto: document.getElementById('isentopgto').checked,
                     nomePagante: document.getElementById('nomePagante').value,
                     anoevento: document.getElementById('anoevento').value,
@@ -419,28 +399,6 @@
             });
         });
     
-        document.getElementById('isentopgto').addEventListener('change', function() {
-            const pagoCheckbox = document.getElementById('pago');
-            const nomePaganteInput = document.getElementById('nomePagante');
-            if (this.checked) {
-                pagoCheckbox.checked = false;
-                pagoCheckbox.disabled = true;
-                nomePaganteInput.value = '';
-                nomePaganteInput.disabled = true;
-            } else {
-                pagoCheckbox.disabled = false;
-                nomePaganteInput.disabled = false;
-            }
-        });
-
-        document.getElementById('pago').addEventListener('change', function() {
-            const isentoCheckbox = document.getElementById('isentopgto');
-            const nomePaganteInput = document.getElementById('nomePagante');
-            if (this.checked) {
-                isentoCheckbox.checked = false;
-                nomePaganteInput.disabled = false;
-            }
-        });
     </script>
 </body>
 </html>
