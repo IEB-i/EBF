@@ -125,9 +125,15 @@
         <h2 class="text-center mb-4 font-weight-bold">VOLUNTÁRIOS EBF 2025</h2>
         
         <div class="info-box">
-            <p><strong>Pré-requisito:</strong> maior de 14 anos</p>
-            <p><strong>Valor da inscrição:</strong> R$ 30,00 + 1 refrigerante de 2 Litros*</p>
-            <p><small>*Entregar o refrigerante no dia da EBF à equipe da cantina informando seu nome completo</small></p>
+            <p><strong>Pré-requisito:</strong> Maior de 14 anos</p>
+            <p><strong>Para realizar o Pagamento:</strong>
+            <p>No Pix: R$ 30,00 - Chave: 83991118901<br>
+            Nome: Maria Adeildes Ferreira Carneiro<br>
+            Enviar comprovante para WhatsApp de
+                <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
+            <p>No Cartão (Com Taxa da Maquininha): R$ 30,00 + TAXAS<br>
+            Entrar em contato com
+        <a href="https://wa.me/558391118901" class="whatsapp-link"><strong>Adeildes</strong> (83) 99111-8901</a>.</p>
         </div>
 
         <div class="divider"></div>
@@ -222,14 +228,6 @@
                 </label>
             </div>
 
-            <div class="info-box">
-                <h4>Pagamento em Cartão ou no Pix:</h4>
-                <p>Maria Adeildes Ferreira Carneiro<br>
-                Chave: 83991118901</p>
-                <p>Enviar comprovante para WhatsApp de 
-                    <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
-                </p>
-            </div>
             <div class="form-group">
                 <label for="anoevento">Ano EBF</label>
                 <input type="text" class="form-control" id="anoevento" value="2025" readonly>
@@ -387,7 +385,7 @@
                 db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
-                        window.location.href = 'obrigado.html';
+                        window.location.href = 'obrigadoVoluntario.html';
                         this.reset();
                     })
                     .catch((error) => {
