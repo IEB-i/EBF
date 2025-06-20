@@ -495,7 +495,7 @@
 
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="autorizacaoParticipacao" required>
+                    <input class="form-check-input" type="checkbox" id="autorizacaoParticipacao" required checked>
                     <label class="form-check-label" for="autorizacaoParticipacao">
                         Autorizo a participação no evento
                     </label>
@@ -504,7 +504,7 @@
 
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="autorizacaoEmergencia" required>
+                    <input class="form-check-input" type="checkbox" id="autorizacaoEmergencia" required checked>
                     <label class="form-check-label" for="autorizacaoEmergencia">
                         Autorizo atendimento médico de emergência
                     </label>
@@ -513,7 +513,7 @@
 
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="autorizacaoFotos" required>
+                    <input class="form-check-input" type="checkbox" id="autorizacaoFotos" required checked>
                     <label class="form-check-label" for="autorizacaoFotos">
                         Autorizo o uso de imagens em redes sociais e comunicação do evento
                     </label>
@@ -522,7 +522,7 @@
 
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="autorizacaoMedicamentos" required>
+                    <input class="form-check-input" type="checkbox" id="autorizacaoMedicamentos" required checked>
                     <label class="form-check-label" for="autorizacaoMedicamentos">
                         Autorizo a administração de medicamentos básicos (analgésicos, antitérmicos)
                     </label>
@@ -837,6 +837,7 @@
                 responsavel: document.getElementById('responsavel').value,
                 telefone1: document.getElementById('telefone1').value,
                 sala: document.getElementById('sala').value,
+
                 // Saúde
                 alergiasAlimentares: document.querySelector('input[name="alergiasAlimentares"]:checked').value,
                 quaisAlergiasAlimentares: document.getElementById('quaisAlergiasAlimentares').value,
@@ -873,7 +874,7 @@
                 dataPreenchimento: document.getElementById('dataPreenchimento').value,
                 assinatura: document.getElementById('assinaturaData').value,
                 statusCheckin: 'realizado',
-                dtCheckin: new Date().toISOString()
+                dtCheckin: new Date().toLocaleDateString('pt-BR')
             };
 
             // Salvar no Firestore
@@ -885,18 +886,37 @@
                     db.collection("Eventos").doc("EBF2025").collection("inscricoes")
                         .where("nome", "==", formData.nome)
                         .where("anoevento", "==", "2025")
+                        .where("tipoInsc", "==", "criancas")
                         .get()
                         .then((querySnapshot) => {
-                            querySnapshot.forEach((doc) => {
-                                doc.ref.update({
-                                    statusCheckin: 'realizado',
-                                    dtCheckin: new Date().toISOString()
+                            if (!querySnapshot.empty) {
+                                const promises = [];
+                                querySnapshot.forEach((doc) => {
+                                    console.log("Atualizando documento:", doc.id);
+                                    const updatePromise = doc.ref.update({
+                                        statusCheckin: 'realizado',
+                                        dtCheckin: new Date().toLocaleDateString('pt-BR'),
+                                        sala: formData.sala
+                                    });
+                                    promises.push(updatePromise);
                                 });
-                            });
+                                
+                                // Aguardar todas as atualizações
+                                return Promise.all(promises);
+                            } else {
+                                console.error("Nenhum documento encontrado para atualizar o status de check-in");
+                                throw new Error("Documento não encontrado para atualização");
+                            }
+                        })
+                        .then(() => {
+                            console.log("Status de check-in atualizado com sucesso!");
+                            alert('Check-in realizado com sucesso!');
+                            window.location.href = 'checkin_sucesso.html';
+                        })
+                        .catch((error) => {
+                            console.error("Erro ao atualizar status de check-in: ", error);
+                            alert('Check-in salvo, mas houve erro ao atualizar o status. Contate o administrador.');
                         });
-
-                    alert('Check-in realizado com sucesso!');
-                    window.location.href = 'checkin_sucesso.html';
                 })
                 .catch((error) => {
                     console.error("Erro ao realizar check-in: ", error);
