@@ -131,6 +131,273 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        /* Header de Estatísticas */
+        .stats-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .stats-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .stats-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+        }
+
+        .stats-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .stats-content h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-content p {
+            font-size: 1.2rem;
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+
+        .stats-content small {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Grid de Salas */
+        .salas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .sala-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sala-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .sala-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Cores específicas para cada sala */
+        .sala-verde::before {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        }
+
+        .sala-amarela::before {
+            background: linear-gradient(90deg, #FFC107, #FFEB3B);
+        }
+
+        .sala-laranja::before {
+            background: linear-gradient(90deg, #FF9800, #FF5722);
+        }
+
+        .sala-vermelha::before {
+            background: linear-gradient(90deg, #F44336, #E91E63);
+        }
+
+        .sala-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sala-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .sala-verde .sala-icon {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .sala-amarela .sala-icon {
+            background: linear-gradient(135deg, #FFC107, #FFEB3B);
+        }
+
+        .sala-laranja .sala-icon {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+        }
+
+        .sala-vermelha .sala-icon {
+            background: linear-gradient(135deg, #F44336, #E91E63);
+        }
+
+        .sala-info h4 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .idade-range {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .sala-stats {
+            text-align: center;
+        }
+
+        .count-display {
+            margin-bottom: 15px;
+        }
+
+        .count {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .max-count {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        /* Progress Bar Moderno */
+        .progress-modern {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: all 0.6s ease;
+            position: relative;
+        }
+
+        .sala-verde .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        }
+
+        .sala-amarela .progress-fill {
+            background: linear-gradient(90deg, #FFC107, #FFEB3B);
+        }
+
+        .sala-laranja .progress-fill {
+            background: linear-gradient(90deg, #FF9800, #FF5722);
+        }
+
+        .sala-vermelha .progress-fill {
+            background: linear-gradient(90deg, #F44336, #E91E63);
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .percentage {
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.9rem;
+        }
+
+        /* Indicadores de Status */
+        .sala-card.warning::before {
+            background: linear-gradient(90deg, #f39c12, #e67e22) !important;
+        }
+
+        .sala-card.danger::before {
+            background: linear-gradient(90deg, #e74c3c, #c0392b) !important;
+        }
+
+        .sala-card.full::before {
+            background: linear-gradient(90deg, #2c3e50, #34495e) !important;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .stats-header {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .stats-card {
+                flex-direction: column;
+            }
+
+            .stats-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .salas-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .sala-card {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -143,66 +410,127 @@
     </div>
 
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card dashboard-card">
-                    <div class="card-body Sala-card text-center">
-                        <h5 class="card-title">Total de Participantes</h5>
-                        <h2 id="totalParticipantes">0</h2>
-                        <h6>Com Checkin confirmado</h6>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-8">
-                <div class="card dashboard-card">
-                    <div class="card-header">
-                        Distribuição por Sala
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 text-center">
-                                <h4>Sala Verde</h4>
-                                <h2 id="totalSala1">0</h2>
-                                <div class="progress mt-2">
-                                    <div id="progressSala1" class="progress-bar bg-success" role="progressbar"
-                                        style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 text-center">
-                                <h4>Sala Amarela</h4>
-                                <h2 id="totalSala2">0</h2>
-                                <div class="progress mt-2">
-                                    <div id="progressSala2" class="progress-bar bg-primary" role="progressbar"
-                                        style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 text-center">
-                                <h4>Sala Laranja</h4>
-                                <h2 id="totalSala3">0</h2>
-                                <div class="progress mt-2">
-                                    <div id="progressSala3" class="progress-bar bg-warning" role="progressbar"
-                                        style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 text-center">
-                                <h4>Sala Vermelha</h4>
-                                <h2 id="totalSala3">0</h2>
-                                <div class="progress mt-2">
-                                    <div id="progressSala4" class="progress-bar bg-danger" role="progressbar"
-                                        style="width: 0%"></div>
-                                </div>
-                            </div>
+        <!-- Header com estatísticas gerais -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="stats-header">
+                    <div class="stats-card total-participants">
+                        <div class="stats-icon">
+                            <i class="material-icons">groups</i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 id="totalParticipantes">0</h3>
+                            <p>Participantes com Check-in Realizados</p>
+                            <small>Total confirmado</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Grid de Salas Moderno -->
+        <div class="row">
+            <div class="col-12">
+                <div class="salas-grid">
+                    <div class="sala-card sala-verde">
+                        <div class="sala-header">
+                            <div class="sala-icon">
+                                <i class="material-icons">nature</i>
+                            </div>
+                            <div class="sala-info">
+                                <h4>Sala Verde</h4>
+                                <span class="idade-range">4-5 anos</span>
+                            </div>
+                        </div>
+                        <div class="sala-stats">
+                            <div class="count-display">
+                                <span class="count" id="totalSala1">0</span>
+                                <span class="max-count">/ 30</span>
+                            </div>
+                            <div class="progress-modern">
+                                <div class="progress-fill" id="progressSala1" style="width: 0%"></div>
+                            </div>
+                            <div class="percentage" id="percentSala1">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="sala-card sala-amarela">
+                        <div class="sala-header">
+                            <div class="sala-icon">
+                                <i class="material-icons">wb_sunny</i>
+                            </div>
+                            <div class="sala-info">
+                                <h4>Sala Amarela</h4>
+                                <span class="idade-range">6-7 anos</span>
+                            </div>
+                        </div>
+                        <div class="sala-stats">
+                            <div class="count-display">
+                                <span class="count" id="totalSala2">0</span>
+                                <span class="max-count">/ 30</span>
+                            </div>
+                            <div class="progress-modern">
+                                <div class="progress-fill" id="progressSala2" style="width: 0%"></div>
+                            </div>
+                            <div class="percentage" id="percentSala2">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="sala-card sala-laranja">
+                        <div class="sala-header">
+                            <div class="sala-icon">
+                                <i class="material-icons">local_fire_department</i>
+                            </div>
+                            <div class="sala-info">
+                                <h4>Sala Laranja</h4>
+                                <span class="idade-range">8-9 anos</span>
+                            </div>
+                        </div>
+                        <div class="sala-stats">
+                            <div class="count-display">
+                                <span class="count" id="totalSala3">0</span>
+                                <span class="max-count">/ 30</span>
+                            </div>
+                            <div class="progress-modern">
+                                <div class="progress-fill" id="progressSala3" style="width: 0%"></div>
+                            </div>
+                            <div class="percentage" id="percentSala3">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="sala-card sala-vermelha">
+                        <div class="sala-header">
+                            <div class="sala-icon">
+                                <i class="material-icons">sports_esports</i>
+                            </div>
+                            <div class="sala-info">
+                                <h4>Sala Vermelha</h4>
+                                <span class="idade-range">10-12 anos</span>
+                            </div>
+                        </div>
+                        <div class="sala-stats">
+                            <div class="count-display">
+                                <span class="count" id="totalSala4">0</span>
+                                <span class="max-count">/ 30</span>
+                            </div>
+                            <div class="progress-modern">
+                                <div class="progress-fill" id="progressSala4" style="width: 0%"></div>
+                            </div>
+                            <div class="percentage" id="percentSala4">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Container Filtros -->
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="filtro-container">
                     <div class="row">
+                        <!-- Filtro Buscar Nomes -->
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="filtroNome">Buscar por nome</label>
@@ -210,19 +538,23 @@
                                     placeholder="Digite o nome do participante">
                             </div>
                         </div>
+
+                        <!-- Filtro Salas -->
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="filtroSala">Filtrar por Sala</label>
                                 <select class="form-control" id="filtroSala">
                                     <option value="todos">Todos as Sala</option>
-                                    <option value="4">Sala Verde</option>
-                                    <option value="1">Sala Amarela</option>
-                                    <option value="2">Sala Laranja</option>
-                                    <option value="3">Sala Vermelha</option>
+                                    <option value="Verde">Sala Verde</option>
+                                    <option value="Amarela">Sala Amarela</option>
+                                    <option value="Laranja">Sala Laranja</option>
+                                    <option value="Vermelha">Sala Vermelha</option>
                                     <option value="sem">Sem Sala</option>
                                 </select>
                             </div>
                         </div>
+
+                        <!-- Ordenação Manual -->
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="ordenacao">Ordenar por</label>
@@ -233,14 +565,17 @@
                                 </select>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Estrutura da Tabela -->
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="card dashboard-card">
+                    <!--  título Antes da Tabela-->
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Participantes com Checkin Confirmado</span>
                         <div>
@@ -252,6 +587,8 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- Tabela -->
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="participantesTable">
@@ -362,7 +699,7 @@
                             <option value="verde">Apenas Sala Verde</option>
                             <option value="amarelo">Apenas Sala Amarelo</option>
                             <option value="laranja">Apenas Sala Laranja</option>
-                            <option value="vermelho">Apenas Sala Vermelha</option>
+                            <option value="vermelha">Apenas Sala Vermelha</option>
                         </select>
                     </div>
                     <div class="form-check">
@@ -395,7 +732,15 @@
         };
 
         // Capacidade máxima de cada Sala
-        const CAPACIDADE_Sala = 40;
+        const CAPACIDADE_Sala = 30;
+
+        // Usar nomes consistentes em vez de números
+        const SALAS_CONFIG = {
+            'Verde': { id: 1, faixaEtaria: '4-5 anos', cor: '#28a745' },
+            'Amarela': { id: 2, faixaEtaria: '6-7 anos', cor: '#ffc107' },
+            'Laranja': { id: 3, faixaEtaria: '8-9 anos', cor: '#fd7e14' },
+            'Vermelha': { id: 4, faixaEtaria: '10-12 anos', cor: '#dc3545' }
+        };
 
         $(document).ready(function () {
             // Carregar dados iniciais
@@ -613,38 +958,51 @@
             // Total de participantes com Checkin confirmado
             $('#totalParticipantes').text(todosParticipantes.length);
 
-            // Contar participantes por Sala
+            // Contar participantes por todas as 4 salas
             const contagem = {
-                Sala1: 0,
-                Sala2: 0
+                verde: 0,
+                amarela: 0,
+                laranja: 0,
+                vermelha: 0
             };
 
             todosParticipantes.forEach(participante => {
-                if (participante.sala === '1') contagem.Sala1++;
-                if (participante.sala === '2') contagem.Sala2++;
+                if (participante.sala === 'Verde') contagem.verde++;
+                if (participante.sala === 'Amarela') contagem.amarela++;
+                if (participante.sala === 'Laranja') contagem.laranja++;
+                if (participante.sala === 'Vermelha') contagem.vermelha++;
             });
 
-            // Atualizar contadores
-            $('#totalSala1').text(contagem.Sala1);
-            $('#totalSala2').text(contagem.Sala2);
+            // Atualizar contadores e porcentagens
+            const salas = [
+                { id: 1, count: contagem.verde, selector: '.sala-verde' },
+                { id: 2, count: contagem.amarela, selector: '.sala-amarela' },
+                { id: 3, count: contagem.laranja, selector: '.sala-laranja' },
+                { id: 4, count: contagem.vermelha, selector: '.sala-vermelha' }
+            ];
 
-            // Atualizar barras de progresso
-            const porcentagem1 = (contagem.Sala1 / CAPACIDADE_Sala) * 100;
-            const porcentagem2 = (contagem.Sala2 / CAPACIDADE_Sala) * 100;
+            salas.forEach(sala => {
+                const porcentagem = (sala.count / CAPACIDADE_Sala) * 100;
 
-            $('#progressSala1').css('width', `${porcentagem1}%`);
-            $('#progressSala2').css('width', `${porcentagem2}%`);
+                // Atualizar números
+                $(`#totalSala${sala.id}`).text(sala.count);
+                $(`#percentSala${sala.id}`).text(`${Math.round(porcentagem)}%`);
 
-            // Atualizar contadores nas listas de Sala
-            $('#Sala1Count').text(contagem.Sala1);
-            $('#Sala2Count').text(contagem.Sala2);
+                // Atualizar barra de progresso
+                $(`#progressSala${sala.id}`).css('width', `${porcentagem}%`);
 
-            // Mudar cor da barra de progresso se estiver próximo da capacidade
-            if (porcentagem1 > 90) $('#progressSala1').removeClass('bg-success').addClass('bg-danger');
-            else $('#progressSala1').removeClass('bg-danger').addClass('bg-success');
+                // Adicionar classes de status
+                const $card = $(sala.selector);
+                $card.removeClass('warning danger full');
 
-            if (porcentagem2 > 90) $('#progressSala2').removeClass('bg-primary').addClass('bg-danger');
-            else $('#progressSala2').removeClass('bg-danger').addClass('bg-primary');
+                if (porcentagem >= 100) {
+                    $card.addClass('full');
+                } else if (porcentagem >= 90) {
+                    $card.addClass('danger');
+                } else if (porcentagem >= 75) {
+                    $card.addClass('warning');
+                }
+            });
         }
 
         function prepararAtribuicao(participanteId) {

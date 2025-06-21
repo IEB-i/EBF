@@ -29,42 +29,35 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .logo-circle {
-            width: 120px;
-            height: 120px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -30%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
+        /* Adicionar no <style> se não existir: */
+.btn-voltar {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-        .logo-circle img {
-            max-width: 150px;
-            height: auto;
-            margin-top: 15px;
-        }
+.btn-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) scale(1.05);
+    color: white;
+    text-decoration: none;
+}
 
-        .logo-circle.scrolled {
-            left: 60px;
-            transform: translate(0, -30%);
-            background: transparent;
-            box-shadow: none;
-            top: 5px;
-        }
-
-        .scrolled .logo-circle img {
-            content: url('./assets/Logo\ 360\ sem\ Fundo.png');
-            width: 180px;
-            height: auto;
-            margin-top: -80;
-        }
+.btn-voltar .material-icons {
+    font-size: 24px;
+}
 
         .header-title {
             color: white;
@@ -220,9 +213,13 @@
 </head>
 
 <body>
-    <div class="header">
-        <h2 class="header-title">CHECK-IN</h2>
-    </div>
+<div class="header">
+    <a href="gestao.html" class="btn-voltar">
+        <i class="material-icons">arrow_back</i>
+    </a>
+    <h2 class="header-title">CHECK-IN</h2>
+</div>
+
     <div class="container">
         <h2 class="text-center mb-4 font-weight-bold">CHECK-IN</h2>
         <div class="divider"></div>
@@ -743,8 +740,8 @@
             if (!isNaN(idadeNum)) {
                 // Determina a sala com base na faixa etária
                 if (idadeNum >= 10 && idadeNum <= 12) {
-                    sala.value = 'Vermelho';
-                    sala.style.backgroundColor = '#FF4C4C'; // Vermelho
+                    sala.value = 'Vermelha';
+                    sala.style.backgroundColor = '#FF4C4C'; // Vermelha
                 } else if (idadeNum >= 8 && idadeNum <= 9) {
                     sala.value = 'Laranja';
                     sala.style.backgroundColor = '#FF9C33'; // Laranja
