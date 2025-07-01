@@ -272,6 +272,219 @@
                 <input type="text" class="form-control" id="telefone1" readonly>
             </div>
 
+            <!-- SAÚDE -->
+            <div class="section-title">
+                <h4 class="mb-0">SAÚDE</h4>
+            </div>
+
+            <div class="form-group">
+                <label>Possui alergias alimentares?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasAlimentares" id="alergiasAlimentaresSim"
+                        value="sim">
+                    <label class="form-check-label" for="alergiasAlimentaresSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasAlimentares" id="alergiasAlimentaresNao"
+                        value="nao" checked>
+                    <label class="form-check-label" for="alergiasAlimentaresNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisAlergiasAlimentaresDiv" style="display: none;">
+                    <label for="quaisAlergiasAlimentares">Quais alergias alimentares?</label>
+                    <textarea class="form-control" id="quaisAlergiasAlimentares" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Possui alergias a medicamentos?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasMedicamentos"
+                        id="alergiasMedicamentosSim" value="sim">
+                    <label class="form-check-label" for="alergiasMedicamentosSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasMedicamentos"
+                        id="alergiasMedicamentosNao" value="nao" checked>
+                    <label class="form-check-label" for="alergiasMedicamentosNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisAlergiasMedicamentosDiv" style="display: none;">
+                    <label for="quaisAlergiasMedicamentos">Quais alergias a medicamentos?</label>
+                    <textarea class="form-control" id="quaisAlergiasMedicamentos" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Possui alergias a picadas de insetos?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasInsetos" id="alergiasInsetosSim"
+                        value="sim">
+                    <label class="form-check-label" for="alergiasInsetosSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="alergiasInsetos" id="alergiasInsetosNao"
+                        value="nao" checked>
+                    <label class="form-check-label" for="alergiasInsetosNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisAlergiasInsetosDiv" style="display: none;">
+                    <label for="quaisAlergiasInsetos">Quais alergias a picadas de insetos?</label>
+                    <textarea class="form-control" id="quaisAlergiasInsetos" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Faz uso de medicamentos controlados?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="medicamentosControlados"
+                        id="medicamentosControladosSim" value="sim">
+                    <label class="form-check-label" for="medicamentosControladosSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="medicamentosControlados"
+                        id="medicamentosControladosNao" value="nao" checked>
+                    <label class="form-check-label" for="medicamentosControladosNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisMedicamentosDiv" style="display: none;">
+                    <label for="quaisMedicamentos">Quais medicamentos, dosagem e horários?</label>
+                    <textarea class="form-control" id="quaisMedicamentos" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Possui problemas de saúde que devemos saber?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="problemasSaude" id="problemasSaudeSim"
+                        value="sim">
+                    <label class="form-check-label" for="problemasSaudeSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="problemasSaude" id="problemasSaudeNao"
+                        value="nao" checked>
+                    <label class="form-check-label" for="problemasSaudeNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisProblemasSaudeDiv" style="display: none;">
+                    <label for="quaisProblemasSaude">Quais problemas de saúde? (Ex.: asma, diabetes, epilepsia)</label>
+                    <textarea class="form-control" id="quaisProblemasSaude" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="tipoSanguineo">Tipo Sanguíneo</label>
+                    <select class="form-control" id="tipoSanguineo">
+                        <option value="">Selecione</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Não sei">Não sei</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Vacinas em dia?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="vacinasEmDia" id="vacinasEmDiaSim"
+                            value="sim" checked>
+                        <label class="form-check-label" for="vacinasEmDiaSim">Sim</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="vacinasEmDia" id="vacinasEmDiaNao"
+                            value="nao">
+                        <label class="form-check-label" for="vacinasEmDiaNao">Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="seguroSaude">Possui seguro saúde? Qual?</label>
+                <input type="text" class="form-control" id="seguroSaude"
+                    placeholder="Nome do plano e número da carteirinha (se houver)">
+            </div>
+
+            <div class="form-group">
+                <label for="hospitalPreferencia">Hospital de preferência em caso de emergência</label>
+                <input type="text" class="form-control" id="hospitalPreferencia">
+            </div>
+
+            <div class="form-group">
+                <label>Possui restrições para atividades físicas?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="restricoesAtividades"
+                        id="restricoesAtividadesSim" value="sim">
+                    <label class="form-check-label" for="restricoesAtividadesSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="restricoesAtividades"
+                        id="restricoesAtividadesNao" value="nao" checked>
+                    <label class="form-check-label" for="restricoesAtividadesNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisRestricoesDiv" style="display: none;">
+                    <label for="quaisRestricoes">Quais restrições?</label>
+                    <textarea class="form-control" id="quaisRestricoes" rows="2"></textarea>
+                </div>
+            </div>
+
+            <!-- ALIMENTAÇÃO -->
+            <div class="section-title">
+                <h4 class="mb-0">ALIMENTAÇÃO</h4>
+            </div>
+
+            <div class="form-group">
+                <label>Possui restrições alimentares ou dietas específicas?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="restricoesAlimentares"
+                        id="restricoesAlimentaresSim" value="sim">
+                    <label class="form-check-label" for="restricoesAlimentaresSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="restricoesAlimentares"
+                        id="restricoesAlimentaresNao" value="nao" checked>
+                    <label class="form-check-label" for="restricoesAlimentaresNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="quaisRestricoesAlimentaresDiv" style="display: none;">
+                    <label for="quaisRestricoesAlimentares">Quais restrições? (Ex.: vegetariano, vegano, intolerância à
+                        lactose)</label>
+                    <textarea class="form-control" id="quaisRestricoesAlimentares" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="alimentosNaoConsome">Lista de alimentos que não pode consumir (se houver)</label>
+                <textarea class="form-control" id="alimentosNaoConsome" rows="2"></textarea>
+            </div>
+
+            <!-- OUTROS -->
+            <div class="section-title">
+                <h4 class="mb-0">OUTROS</h4>
+            </div>
+
+            <div class="form-group">
+                <label>Algum comportamento ou condição especial que devemos estar atentos?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="comportamentoEspecial"
+                        id="comportamentoEspecialSim" value="sim">
+                    <label class="form-check-label" for="comportamentoEspecialSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="comportamentoEspecial"
+                        id="comportamentoEspecialNao" value="nao" checked>
+                    <label class="form-check-label" for="comportamentoEspecialNao">Não</label>
+                </div>
+                <div class="form-group mt-2" id="qualComportamentoDiv" style="display: none;">
+                    <label for="qualComportamento">Qual comportamento? (Ex.: timidez extrema, hiperatividade,
+                        sonambulismo)</label>
+                    <textarea class="form-control" id="qualComportamento" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoesAdicionais">Observações adicionais</label>
+                <textarea class="form-control" id="observacoesAdicionais" rows="3"></textarea>
+            </div>
+
             <!-- AUTORIZAÇÕES E TERMOS -->
             <div class="section-title">
                 <h4 class="mb-0">AUTORIZAÇÕES E TERMOS</h4>
@@ -359,6 +572,63 @@
 
         // Máscaras
         VMasker(document.getElementById("telefone1")).maskPattern("(99) 99999-9999");
+
+        // Mostrar/esconder campos condicionais
+        document.querySelectorAll('input[name="alergiasAlimentares"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisAlergiasAlimentaresDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="alergiasMedicamentos"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisAlergiasMedicamentosDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="alergiasInsetos"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisAlergiasInsetosDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="medicamentosControlados"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisMedicamentosDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="problemasSaude"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisProblemasSaudeDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="restricoesAtividades"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisRestricoesDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="restricoesAlimentares"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('quaisRestricoesAlimentaresDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="comportamentoEspecial"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.getElementById('qualComportamentoDiv').style.display =
+                    this.value === 'sim' ? 'block' : 'none';
+            });
+        });
 
         // Função para carregar os acampantes com status "pago" e sem check-in no dropdown
         function carregarAcampantes() {
@@ -504,6 +774,56 @@
             // Capturar a assinatura como uma imagem base64
             const assinaturaData = signaturePad.toDataURL('image/png');
             document.getElementById('assinaturaData').value = assinaturaData;
+
+            // Validar campos condicionais
+            const alergiasAlimentaresSim = document.getElementById('alergiasAlimentaresSim').checked;
+            const alergiasMedicamentosSim = document.getElementById('alergiasMedicamentosSim').checked;
+            const alergiasInsetosSim = document.getElementById('alergiasInsetosSim').checked;
+            const medicamentosControladosSim = document.getElementById('medicamentosControladosSim').checked;
+            const problemasSaudeSim = document.getElementById('problemasSaudeSim').checked;
+            const restricoesAtividadesSim = document.getElementById('restricoesAtividadesSim').checked;
+            const restricoesAlimentaresSim = document.getElementById('restricoesAlimentaresSim').checked;
+            const comportamentoEspecialSim = document.getElementById('comportamentoEspecialSim').checked;
+
+            if (alergiasAlimentaresSim && !document.getElementById('quaisAlergiasAlimentares').value.trim()) {
+                alert('Por favor, especifique quais alergias alimentares o acampante possui.');
+                return;
+            }
+
+            if (alergiasMedicamentosSim && !document.getElementById('quaisAlergiasMedicamentos').value.trim()) {
+                alert('Por favor, especifique quais alergias a medicamentos o acampante possui.');
+                return;
+            }
+
+            if (alergiasInsetosSim && !document.getElementById('quaisAlergiasInsetos').value.trim()) {
+                alert('Por favor, especifique quais alergias a picadas de insetos o acampante possui.');
+                return;
+            }
+
+            if (medicamentosControladosSim && !document.getElementById('quaisMedicamentos').value.trim()) {
+                alert('Por favor, especifique quais medicamentos controlados o acampante utiliza.');
+                return;
+            }
+
+            if (problemasSaudeSim && !document.getElementById('quaisProblemasSaude').value.trim()) {
+                alert('Por favor, especifique quais problemas de saúde o acampante possui.');
+                return;
+            }
+
+            if (restricoesAtividadesSim && !document.getElementById('quaisRestricoes').value.trim()) {
+                alert('Por favor, especifique quais restrições para atividades físicas o acampante possui.');
+                return;
+            }
+
+            if (restricoesAlimentaresSim && !document.getElementById('quaisRestricoesAlimentares').value.trim()) {
+                alert('Por favor, especifique quais restrições alimentares o acampante possui.');
+                return;
+            }
+
+            if (comportamentoEspecialSim && !document.getElementById('qualComportamento').value.trim()) {
+                alert('Por favor, especifique qual comportamento especial o acampante possui.');
+                return;
+            }
 
             // Coletar dados do formulário
             const formData = {
