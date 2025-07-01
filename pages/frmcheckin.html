@@ -17,61 +17,16 @@
             background-position: center;
             font-family: 'Montserrat', sans-serif;
             color: #333;
-            padding-top: 80px;
+            padding-top: 20px;
         }
 
         .container {
             max-width: 800px;
-            margin-top: 20px;
+            margin-top: 30px;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Adicionar no <style> se não existir: */
-.btn-voltar {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.btn-voltar:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: translateY(-50%) scale(1.05);
-    color: white;
-    text-decoration: none;
-}
-
-.btn-voltar .material-icons {
-    font-size: 24px;
-}
-
-        .header-title {
-            color: white;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: none;
-        }
-
-        .header-title.visible {
-            opacity: 1;
-            display: block;
         }
 
         .divider {
@@ -95,58 +50,12 @@
             box-shadow: 0 0 0 0.2rem rgba(128, 0, 128, 0.25);
         }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 24px;
-            margin-left: 10px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
         .info-box {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 5px;
             padding: 15px;
             margin-bottom: 20px;
-        }
-
-        input:checked+.slider {
-            background: linear-gradient(45deg, #3d7517, #3d7517);
-        }
-
-        input:checked+.slider:before {
-            transform: translateX(16px);
         }
 
         .section-title {
@@ -209,17 +118,18 @@
             display: flex;
             justify-content: flex-end;
         }
+
+        /* MELHORAR - Estilo do campo sala: */
+        #sala {
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            /* border: 2px solid #333; */
+        }
     </style>
 </head>
 
 <body>
-<div class="header">
-    <a href="gestao.html" class="btn-voltar">
-        <i class="material-icons">arrow_back</i>
-    </a>
-    <h2 class="header-title">CHECK-IN</h2>
-</div>
-
     <div class="container">
         <h2 class="text-center mb-4 font-weight-bold">CHECK-IN</h2>
         <div class="divider"></div>
@@ -494,10 +404,36 @@
         // Enviar formulário
         document.getElementById('checkinForm').addEventListener('submit', function (e) {
             e.preventDefault();
+            
+            // Adicionar loading state
+            const submitBtn = document.getElementById('cadastrarBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processando...';
+            
+            // MELHORAR - Validação do formulário:
+            function validarFormulario() {
+                const nome = document.getElementById('nome').value;
+                const assinatura = signaturePad.isEmpty();
+                
+                if (!nome) {
+                    alert('Por favor, selecione um participante.');
+                    document.getElementById('nome').focus();
+                    return false;
+                }
+                
+                if (assinatura) {
+                    alert('Por favor, forneça a assinatura do responsável.');
+                    return false;
+                }
+                
+                return true;
+            }
 
-            // Verificar se a assinatura foi feita
-            if (signaturePad.isEmpty()) {
-                alert('Por favor, forneça a assinatura do responsável antes de confirmar o check-in.');
+            // Usar na função de submit:
+            if (!validarFormulario()) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
                 return;
             }
 
@@ -505,49 +441,22 @@
             const assinaturaData = signaturePad.toDataURL('image/png');
             document.getElementById('assinaturaData').value = assinaturaData;
 
-            // Coletar dados do formulário
+            // Coletar dados do formulário - VERSÃO CORRIGIDA
             const formData = {
                 nome: document.getElementById('nome').value.trim().toUpperCase(),
-
                 dtnasc: document.getElementById('dtnasc').value,
                 idade: document.getElementById('idade').value,
                 responsavel: document.getElementById('responsavel').value,
                 telefone1: document.getElementById('telefone1').value,
                 sala: document.getElementById('sala').value,
-
-                // Saúde
-                alergiasAlimentares: document.querySelector('input[name="alergiasAlimentares"]:checked').value,
-                quaisAlergiasAlimentares: document.getElementById('quaisAlergiasAlimentares').value,
-                alergiasMedicamentos: document.querySelector('input[name="alergiasMedicamentos"]:checked').value,
-                quaisAlergiasMedicamentos: document.getElementById('quaisAlergiasMedicamentos').value,
-                alergiasInsetos: document.querySelector('input[name="alergiasInsetos"]:checked').value,
-                quaisAlergiasInsetos: document.getElementById('quaisAlergiasInsetos').value,
-                medicamentosControlados: document.querySelector('input[name="medicamentosControlados"]:checked').value,
-                quaisMedicamentos: document.getElementById('quaisMedicamentos').value,
-                problemasSaude: document.querySelector('input[name="problemasSaude"]:checked').value,
-                quaisProblemasSaude: document.getElementById('quaisProblemasSaude').value,
-                tipoSanguineo: document.getElementById('tipoSanguineo').value,
-                vacinasEmDia: document.querySelector('input[name="vacinasEmDia"]:checked').value,
-                seguroSaude: document.getElementById('seguroSaude').value,
-                hospitalPreferencia: document.getElementById('hospitalPreferencia').value,
-                restricoesAtividades: document.querySelector('input[name="restricoesAtividades"]:checked').value,
-                quaisRestricoes: document.getElementById('quaisRestricoes').value,
-
-                // Alimentação
-                restricoesAlimentares: document.querySelector('input[name="restricoesAlimentares"]:checked').value,
-                quaisRestricoesAlimentares: document.getElementById('quaisRestricoesAlimentares').value,
-                alimentosNaoConsome: document.getElementById('alimentosNaoConsome').value,
-
-                // Autorizações
+                
+                // Autorizações (apenas os campos que existem no HTML)
                 autorizacaoParticipacao: document.getElementById('autorizacaoParticipacao').checked,
                 autorizacaoEmergencia: document.getElementById('autorizacaoEmergencia').checked,
                 autorizacaoFotos: document.getElementById('autorizacaoFotos').checked,
                 autorizacaoMedicamentos: document.getElementById('autorizacaoMedicamentos').checked,
-
-                // Outros
-                comportamentoEspecial: document.querySelector('input[name="comportamentoEspecial"]:checked').value,
-                qualComportamento: document.getElementById('qualComportamento').value,
-                observacoesAdicionais: document.getElementById('observacoesAdicionais').value,
+                
+                // Dados do check-in
                 dataPreenchimento: document.getElementById('dataPreenchimento').value,
                 assinatura: document.getElementById('assinaturaData').value,
                 statusCheckin: 'realizado',
@@ -597,21 +506,20 @@
                 })
                 .catch((error) => {
                     console.error("Erro ao realizar check-in: ", error);
-                    alert('Erro ao realizar check-in. Por favor, tente novamente.');
+                    let mensagem = 'Erro ao realizar check-in. ';
+    
+                    if (error.code === 'permission-denied') {
+                        mensagem += 'Sem permissão para salvar dados.';
+                    } else if (error.code === 'unavailable') {
+                        mensagem += 'Serviço temporariamente indisponível.';
+                    } else {
+                        mensagem += 'Por favor, tente novamente.';
+                    }
+    
+                    alert(mensagem);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
                 });
-        });
-
-        window.addEventListener('scroll', function () {
-            const header = document.querySelector('.header');
-            const headerTitle = document.querySelector('.header-title');
-
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-                headerTitle.classList.add('visible');
-            } else {
-                header.classList.remove('scrolled');
-                headerTitle.classList.remove('visible');
-            }
         });
 
         // Inicializar o pad de assinatura - MOVER PARA FORA DO EVENTO DE SCROLL
