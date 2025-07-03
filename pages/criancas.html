@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -155,6 +156,34 @@
             overflow: hidden;
             /* Importante para manter os cantos arredondados */
         }
+
+        .chart-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -178,6 +207,14 @@
                 <button class="btn btn-export mr-2">
                     <i class="material-icons align-middle">file_download</i> Exportar Excel
                 </button>
+            </div>
+        </div>
+
+        <!-- Gráfico de Faixas Etárias -->
+        <div class="chart-card">
+            <h4 class="chart-title">📊 Distribuição por Faixa Etária</h4>
+            <div class="chart-container">
+                <canvas id="faixaEtariaChart"></canvas>
             </div>
         </div>
 
@@ -322,6 +359,7 @@
         // Inicialização do DataTable
         let dataTable;
         let totalParticipantes = 0;
+        let faixaEtariaChart;
 
         //Modal e gestão do doc
         $(document).ready(function () {
@@ -458,8 +496,14 @@
                     // Armazenar o total de participantes
                     totalParticipantes = querySnapshot.size;
 
+                    // Array para armazenar dados dos participantes para o gráfico
+                    const dadosParticipantes = [];
+
                     querySnapshot.forEach((doc) => {
                         const participante = doc.data();
+                        
+                        // Adicionar aos dados do gráfico
+                        dadosParticipantes.push(participante);
 
                         // Linhas ao DataTable
                         dataTable.row.add([
@@ -476,6 +520,9 @@
 
                     // Renderizar DataTable
                     dataTable.draw();
+
+                    // Criar gráfico de faixa etária
+                    criarGraficoFaixaEtaria(dadosParticipantes);
 
                     // Atualizar contador
                     atualizarContador();
@@ -617,6 +664,223 @@
 
             carregarParticipantes(); // Recarrega a lista após exclusão
 
+        }
+
+        // Função para criar gráfico de faixa etária
+        function criarGraficoFaixaEtaria(dados) {
+            const ctx = document.getElementById('faixaEtariaChart').getContext('2d');
+            
+            // Destruir gráfico existente se houver
+            if (faixaEtariaChart) {
+                faixaEtariaChart.destroy();
+            }
+            
+            // Definir faixas etárias baseadas no check-in
+            const faixas = {
+                '2-5 anos': 0,
+                '6-7 anos': 0,
+                '8-9 anos': 0,
+                '10-12 anos': 0
+            };
+            
+            const coresInfo = {
+                '2-5 anos': { cor: '#4CAF50', nome: 'Verde', emoji: '🟢' },
+                '6-7 anos': { cor: '#dfca0d', nome: 'Amarela', emoji: '🟡' },
+                '8-9 anos': { cor: '#FF9C33', nome: 'Laranja', emoji: '🟠' },
+                '10-12 anos': { cor: '#FF4C4C', nome: 'Vermelha', emoji: '🔴' }
+            };
+
+            // Contar crianças por faixa
+            dados.forEach(participante => {
+                const idade = parseInt(participante.idade);
+                if (idade >= 2 && idade <= 5) {
+                    faixas['2-5 anos']++;
+                } else if (idade >= 6 && idade <= 7) {
+                    faixas['6-7 anos']++;
+                } else if (idade >= 8 && idade <= 9) {
+                    faixas['8-9 anos']++;
+                } else if (idade >= 10 && idade <= 12) {
+                    faixas['10-12 anos']++;
+                }
+            });
+            
+            faixaEtariaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(faixas),
+                    datasets: [{
+                        label: 'Quantidade de Crianças',
+                        data: Object.values(faixas),
+                        backgroundColor: [
+                            'rgba(76, 175, 80, 0.85)',    // Verde
+                            'rgba(255, 235, 59, 0.85)',   // Amarela
+                            'rgba(255, 156, 51, 0.85)',   // Laranja
+                            'rgba(255, 76, 76, 0.85)'     // Vermelha
+                        ],
+                        borderColor: [
+                            'rgba(76, 175, 80, 1)',       // Verde
+                            'rgba(255, 193, 7, 1)',       // Amarela mais escura
+                            'rgba(255, 156, 51, 1)',      // Laranja
+                            'rgba(255, 76, 76, 1)'        // Vermelha
+                        ],
+                        borderWidth: 3,
+                        borderRadius: {
+                            topLeft: 8,
+                            topRight: 8,
+                            bottomLeft: 4,
+                            bottomRight: 4
+                        },
+                        borderSkipped: false,
+                        hoverBackgroundColor: [
+                            'rgba(76, 175, 80, 0.95)',
+                            'rgba(255, 235, 59, 0.95)',
+                            'rgba(255, 156, 51, 0.95)',
+                            'rgba(255, 76, 76, 0.95)'
+                        ],
+                        hoverBorderWidth: 4,
+                        shadowOffsetX: 3,
+                        shadowOffsetY: 3,
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#3498db',
+                            borderWidth: 2,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    const faixa = context[0].label;
+                                    const info = coresInfo[faixa];
+                                    return `${info.emoji} Sala ${info.nome}`;
+                                },
+                                label: function(context) {
+                                    const valor = context.parsed.y;
+                                    const total = Object.values(faixas).reduce((a, b) => a + b, 0);
+                                    const percentual = total > 0 ? ((valor / total) * 100).toFixed(1) : 0;
+                                    return `${valor} criança${valor !== 1 ? 's' : ''} (${percentual}%)`;
+                                }
+                            }
+                        },
+                        // Plugin personalizado para mostrar valores em cima das barras
+                        datalabels: false
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                },
+                                padding: 8
+                            },
+                            grid: {
+                                color: 'rgba(90, 108, 125, 0.1)',
+                                lineWidth: 1,
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                },
+                                padding: 8,
+                                maxRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutCubic',
+                        delay: (context) => {
+                            return context.dataIndex * 200;
+                        },
+                        onComplete: function() {
+                            // Desenhar valores em cima das barras após a animação
+                            const chart = this;
+                            const ctx = chart.ctx;
+                            
+                            ctx.font = 'bold 18px Montserrat';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            chart.data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+                                meta.data.forEach((bar, index) => {
+                                    const data = dataset.data[index];
+                                    const faixa = chart.data.labels[index];
+                                    const info = coresInfo[faixa];
+                                    
+                                    if (data > 0) {
+                                        // Cor do texto baseada na cor da barra
+                                        ctx.fillStyle = info.cor;
+                                        ctx.strokeStyle = '#fff';
+                                        ctx.lineWidth = 3;
+                                        
+                                        const text = `${data}`;
+                                        const x = bar.x;
+                                        const y = bar.y - 8;
+                                        
+                                        // Contorno branco para melhor legibilidade
+                                        ctx.strokeText(text, x, y);
+                                        ctx.fillText(text, x, y);
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    hover: {
+                        animationDuration: 300
+                    },
+                    layout: {
+                        padding: {
+                            top: 30, // Aumentar padding superior para acomodar os labels
+                            bottom: 10,
+                            left: 10,
+                            right: 10
+                        }
+                    }
+                }
+            });
         }
 
     </script>
