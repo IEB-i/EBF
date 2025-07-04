@@ -680,14 +680,16 @@
                 '2-5 anos': 0,
                 '6-7 anos': 0,
                 '8-9 anos': 0,
-                '10+ anos': 0
+                '10-12 anos': 0,
+                'Sem Faixa': 0
             };
             
             const coresInfo = {
                 '2-5 anos': { cor: '#4CAF50', nome: 'Verde', emoji: '🟢' },
                 '6-7 anos': { cor: '#dfca0d', nome: 'Amarela', emoji: '🟡' },
                 '8-9 anos': { cor: '#FF9C33', nome: 'Laranja', emoji: '🟠' },
-                '10+ anos': { cor: '#FF4C4C', nome: 'Vermelha', emoji: '🔴' }
+                '10-12 anos': { cor: '#FF4C4C', nome: 'Vermelha', emoji: '🔴' },
+                'Sem Faixa': { cor: '#9E9E9E', nome: 'Cinza', emoji: '⚫' }
             };
 
             // Contar crianças por faixa
@@ -699,8 +701,10 @@
                     faixas['6-7 anos']++;
                 } else if (idade >= 8 && idade <= 9) {
                     faixas['8-9 anos']++;
-                } else if (idade >= 10 && idade <= 20) {
-                    faixas['10+ anos']++;
+                } else if (idade >= 10 && idade <= 12) {
+                    faixas['10-12 anos']++;
+                } else {
+                    faixas['Sem Faixa']++;
                 }
             });
             
@@ -715,13 +719,15 @@
                             'rgba(76, 175, 80, 0.85)',    // Verde
                             'rgba(255, 235, 59, 0.85)',   // Amarela
                             'rgba(255, 156, 51, 0.85)',   // Laranja
-                            'rgba(255, 76, 76, 0.85)'     // Vermelha
+                            'rgba(255, 76, 76, 0.85)',    // Vermelha
+                            'rgba(158, 158, 158, 0.85)'   // Cinza para Sem Faixa
                         ],
                         borderColor: [
                             'rgba(76, 175, 80, 1)',       // Verde
                             'rgba(255, 193, 7, 1)',       // Amarela mais escura
                             'rgba(255, 156, 51, 1)',      // Laranja
-                            'rgba(255, 76, 76, 1)'        // Vermelha
+                            'rgba(255, 76, 76, 1)',       // Vermelha
+                            'rgba(158, 158, 158, 1)'      // Cinza para Sem Faixa
                         ],
                         borderWidth: 3,
                         borderRadius: {
@@ -735,7 +741,8 @@
                             'rgba(76, 175, 80, 0.95)',
                             'rgba(255, 235, 59, 0.95)',
                             'rgba(255, 156, 51, 0.95)',
-                            'rgba(255, 76, 76, 0.95)'
+                            'rgba(255, 76, 76, 0.95)',
+                            'rgba(158, 158, 158, 0.95)'  // Cinza para Sem Faixa
                         ],
                         hoverBorderWidth: 4,
                         shadowOffsetX: 3,
@@ -776,6 +783,9 @@
                                 title: function(context) {
                                     const faixa = context[0].label;
                                     const info = coresInfo[faixa];
+                                    if (faixa === 'Sem Faixa') {
+                                        return `${info.emoji} ${info.nome}`;
+                                    }
                                     return `${info.emoji} Sala ${info.nome}`;
                                 },
                                 label: function(context) {
