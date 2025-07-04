@@ -212,7 +212,7 @@
 
         <!-- Gráfico de Faixas Etárias -->
         <div class="chart-card">
-            <h4 class="chart-title">📊 Distribuição por Faixa Etária</h4>
+            <h4 class="chart-title">📊 Faixa Etária (Com Pgto Confirmado)</h4>
             <div class="chart-container">
                 <canvas id="faixaEtariaChart"></canvas>
             </div>
@@ -692,19 +692,22 @@
                 'Sem Faixa': { cor: '#9E9E9E', nome: 'Cinza', emoji: '⚫' }
             };
 
-            // Contar crianças por faixa
+            // Contar crianças por faixa - APENAS AS QUE PAGARAM
             dados.forEach(participante => {
-                const idade = parseInt(participante.idade);
-                if (idade >= 2 && idade <= 5) {
-                    faixas['2-5 anos']++;
-                } else if (idade >= 6 && idade <= 7) {
-                    faixas['6-7 anos']++;
-                } else if (idade >= 8 && idade <= 9) {
-                    faixas['8-9 anos']++;
-                } else if (idade >= 10 && idade <= 12) {
-                    faixas['10-12 anos']++;
-                } else {
-                    faixas['Sem Faixa']++;
+                // Verificar se o pagamento foi realizado
+                if (participante.statusPagamento === 'pago') {
+                    const idade = parseInt(participante.idade);
+                    if (idade >= 2 && idade <= 5) {
+                        faixas['2-5 anos']++;
+                    } else if (idade >= 6 && idade <= 7) {
+                        faixas['6-7 anos']++;
+                    } else if (idade >= 8 && idade <= 9) {
+                        faixas['8-9 anos']++;
+                    } else if (idade >= 10 && idade <= 12) {
+                        faixas['10-12 anos']++;
+                    } else {
+                        faixas['Sem Faixa']++;
+                    }
                 }
             });
             
