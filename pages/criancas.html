@@ -680,14 +680,14 @@
                 '2-5 anos': 0,
                 '6-7 anos': 0,
                 '8-9 anos': 0,
-                '10-12 anos': 0
+                '10+ anos': 0
             };
             
             const coresInfo = {
                 '2-5 anos': { cor: '#4CAF50', nome: 'Verde', emoji: '🟢' },
                 '6-7 anos': { cor: '#dfca0d', nome: 'Amarela', emoji: '🟡' },
                 '8-9 anos': { cor: '#FF9C33', nome: 'Laranja', emoji: '🟠' },
-                '10-12 anos': { cor: '#FF4C4C', nome: 'Vermelha', emoji: '🔴' }
+                '10+ anos': { cor: '#FF4C4C', nome: 'Vermelha', emoji: '🔴' }
             };
 
             // Contar crianças por faixa
@@ -699,8 +699,8 @@
                     faixas['6-7 anos']++;
                 } else if (idade >= 8 && idade <= 9) {
                     faixas['8-9 anos']++;
-                } else if (idade >= 10 && idade <= 12) {
-                    faixas['10-12 anos']++;
+                } else if (idade >= 10 && idade <= 20) {
+                    faixas['10+ anos']++;
                 }
             });
             
@@ -796,7 +796,7 @@
                                 stepSize: 1,
                                 color: '#5a6c7d',
                                 font: {
-                                    size: 12,
+                                    size: 14,
                                     weight: '500'
                                 },
                                 padding: 8
@@ -814,7 +814,7 @@
                             ticks: {
                                 color: '#5a6c7d',
                                 font: {
-                                    size: 11,
+                                    size: 15,
                                     weight: 'bold'
                                 },
                                 padding: 8,
@@ -839,7 +839,7 @@
                             const chart = this;
                             const ctx = chart.ctx;
                             
-                            ctx.font = 'bold 18px Montserrat';
+                            ctx.font = 'bold 19px Montserrat';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             
@@ -875,8 +875,8 @@
                         padding: {
                             top: 30, // Aumentar padding superior para acomodar os labels
                             bottom: 10,
-                            left: 10,
-                            right: 10
+                            left: 0,
+                            right: 0
                         }
                     }
                 }
