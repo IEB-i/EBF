@@ -218,6 +218,14 @@
             </div>
         </div>
 
+        <!-- Gráfico de Pagamentos por Dia -->
+        <div class="chart-card">
+            <h4 class="chart-title">💰 Pagamentos por Dia</h4>
+            <div class="chart-container">
+                <canvas id="pagamentosPorDiaChart"></canvas>
+            </div>
+        </div>
+
         <!-- Filtros -->
         <div class="filter-card">
             <form id="filterForm" class="row">
@@ -360,6 +368,7 @@
         let dataTable;
         let totalParticipantes = 0;
         let faixaEtariaChart;
+        let pagamentosPorDiaChart; // Nova variável
 
         //Modal e gestão do doc
         $(document).ready(function () {
@@ -377,13 +386,48 @@
                 scrollY: '350px', // Altura fixa para a área de rolagem
                 scrollCollapse: true, // Mantém o colapso da altura
                 fixedHeader: true, // Mantém o cabeçalho fixo durante a rolagem
+                columnDefs: [
+                    {
+                        targets: [7, 8], // Índices das colunas "Data Preenchimento" e "Data Pagamento"
+                        visible: false, // Oculta as colunas na visualização
+                        searchable: false // Não permite busca nestas colunas
+                    }
+                ],
                 buttons: [
                     {
                         extend: 'excel',
                         text: 'Exportar Excel',
                         className: 'btn btn-export d-none',
+                        title: 'Lista de Crianças Inscritas - EBF 2025',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6]
+                            columns: [0, 1, 2, 3, 4, 5, 7, 8], // Incluir as colunas ocultas na exportação (índices 7 e 8)
+                            format: {
+                                body: function (data, row, column, node) {
+                                    // Se for a coluna de pagamento (índice 5), extrair apenas o texto
+                                    if (column === 5) {
+                                        return $(data).text();
+                                    }
+                                    return data;
+                                }
+                            }
+                        },
+                        customize: function (xlsx) {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            
+                            // Personalizar cabeçalhos
+                            var headerRow = sheet.getElementsByTagName('row')[0];
+                            var cells = headerRow.getElementsByTagName('c');
+                            
+                            // Definir novos cabeçalhos para a exportação
+                            var headers = ['Nome', 'Idade', 'Responsável', 'Cel. Responsável', 'Igreja', 'Pagamento', 'Data Preenchimento', 'Data Pagamento'];
+                            
+                            for (var i = 0; i < cells.length && i < headers.length; i++) {
+                                var cell = cells[i];
+                                var textNode = cell.getElementsByTagName('v')[0];
+                                if (textNode) {
+                                    textNode.textContent = headers[i];
+                                }
+                            }
                         }
                     },
                 ]
@@ -505,7 +549,7 @@
                         // Adicionar aos dados do gráfico
                         dadosParticipantes.push(participante);
 
-                        // Linhas ao DataTable
+                        // Linhas ao DataTable - incluindo data de preenchimento e data de pagamento como colunas ocultas
                         dataTable.row.add([
                             participante.nome,
                             participante.idade,
@@ -513,7 +557,9 @@
                             participante.foneResponsavel,
                             participante.igreja === 'Outra' ? participante.outraIgreja : participante.igreja,
                             `<span class="badge ${participante.statusPagamento === 'pago' ? 'badge-pago' : 'badge-pendente'}">${participante.statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span>`,
-                            `<button class="btn btn-info btn-sm" onclick="verDetalhes('${doc.id}')">Ver</button>`
+                            `<button class="btn btn-info btn-sm" onclick="verDetalhes('${doc.id}')">Ver</button>`,
+                            participante.dataPreenchimento || 'N/A', // Coluna oculta para exportação
+                            participante.dataPagamento ? formatarDataHora(participante.dataPagamento) : 'N/A' // Nova coluna oculta para data de pagamento
                         ]);
 
                     });
@@ -523,6 +569,9 @@
 
                     // Criar gráfico de faixa etária
                     criarGraficoFaixaEtaria(dadosParticipantes);
+
+                    // Criar gráfico de pagamentos por dia
+                    criarGraficoPagamentosPorDia(dadosParticipantes);
 
                     // Atualizar contador
                     atualizarContador();
@@ -896,6 +945,212 @@
             });
         }
 
+        // Função para criar gráfico de pagamentos por dia
+        function criarGraficoPagamentosPorDia(dados) {
+            const ctx = document.getElementById('pagamentosPorDiaChart').getContext('2d');
+            
+            // Destruir gráfico existente se houver
+            if (pagamentosPorDiaChart) {
+                pagamentosPorDiaChart.destroy();
+            }
+            
+            // Definir períodos
+            const periodos = {
+                'Até 09/07': 0,
+                'Dia 10/07': 0,
+                'Dia 11/07': 0,
+                'Dia 12/07': 0
+            };
+            
+            // Contar pagamentos por período - APENAS OS QUE PAGARAM
+            dados.forEach(participante => {
+                if (participante.statusPagamento === 'pago' && participante.dataPagamento) {
+                    const dataPagamento = new Date(participante.dataPagamento);
+                    const dia = dataPagamento.getDate();
+                    const mes = dataPagamento.getMonth() + 1; // getMonth() retorna 0-11
+                    
+                    // Verificar se é julho (mês 7)
+                    if (mes === 7) {
+                        if (dia <= 9) {
+                            periodos['Até 09/07']++;
+                        } else if (dia === 10) {
+                            periodos['Dia 10/07']++;
+                        } else if (dia === 11) {
+                            periodos['Dia 11/07']++;
+                        } else if (dia === 12) {
+                            periodos['Dia 12/07']++;
+                        }
+                    }
+                }
+            });
+            
+            pagamentosPorDiaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(periodos),
+                    datasets: [{
+                        label: 'Quantidade de Pagamentos',
+                        data: Object.values(periodos),
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.85)',   // Azul
+                            'rgba(255, 99, 132, 0.85)',   // Rosa
+                            'rgba(255, 206, 86, 0.85)',   // Amarelo
+                            'rgba(75, 192, 192, 0.85)'    // Verde água
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 3,
+                        borderRadius: {
+                            topLeft: 8,
+                            topRight: 8,
+                            bottomLeft: 4,
+                            bottomRight: 4
+                        },
+                        borderSkipped: false,
+                        hoverBackgroundColor: [
+                            'rgba(54, 162, 235, 0.95)',
+                            'rgba(255, 99, 132, 0.95)',
+                            'rgba(255, 206, 86, 0.95)',
+                            'rgba(75, 192, 192, 0.95)'
+                        ],
+                        hoverBorderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#3498db',
+                            borderWidth: 2,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return `📅 ${context[0].label}`;
+                                },
+                                label: function(context) {
+                                    const valor = context.parsed.y;
+                                    const total = Object.values(periodos).reduce((a, b) => a + b, 0);
+                                    const percentual = total > 0 ? ((valor / total) * 100).toFixed(1) : 0;
+                                    return `${valor} pagamento${valor !== 1 ? 's' : ''} (${percentual}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                },
+                                padding: 8
+                            },
+                            grid: {
+                                color: 'rgba(90, 108, 125, 0.1)',
+                                lineWidth: 1,
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 15,
+                                    weight: 'bold'
+                                },
+                                padding: 8,
+                                maxRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutCubic',
+                        delay: (context) => {
+                            return context.dataIndex * 200;
+                        },
+                        onComplete: function() {
+                            // Desenhar valores em cima das barras após a animação
+                            const chart = this;
+                            const ctx = chart.ctx;
+                            
+                            ctx.font = 'bold 19px Montserrat';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            chart.data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+                                meta.data.forEach((bar, index) => {
+                                    const data = dataset.data[index];
+                                    
+                                    if (data > 0) {
+                                        ctx.fillStyle = dataset.borderColor[index];
+                                        ctx.strokeStyle = '#fff';
+                                        ctx.lineWidth = 3;
+                                        
+                                        const text = `${data}`;
+                                        const x = bar.x;
+                                        const y = bar.y - 8;
+                                        
+                                        // Contorno branco para melhor legibilidade
+                                        ctx.strokeText(text, x, y);
+                                        ctx.fillText(text, x, y);
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    hover: {
+                        animationDuration: 300
+                    },
+                    layout: {
+                        padding: {
+                            top: 30,
+                            bottom: 10,
+                            left: 0,
+                            right: 0
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 
