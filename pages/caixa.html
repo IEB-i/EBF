@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Caixa</title>
     <link rel="shortcut icon" href="../assets/3.ico" type="image/x-icon">
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
     <link rel="stylesheet" href="../css/common.css">
-    
+
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -101,7 +101,8 @@
             transition: all 0.3s ease;
         }
 
-        .upload-area:hover, .upload-area.dragover {
+        .upload-area:hover,
+        .upload-area.dragover {
             border-color: #28a745;
             background-color: #f1f8f1;
         }
@@ -282,14 +283,19 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="filtroCategoria">Categoria</label>
+                                        <!-- Filtro na aba de Transações -->
                                         <select class="form-control" id="filtroCategoria">
                                             <option value="todos">Todas</option>
                                             <option value="inscricao">Inscrição</option>
                                             <option value="alimentacao">Alimentação</option>
                                             <option value="transporte">Transporte</option>
                                             <option value="material">Material</option>
+                                            <option value="colaboracao">Colaboração</option>
+                                            <option value="decoracao">Decoração</option>
+                                            <option value="medicamentos">Medicamentos</option>
                                             <option value="outros">Outros</option>
                                         </select>
+
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -364,7 +370,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="tipo">Tipo</label>
-                                                                                <select class="form-control" id="tipo" required>
+                                        <select class="form-control" id="tipo" required>
                                             <option value="">Selecione</option>
                                             <option value="entrada">Entrada</option>
                                             <option value="saida">Saída</option>
@@ -380,6 +386,9 @@
                                             <option value="alimentacao">Alimentação</option>
                                             <option value="transporte">Transporte</option>
                                             <option value="material">Material</option>
+                                            <option value="colaboracao">Colaboração</option>
+                                            <option value="decoracao">Decoração</option>
+                                            <option value="medicamentos">Medicamentos</option>
                                             <option value="outros">Outros</option>
                                         </select>
                                     </div>
@@ -474,7 +483,8 @@
                                         </div>
                                         <div class="text-right">
                                             <button class="btn btn-secondary" id="btnCancelarUpload">Cancelar</button>
-                                            <button class="btn btn-success" id="btnImportarDados">Importar Dados</button>
+                                            <button class="btn btn-success" id="btnImportarDados">Importar
+                                                Dados</button>
                                         </div>
                                     </div>
                                 </div>
@@ -495,11 +505,16 @@
                                         <div class="mt-3">
                                             <h6>Instruções:</h6>
                                             <ol>
-                                                <li>Baixe o modelo ou crie um arquivo CSV/Excel com as colunas: Data, Descrição, Valor, Tipo, Categoria, Método</li>
+                                                <li>Baixe o modelo ou crie um arquivo CSV/Excel com as colunas: Data,
+                                                    Descrição, Valor, Tipo, Categoria, Método</li>
                                                 <li>Preencha os dados seguindo o formato indicado</li>
                                                 <li>Para o campo "Tipo", use "entrada" ou "saida"</li>
-                                                <li>Para o campo "Categoria", use uma das opções: inscricao, alimentacao, transporte, material, outros</li>
-                                                <li>Para o campo "Método", use uma das opções: pix, cartao, dinheiro, transferencia, cheque</li>
+                                                <li>Para o campo "Categoria", use uma das opções: inscricao,
+                                                    alimentacao,
+                                                    transporte, material, colaboracao, decoracao, medicamentos, outros
+                                                </li>
+                                                <li>Para o campo "Método", use uma das opções: pix, cartao, dinheiro,
+                                                    transferencia, cheque</li>
                                                 <li>Salve o arquivo e faça o upload</li>
                                             </ol>
                                         </div>
@@ -567,7 +582,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div id="relatorioResultado">
-                                            <p class="text-center text-muted">Gere um relatório para visualizar os resultados aqui.</p>
+                                            <p class="text-center text-muted">Gere um relatório para visualizar os
+                                                resultados aqui.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -654,11 +670,14 @@
                                         <option value="alimentacao">Alimentação</option>
                                         <option value="transporte">Transporte</option>
                                         <option value="material">Material</option>
+                                        <option value="colaboracao">Colaboração</option>
+                                        <option value="decoracao">Decoração</option>
+                                        <option value="medicamentos">Medicamentos</option>
                                         <option value="outros">Outros</option>
                                     </select>
                                 </div>
                             </div>
-                                                        <div class="col-md-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="editMetodo">Método de Pagamento</label>
                                     <select class="form-control" id="editMetodo" required>
@@ -711,14 +730,14 @@
         $(document).ready(function () {
             // Definir data atual no campo de data
             document.getElementById('data').valueAsDate = new Date();
-            
+
             // Inicializar gráficos
             initGraficos();
-            
+
             // Carregar dados
             carregarDashboard();
             carregarTransacoes();
-            
+
             // Event listeners
             $('#novaTransacaoForm').on('submit', registrarTransacao);
             $('#btnAplicarFiltros').on('click', aplicarFiltros);
@@ -729,78 +748,87 @@
             $('#btnExportarCSV').on('click', exportarCSV);
             $('#btnExportarExcel').on('click', exportarExcel);
             $('#btnBaixarModelo').on('click', baixarModeloCSV);
-            
+
             // Event listeners para upload de arquivo
             configurarUploadArea();
             $('#fileInput').on('change', processarArquivo);
             $('#btnCancelarUpload').on('click', cancelarUpload);
             $('#btnImportarDados').on('click', importarDados);
-            
+
             // Formatar campo de valor para aceitar apenas números e vírgula
-            $('#valor, #editValor').on('input', function() {
+            $('#valor, #editValor').on('input', function () {
                 this.value = this.value.replace(/[^0-9,]/g, '');
             });
         });
 
-function sincronizarPagamentos() {
-    // Buscar pagamentos confirmados que não estão no caixa
-    db.collection("Eventos").doc("EBF2025").collection("pagamentos")
-        .where("status", "==", "confirmado")
-        .get()
-        .then((pagamentosSnapshot) => {
-            const batch = db.batch();
-            let contador = 0;
-            
-            pagamentosSnapshot.forEach((doc) => {
-                const pagamento = doc.data();
-                
-                // Verificar se já existe no caixa
-                db.collection("Eventos").doc("EBF2025").collection("caixa")
-                    .where("pagamentoId", "==", doc.id)
-                    .get()
-                    .then((caixaSnapshot) => {
-                        if (caixaSnapshot.empty) {
-                            // Não existe no caixa, criar entrada
-                            const novaRef = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
-                            
-                            batch.set(novaRef, {
-                                descricao: `Inscrição - ${pagamento.participanteNome}`,
-                                data: pagamento.dataPagamento.substring(0, 10),
-                                valor: pagamento.valor,
-                                tipo: 'entrada',
-                                categoria: 'inscricao',
-                                metodo: pagamento.formaPagamento,
-                                observacao: `Pagamento de inscrição - Ref: ${doc.id}`,
-                                referenciaOrigem: 'pagamento',
-                                pagamentoId: doc.id,
-                                participanteId: pagamento.participanteId,
-                                dataCriacao: new Date().toISOString()
+        // CORREÇÃO 1: Função sincronizarPagamentos (por volta da linha 800)
+        function sincronizarPagamentos() {
+            // Buscar pagamentos confirmados que não estão no caixa
+            db.collection("Eventos").doc("EBF2025").collection("pagamentos")
+                .where("status", "==", "confirmado")
+                .get()
+                .then((pagamentosSnapshot) => {
+                    const batch = db.batch();
+                    let contador = 0; // MOVER ESTA DECLARAÇÃO PARA AQUI
+                    const promises = []; // Array para armazenar as promises
+
+                    pagamentosSnapshot.forEach((doc) => {
+                        const pagamento = doc.data();
+
+                        // Verificar se já existe no caixa
+                        const promise = db.collection("Eventos").doc("EBF2025").collection("caixa")
+                            .where("pagamentoId", "==", doc.id)
+                            .get()
+                            .then((caixaSnapshot) => {
+                                if (caixaSnapshot.empty) {
+                                    // Não existe no caixa, criar entrada
+                                    const novaRef = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
+
+                                    batch.set(novaRef, {
+                                        descricao: `Inscrição - ${pagamento.participanteNome}`,
+                                        data: pagamento.dataPagamento.substring(0, 10),
+                                        valor: pagamento.valor,
+                                        tipo: 'entrada',
+                                        categoria: 'inscricao',
+                                        metodo: pagamento.formaPagamento,
+                                        observacao: `Pagamento de inscrição - Ref: ${doc.id}`,
+                                        referenciaOrigem: 'pagamento',
+                                        pagamentoId: doc.id,
+                                        participanteId: pagamento.participanteId,
+                                        dataCriacao: new Date().toISOString()
+                                    });
+
+                                    contador++;
+                                }
                             });
-                            
-                            contador++;
+
+                        promises.push(promise);
+                    });
+
+                    // Aguardar todas as verificações antes de executar o batch
+                    return Promise.all(promises).then(() => {
+                        if (contador > 0) {
+                            return batch.commit();
+                        }
+                        return Promise.resolve();
+                    }).then(() => {
+                        if (contador > 0) {
+                            console.log(`${contador} pagamentos sincronizados com o caixa`);
+                            carregarDashboard();
+                            carregarTransacoes();
                         }
                     });
-            });
-            
-            // Executar batch se houver novos registros
-            if (contador > 0) {
-                return batch.commit();
-            }
-        })
-        .then(() => {
-            if (contador > 0) {
-                console.log(`${contador} pagamentos sincronizados com o caixa`);
-                carregarDashboard();
-                carregarTransacoes();
-            }
-        });
-}
+                })
+                .catch((error) => {
+                    console.error("Erro ao sincronizar pagamentos: ", error);
+                });
+        }
 
-// Chamar na inicialização
-$(document).ready(function () {
-    // ... código existente ...
-    sincronizarPagamentos(); // ADICIONAR ESTA LINHA
-});
+        // Chamar na inicialização
+        $(document).ready(function () {
+            // ... código existente ...
+            sincronizarPagamentos(); // ADICIONAR ESTA LINHA
+        });
 
         // Função para inicializar os gráficos
         function initGraficos() {
@@ -853,14 +881,17 @@ $(document).ready(function () {
             graficoCategorias = new Chart(ctxCategorias, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Inscrição', 'Alimentação', 'Transporte', 'Material', 'Outros'],
+                    labels: ['Inscrição', 'Alimentação', 'Transporte', 'Material', 'Colaboração', 'Decoração', 'Medicamentos', 'Outros'],
                     datasets: [{
-                        data: [0, 0, 0, 0, 0],
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
                         backgroundColor: [
                             'rgba(40, 167, 69, 0.7)',
                             'rgba(220, 53, 69, 0.7)',
                             'rgba(255, 193, 7, 0.7)',
                             'rgba(23, 162, 184, 0.7)',
+                            'rgba(156, 39, 176, 0.7)',    // Colaboração - Roxo
+                            'rgba(255, 152, 0, 0.7)',     // Decoração - Laranja
+                            'rgba(76, 175, 80, 0.7)',     // Medicamentos - Verde
                             'rgba(108, 117, 125, 0.7)'
                         ],
                         borderWidth: 1
@@ -886,7 +917,7 @@ $(document).ready(function () {
                     let totalTransacoes = querySnapshot.size;
                     let totalEntradas = 0;
                     let totalSaidas = 0;
-                    
+
                     // Dados para o gráfico de fluxo
                     const dadosPorData = {};
                     const categorias = {
@@ -894,20 +925,23 @@ $(document).ready(function () {
                         alimentacao: 0,
                         transporte: 0,
                         material: 0,
+                        colaboracao: 0,
+                        decoracao: 0,
+                        medicamentos: 0,
                         outros: 0
                     };
-                    
+
                     querySnapshot.forEach((doc) => {
                         const transacao = doc.data();
                         const valor = parseFloat(transacao.valor) || 0;
-                        
+
                         // Somar entradas e saídas
                         if (transacao.tipo === 'entrada') {
                             totalEntradas += valor;
                         } else if (transacao.tipo === 'saida') {
                             totalSaidas += valor;
                         }
-                        
+
                         // Agrupar por data para o gráfico de fluxo
                         const dataFormatada = formatarDataSimples(transacao.data);
                         if (!dadosPorData[dataFormatada]) {
@@ -916,30 +950,30 @@ $(document).ready(function () {
                                 saidas: 0
                             };
                         }
-                        
+
                         if (transacao.tipo === 'entrada') {
                             dadosPorData[dataFormatada].entradas += valor;
                         } else if (transacao.tipo === 'saida') {
                             dadosPorData[dataFormatada].saidas += valor;
                         }
-                        
+
                         // Contar por categoria
                         if (transacao.categoria && categorias.hasOwnProperty(transacao.categoria)) {
                             categorias[transacao.categoria] += valor;
                         }
                     });
-                    
+
                     // Atualizar cards
                     $('#totalTransacoes').text(totalTransacoes);
                     $('#totalEntradas').text('R$ ' + totalEntradas.toFixed(2).replace('.', ','));
                     $('#totalSaidas').text('R$ ' + totalSaidas.toFixed(2).replace('.', ','));
-                    
+
                     const saldoAtual = totalEntradas - totalSaidas;
                     $('#saldoAtual').text('R$ ' + saldoAtual.toFixed(2).replace('.', ','));
-                    
+
                     // Atualizar gráfico de fluxo
                     atualizarGraficoFluxo(dadosPorData);
-                    
+
                     // Atualizar gráfico de categorias
                     atualizarGraficoCategorias(categorias);
                 })
@@ -952,24 +986,24 @@ $(document).ready(function () {
         function atualizarGraficoFluxo(dadosPorData) {
             // Ordenar datas
             const datas = Object.keys(dadosPorData).sort();
-            
+
             // Preparar dados para o gráfico
             const entradas = [];
             const saidas = [];
             const saldos = [];
             let saldoAcumulado = 0;
-            
+
             datas.forEach(data => {
                 const entrada = dadosPorData[data].entradas;
                 const saida = dadosPorData[data].saidas;
-                
+
                 entradas.push(entrada);
                 saidas.push(saida);
-                
+
                 saldoAcumulado += (entrada - saida);
                 saldos.push(saldoAcumulado);
             });
-            
+
             // Atualizar gráfico
             graficoFluxo.data.labels = datas;
             graficoFluxo.data.datasets[0].data = entradas;
@@ -985,6 +1019,9 @@ $(document).ready(function () {
                 categorias.alimentacao,
                 categorias.transporte,
                 categorias.material,
+                categorias.colaboracao,
+                categorias.decoracao,
+                categorias.medicamentos,
                 categorias.outros
             ];
             graficoCategorias.update();
@@ -997,13 +1034,13 @@ $(document).ready(function () {
                 .get()
                 .then((querySnapshot) => {
                     todasTransacoes = [];
-                    
+
                     querySnapshot.forEach((doc) => {
                         const transacao = doc.data();
                         transacao.id = doc.id;
                         todasTransacoes.push(transacao);
                     });
-                    
+
                     // Atualizar a tabela com todas as transações
                     transacoesFiltradas = [...todasTransacoes];
                     atualizarTabelaTransacoes(transacoesFiltradas);
@@ -1014,20 +1051,20 @@ $(document).ready(function () {
         }
 
         // Atualizar a função de atualizar tabela de transações
-function atualizarTabelaTransacoes(transacoes) {
-    const tabelaTransacoes = $('#transacoesList');
-    tabelaTransacoes.html('');
-    
-    if (transacoes.length === 0) {
-        tabelaTransacoes.html('<tr><td colspan="7" class="text-center">Nenhuma transação encontrada</td></tr>');
-        return;
-    }
-    
-    transacoes.forEach(transacao => {
-        const dataFormatada = formatarData(transacao.data);
-        const valor = formatarMoeda(parseFloat(transacao.valor)); // Usar formatarMoeda aqui
-        
-        const linha = `
+        function atualizarTabelaTransacoes(transacoes) {
+            const tabelaTransacoes = $('#transacoesList');
+            tabelaTransacoes.html('');
+
+            if (transacoes.length === 0) {
+                tabelaTransacoes.html('<tr><td colspan="7" class="text-center">Nenhuma transação encontrada</td></tr>');
+                return;
+            }
+
+            transacoes.forEach(transacao => {
+                const dataFormatada = formatarData(transacao.data);
+                const valor = formatarMoeda(parseFloat(transacao.valor)); // Usar formatarMoeda aqui
+
+                const linha = `
             <tr>
                 <td>${dataFormatada}</td>
                 <td>${transacao.descricao}</td>
@@ -1051,94 +1088,94 @@ function atualizarTabelaTransacoes(transacoes) {
                 </td>
             </tr>
         `;
-        
-        tabelaTransacoes.append(linha);
-    });
-}
 
-// Função para formatar valores em moeda brasileira
-function formatarMoeda(valor) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(valor);
-}
-
-// Função para carregar o dashboard (modificada)
-function carregarDashboard() {
-    db.collection("Eventos").doc("EBF2025").collection("caixa")
-        .get()
-        .then((querySnapshot) => {
-            let totalTransacoes = querySnapshot.size;
-            let totalEntradas = 0;
-            let totalSaidas = 0;
-            
-            // Dados para o gráfico de fluxo
-            const dadosPorData = {};
-            const categorias = {
-                inscricao: 0,
-                alimentacao: 0,
-                transporte: 0,
-                material: 0,
-                outros: 0
-            };
-            
-            querySnapshot.forEach((doc) => {
-                const transacao = doc.data();
-                const valor = parseFloat(transacao.valor) || 0;
-                
-                // Somar entradas e saídas
-                if (transacao.tipo === 'entrada') {
-                    totalEntradas += valor;
-                } else if (transacao.tipo === 'saida') {
-                    totalSaidas += valor;
-                }
-                
-                // Agrupar por data para o gráfico de fluxo
-                const dataFormatada = formatarDataSimples(transacao.data);
-                if (!dadosPorData[dataFormatada]) {
-                    dadosPorData[dataFormatada] = {
-                        entradas: 0,
-                        saidas: 0
-                    };
-                }
-                
-                if (transacao.tipo === 'entrada') {
-                    dadosPorData[dataFormatada].entradas += valor;
-                } else if (transacao.tipo === 'saida') {
-                    dadosPorData[dataFormatada].saidas += valor;
-                }
-                
-                // Contar por categoria
-                if (transacao.categoria && categorias.hasOwnProperty(transacao.categoria)) {
-                    categorias[transacao.categoria] += valor;
-                }
+                tabelaTransacoes.append(linha);
             });
-            
-            // Atualizar cards com formatação brasileira
-            $('#totalTransacoes').text(totalTransacoes.toLocaleString('pt-BR'));
-            $('#totalEntradas').text(formatarMoeda(totalEntradas));
-            $('#totalSaidas').text(formatarMoeda(totalSaidas));
-            
-            const saldoAtual = totalEntradas - totalSaidas;
-            $('#saldoAtual').text(formatarMoeda(saldoAtual));
-            
-            // Atualizar gráfico de fluxo
-            atualizarGraficoFluxo(dadosPorData);
-            
-            // Atualizar gráfico de categorias
-            atualizarGraficoCategorias(categorias);
-        })
-        .catch((error) => {
-            console.error("Erro ao carregar dashboard: ", error);
-        });
-}
+        }
+
+        // Função para formatar valores em moeda brasileira
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+
+        // Função para carregar o dashboard (modificada)
+        function carregarDashboard() {
+            db.collection("Eventos").doc("EBF2025").collection("caixa")
+                .get()
+                .then((querySnapshot) => {
+                    let totalTransacoes = querySnapshot.size;
+                    let totalEntradas = 0;
+                    let totalSaidas = 0;
+
+                    // Dados para o gráfico de fluxo
+                    const dadosPorData = {};
+                    const categorias = {
+                        inscricao: 0,
+                        alimentacao: 0,
+                        transporte: 0,
+                        material: 0,
+                        outros: 0
+                    };
+
+                    querySnapshot.forEach((doc) => {
+                        const transacao = doc.data();
+                        const valor = parseFloat(transacao.valor) || 0;
+
+                        // Somar entradas e saídas
+                        if (transacao.tipo === 'entrada') {
+                            totalEntradas += valor;
+                        } else if (transacao.tipo === 'saida') {
+                            totalSaidas += valor;
+                        }
+
+                        // Agrupar por data para o gráfico de fluxo
+                        const dataFormatada = formatarDataSimples(transacao.data);
+                        if (!dadosPorData[dataFormatada]) {
+                            dadosPorData[dataFormatada] = {
+                                entradas: 0,
+                                saidas: 0
+                            };
+                        }
+
+                        if (transacao.tipo === 'entrada') {
+                            dadosPorData[dataFormatada].entradas += valor;
+                        } else if (transacao.tipo === 'saida') {
+                            dadosPorData[dataFormatada].saidas += valor;
+                        }
+
+                        // Contar por categoria
+                        if (transacao.categoria && categorias.hasOwnProperty(transacao.categoria)) {
+                            categorias[transacao.categoria] += valor;
+                        }
+                    });
+
+                    // Atualizar cards com formatação brasileira
+                    $('#totalTransacoes').text(totalTransacoes.toLocaleString('pt-BR'));
+                    $('#totalEntradas').text(formatarMoeda(totalEntradas));
+                    $('#totalSaidas').text(formatarMoeda(totalSaidas));
+
+                    const saldoAtual = totalEntradas - totalSaidas;
+                    $('#saldoAtual').text(formatarMoeda(saldoAtual));
+
+                    // Atualizar gráfico de fluxo
+                    atualizarGraficoFluxo(dadosPorData);
+
+                    // Atualizar gráfico de categorias
+                    atualizarGraficoCategorias(categorias);
+                })
+                .catch((error) => {
+                    console.error("Erro ao carregar dashboard: ", error);
+                });
+        }
 
 
         // Função para registrar nova transação
         function registrarTransacao(e) {
             e.preventDefault();
-            
+
             const descricao = $('#descricao').val();
             const data = $('#data').val();
             const valorStr = $('#valor').val().replace(',', '.');
@@ -1147,12 +1184,12 @@ function carregarDashboard() {
             const categoria = $('#categoria').val();
             const metodo = $('#metodo').val();
             const observacao = $('#observacao').val();
-            
+
             if (!descricao || !data || isNaN(valor) || valor <= 0 || !tipo || !categoria || !metodo) {
                 alert('Por favor, preencha todos os campos corretamente.');
                 return;
             }
-            
+
             // Adicionar transação ao Firestore
             db.collection("Eventos").doc("EBF2025").collection("caixa").add({
                 descricao: descricao,
@@ -1164,22 +1201,22 @@ function carregarDashboard() {
                 observacao: observacao,
                 dataCriacao: new Date().toISOString()
             })
-            .then(() => {
-                alert('Transação registrada com sucesso!');
-                $('#novaTransacaoForm')[0].reset();
-                document.getElementById('data').valueAsDate = new Date();
-                
-                // Recarregar dados
-                carregarDashboard();
-                carregarTransacoes();
-                
-                // Voltar para a aba de transações
-                $('#transacoes-tab').tab('show');
-            })
-            .catch((error) => {
-                console.error("Erro ao registrar transação: ", error);
-                alert("Erro ao registrar transação. Tente novamente.");
-            });
+                .then(() => {
+                    alert('Transação registrada com sucesso!');
+                    $('#novaTransacaoForm')[0].reset();
+                    document.getElementById('data').valueAsDate = new Date();
+
+                    // Recarregar dados
+                    carregarDashboard();
+                    carregarTransacoes();
+
+                    // Voltar para a aba de transações
+                    $('#transacoes-tab').tab('show');
+                })
+                .catch((error) => {
+                    console.error("Erro ao registrar transação: ", error);
+                    alert("Erro ao registrar transação. Tente novamente.");
+                });
         }
 
         // Função para preparar exclusão
@@ -1191,13 +1228,13 @@ function carregarDashboard() {
         // Função para excluir transação
         function excluirTransacao() {
             const id = $('#confirmarExclusao').data('id');
-            
+
             db.collection("Eventos").doc("EBF2025").collection("caixa").doc(id)
                 .delete()
                 .then(() => {
                     alert('Transação excluída com sucesso!');
                     $('#excluirModal').modal('hide');
-                    
+
                     // Recarregar dados
                     carregarDashboard();
                     carregarTransacoes();
@@ -1211,12 +1248,12 @@ function carregarDashboard() {
         // Função para preparar edição
         function prepararEdicao(id) {
             const transacao = todasTransacoes.find(t => t.id === id);
-            
+
             if (!transacao) {
                 alert('Transação não encontrada!');
                 return;
             }
-            
+
             // Preencher formulário de edição
             $('#editId').val(id);
             $('#editDescricao').val(transacao.descricao);
@@ -1226,7 +1263,7 @@ function carregarDashboard() {
             $('#editCategoria').val(transacao.categoria);
             $('#editMetodo').val(transacao.metodo);
             $('#editObservacao').val(transacao.observacao || '');
-            
+
             // Abrir modal
             $('#editarModal').modal('show');
         }
@@ -1242,12 +1279,12 @@ function carregarDashboard() {
             const categoria = $('#editCategoria').val();
             const metodo = $('#editMetodo').val();
             const observacao = $('#editObservacao').val();
-            
+
             if (!descricao || !data || isNaN(valor) || valor <= 0 || !tipo || !categoria || !metodo) {
                 alert('Por favor, preencha todos os campos corretamente.');
                 return;
             }
-            
+
             // Atualizar transação no Firestore
             db.collection("Eventos").doc("EBF2025").collection("caixa").doc(id)
                 .update({
@@ -1263,7 +1300,7 @@ function carregarDashboard() {
                 .then(() => {
                     alert('Transação atualizada com sucesso!');
                     $('#editarModal').modal('hide');
-                    
+
                     // Recarregar dados
                     carregarDashboard();
                     carregarTransacoes();
@@ -1280,32 +1317,32 @@ function carregarDashboard() {
             const categoria = $('#filtroCategoria').val();
             const dataInicio = $('#filtroDataInicio').val();
             const dataFim = $('#filtroDataFim').val();
-            
+
             // Filtrar transações
             transacoesFiltradas = todasTransacoes.filter(transacao => {
                 // Filtro por tipo
                 if (tipo !== 'todos' && transacao.tipo !== tipo) {
                     return false;
                 }
-                
+
                 // Filtro por categoria
                 if (categoria !== 'todos' && transacao.categoria !== categoria) {
                     return false;
                 }
-                
+
                 // Filtro por data de início
                 if (dataInicio && transacao.data < dataInicio) {
                     return false;
                 }
-                
+
                 // Filtro por data de fim
                 if (dataFim && transacao.data > dataFim) {
                     return false;
                 }
-                
+
                 return true;
             });
-            
+
             // Atualizar tabela
             atualizarTabelaTransacoes(transacoesFiltradas);
         }
@@ -1316,7 +1353,7 @@ function carregarDashboard() {
             $('#filtroCategoria').val('todos');
             $('#filtroDataInicio').val('');
             $('#filtroDataFim').val('');
-            
+
             // Restaurar todas as transações
             transacoesFiltradas = [...todasTransacoes];
             atualizarTabelaTransacoes(transacoesFiltradas);
@@ -1325,35 +1362,35 @@ function carregarDashboard() {
         // Função para gerar relatório
         function gerarRelatorio(e) {
             e.preventDefault();
-            
+
             const dataInicio = $('#relDataInicio').val();
             const dataFim = $('#relDataFim').val();
             const tipo = $('#relTipo').val();
-            
+
             if (!dataInicio || !dataFim) {
                 alert('Por favor, selecione o período para o relatório.');
                 return;
             }
-            
+
             // Filtrar transações para o relatório
             const transacoesRelatorio = todasTransacoes.filter(transacao => {
                 // Filtro por tipo
                 if (tipo !== 'todos' && transacao.tipo !== tipo) {
                     return false;
                 }
-                
+
                 // Filtro por período
                 if (transacao.data < dataInicio || transacao.data > dataFim) {
                     return false;
                 }
-                
+
                 return true;
             });
-            
+
             // Calcular totais
             let totalEntradas = 0;
             let totalSaidas = 0;
-            
+
             transacoesRelatorio.forEach(transacao => {
                 const valor = parseFloat(transacao.valor) || 0;
                 if (transacao.tipo === 'entrada') {
@@ -1362,9 +1399,9 @@ function carregarDashboard() {
                     totalSaidas += valor;
                 }
             });
-            
+
             const saldo = totalEntradas - totalSaidas;
-            
+
             // Agrupar por categoria
             const categorias = {
                 inscricao: 0,
@@ -1373,7 +1410,7 @@ function carregarDashboard() {
                 material: 0,
                 outros: 0
             };
-            
+
             transacoesRelatorio.forEach(transacao => {
                 const valor = parseFloat(transacao.valor) || 0;
                 if (transacao.categoria && categorias.hasOwnProperty(transacao.categoria)) {
@@ -1384,13 +1421,13 @@ function carregarDashboard() {
                     }
                 }
             });
-            
+
             // Gerar HTML do relatório
             const dataInicioFormatada = formatarData(dataInicio);
             const dataFimFormatada = formatarData(dataFim);
-            
+
             // Parte da função gerarRelatorio que precisa ser atualizada
-let html = `
+            let html = `
     <div class="alert alert-info">
         <h5>Relatório de ${dataInicioFormatada} a ${dataFimFormatada}</h5>
         <p>Tipo: ${tipo === 'todos' ? 'Todas as transações' : (tipo === 'entrada' ? 'Apenas entradas' : 'Apenas saídas')}</p>
@@ -1449,6 +1486,18 @@ let html = `
                 <td>${formatarMoeda(categorias.material)}</td>
             </tr>
             <tr>
+                <td>Colaboração</td>
+                <td>${formatarMoeda(categorias.colaboracao)}</td>
+            </tr>
+            <tr>
+                <td>Decoração</td>
+                <td>${formatarMoeda(categorias.decoracao)}</td>
+            </tr>
+            <tr>
+                <td>Medicamentos</td>
+                <td>${formatarMoeda(categorias.medicamentos)}</td>
+            </tr>
+            <tr>
                 <td>Outros</td>
                 <td>${formatarMoeda(categorias.outros)}</td>
             </tr>
@@ -1456,7 +1505,7 @@ let html = `
     </table>
 `;
 
-            
+
             if (transacoesRelatorio.length > 0) {
                 html += `
                     <div class="table-responsive">
@@ -1472,13 +1521,13 @@ let html = `
                             </thead>
                             <tbody>
                 `;
-                
+
                 // Dentro do loop das transações do relatório
-transacoesRelatorio.forEach(transacao => {
-    const dataFormatada = formatarData(transacao.data);
-    const valor = formatarMoeda(parseFloat(transacao.valor)); // Usar formatarMoeda
-    
-    html += `
+                transacoesRelatorio.forEach(transacao => {
+                    const dataFormatada = formatarData(transacao.data);
+                    const valor = formatarMoeda(parseFloat(transacao.valor)); // Usar formatarMoeda
+
+                    html += `
         <tr>
             <td>${dataFormatada}</td>
             <td>${transacao.descricao}</td>
@@ -1491,9 +1540,9 @@ transacoesRelatorio.forEach(transacao => {
             <td>${valor}</td>
         </tr>
     `;
-});
+                });
 
-                
+
                 html += `
                             </tbody>
                         </table>
@@ -1502,7 +1551,7 @@ transacoesRelatorio.forEach(transacao => {
             } else {
                 html += `<p class="text-center text-muted">Nenhuma transação encontrada no período selecionado.</p>`;
             }
-            
+
             // Exibir relatório
             $('#relatorioResultado').html(html);
         }
@@ -1513,19 +1562,19 @@ transacoesRelatorio.forEach(transacao => {
                 alert('Não há dados para exportar.');
                 return;
             }
-            
+
             // Preparar dados para CSV
             const cabecalho = ['Data', 'Descrição', 'Categoria', 'Tipo', 'Valor', 'Método', 'Observação'];
             const linhas = todasTransacoes.map(transacao => [
                 formatarData(transacao.data),
                 transacao.descricao,
-                                formatarCategoria(transacao.categoria),
+                formatarCategoria(transacao.categoria),
                 transacao.tipo === 'entrada' ? 'Entrada' : 'Saída',
                 'R$ ' + parseFloat(transacao.valor).toFixed(2).replace('.', ','),
                 formatarMetodo(transacao.metodo),
                 transacao.observacao || ''
             ]);
-            
+
             // Criar conteúdo CSV
             let csvContent = cabecalho.join(',') + '\n';
             linhas.forEach(linha => {
@@ -1538,7 +1587,7 @@ transacoesRelatorio.forEach(transacao => {
                 });
                 csvContent += linhaEscapada.join(',') + '\n';
             });
-            
+
             // Criar blob e fazer download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const dataAtual = new Date().toISOString().slice(0, 10);
@@ -1551,7 +1600,7 @@ transacoesRelatorio.forEach(transacao => {
                 alert('Não há dados para exportar.');
                 return;
             }
-            
+
             // Preparar dados para Excel
             const cabecalho = ['Data', 'Descrição', 'Categoria', 'Tipo', 'Valor', 'Método', 'Observação'];
             const dados = todasTransacoes.map(transacao => [
@@ -1563,12 +1612,12 @@ transacoesRelatorio.forEach(transacao => {
                 formatarMetodo(transacao.metodo),
                 transacao.observacao || ''
             ]);
-            
+
             // Criar workbook
             const ws = XLSX.utils.aoa_to_sheet([cabecalho, ...dados]);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Caixa');
-            
+
             // Fazer download
             const dataAtual = new Date().toISOString().slice(0, 10);
             XLSX.writeFile(wb, `caixa_acampamento_${dataAtual}.xlsx`);
@@ -1580,10 +1629,10 @@ transacoesRelatorio.forEach(transacao => {
             const exemplo = [
                 '2023-01-01', 'Inscrição João Silva', '250.00', 'entrada', 'inscricao', 'pix', 'Pagamento completo'
             ];
-            
+
             // Criar conteúdo CSV
             let csvContent = cabecalho.join(',') + '\n' + exemplo.join(',');
-            
+
             // Criar blob e fazer download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, 'modelo_importacao_caixa.csv');
@@ -1592,40 +1641,40 @@ transacoesRelatorio.forEach(transacao => {
         // Configurar área de upload
         function configurarUploadArea() {
             const uploadArea = document.getElementById('uploadArea');
-            
+
             // Eventos de drag and drop
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 uploadArea.addEventListener(eventName, preventDefaults, false);
             });
-            
+
             function preventDefaults(e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            
+
             ['dragenter', 'dragover'].forEach(eventName => {
                 uploadArea.addEventListener(eventName, highlight, false);
             });
-            
+
             ['dragleave', 'drop'].forEach(eventName => {
                 uploadArea.addEventListener(eventName, unhighlight, false);
             });
-            
+
             function highlight() {
                 uploadArea.classList.add('dragover');
             }
-            
+
             function unhighlight() {
                 uploadArea.classList.remove('dragover');
             }
-            
+
             // Evento de drop
             uploadArea.addEventListener('drop', handleDrop, false);
-            
+
             function handleDrop(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
-                
+
                 if (files.length > 0) {
                     document.getElementById('fileInput').files = files;
                     processarArquivo();
@@ -1637,13 +1686,13 @@ transacoesRelatorio.forEach(transacao => {
         function processarArquivo() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
-            
+
             if (!file) {
                 return;
             }
-            
+
             const fileName = file.name.toLowerCase();
-            
+
             if (fileName.endsWith('.csv')) {
                 processarCSV(file);
             } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
@@ -1657,70 +1706,70 @@ transacoesRelatorio.forEach(transacao => {
         // Processar arquivo CSV
         function processarCSV(file) {
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+
+            reader.onload = function (e) {
                 const conteudo = e.target.result;
                 const linhas = conteudo.split('\n');
-                
+
                 if (linhas.length < 2) {
                     alert('O arquivo não contém dados suficientes.');
                     return;
                 }
-                
+
                 // Extrair cabeçalho
                 const cabecalho = linhas[0].split(',').map(col => col.trim().replace(/"/g, ''));
-                
+
                 // Preparar dados para preview
                 const dados = [];
                 for (let i = 1; i < linhas.length; i++) {
                     if (linhas[i].trim() === '') continue;
-                    
+
                     // Lidar com campos que contêm vírgulas dentro de aspas
                     const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
                     const campos = [];
                     let match;
-                    
+
                     while ((match = regex.exec(linhas[i])) !== null) {
                         campos.push(match[0].replace(/"/g, ''));
                     }
-                    
+
                     if (campos.length > 0) {
                         dados.push(campos);
                     }
                 }
-                
+
                 exibirPreviewDados(cabecalho, dados);
             };
-            
+
             reader.readAsText(file);
         }
 
         // Processar arquivo Excel
         function processarExcel(file) {
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+
+            reader.onload = function (e) {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
-                
+
                 // Pegar primeira planilha
                 const primeiraFolha = workbook.SheetNames[0];
                 const planilha = workbook.Sheets[primeiraFolha];
-                
+
                 // Converter para array
                 const dados = XLSX.utils.sheet_to_json(planilha, { header: 1 });
-                
+
                 if (dados.length < 2) {
                     alert('O arquivo não contém dados suficientes.');
                     return;
                 }
-                
+
                 const cabecalho = dados[0];
                 const linhas = dados.slice(1);
-                
+
                 exibirPreviewDados(cabecalho, linhas);
             };
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -1728,7 +1777,7 @@ transacoesRelatorio.forEach(transacao => {
         function exibirPreviewDados(cabecalho, dados) {
             // Limitar a 10 linhas para o preview
             const dadosPreview = dados.slice(0, 10);
-            
+
             // Preencher cabeçalho da tabela
             const previewTableHead = document.getElementById('previewTableHead');
             let headerHTML = '<tr>';
@@ -1737,7 +1786,7 @@ transacoesRelatorio.forEach(transacao => {
             });
             headerHTML += '</tr>';
             previewTableHead.innerHTML = headerHTML;
-            
+
             // Preencher corpo da tabela
             const previewTableBody = document.getElementById('previewTableBody');
             let bodyHTML = '';
@@ -1749,10 +1798,10 @@ transacoesRelatorio.forEach(transacao => {
                 bodyHTML += '</tr>';
             });
             previewTableBody.innerHTML = bodyHTML;
-            
+
             // Preencher opções de mapeamento
             preencherOpcoesMapeamento(cabecalho);
-            
+
             // Mostrar container de preview
             document.getElementById('uploadPreviewContainer').style.display = 'block';
         }
@@ -1760,11 +1809,11 @@ transacoesRelatorio.forEach(transacao => {
         // Preencher opções de mapeamento
         function preencherOpcoesMapeamento(cabecalho) {
             const campos = ['mapeamentoData', 'mapeamentoDescricao', 'mapeamentoValor', 'mapeamentoTipo', 'mapeamentoCategoria', 'mapeamentoMetodo'];
-            
+
             campos.forEach(campo => {
                 const select = document.getElementById(campo);
                 select.innerHTML = '<option value="">Selecione a coluna</option>';
-                
+
                 cabecalho.forEach((col, index) => {
                     const selected = (
                         (campo === 'mapeamentoData' && col.toLowerCase().includes('data')) ||
@@ -1774,7 +1823,7 @@ transacoesRelatorio.forEach(transacao => {
                         (campo === 'mapeamentoCategoria' && col.toLowerCase().includes('categ')) ||
                         (campo === 'mapeamentoMetodo' && (col.toLowerCase().includes('metodo') || col.toLowerCase().includes('método')))
                     ) ? 'selected' : '';
-                    
+
                     select.innerHTML += `<option value="${index}" ${selected}>${col}</option>`;
                 });
             });
@@ -1789,12 +1838,12 @@ transacoesRelatorio.forEach(transacao => {
         // Importar dados
         function importarDados() {
             const fileInput = document.getElementById('fileInput');
-            
+
             if (!fileInput.files[0]) {
                 alert('Nenhum arquivo selecionado.');
                 return;
             }
-            
+
             // Obter índices das colunas mapeadas
             const indiceData = parseInt(document.getElementById('mapeamentoData').value);
             const indiceDescricao = parseInt(document.getElementById('mapeamentoDescricao').value);
@@ -1802,17 +1851,17 @@ transacoesRelatorio.forEach(transacao => {
             const indiceTipo = parseInt(document.getElementById('mapeamentoTipo').value);
             const indiceCategoria = parseInt(document.getElementById('mapeamentoCategoria').value);
             const indiceMetodo = parseInt(document.getElementById('mapeamentoMetodo').value);
-            
+
             // Verificar se todos os campos obrigatórios foram mapeados
             if (isNaN(indiceData) || isNaN(indiceDescricao) || isNaN(indiceValor) || isNaN(indiceTipo)) {
                 alert('Por favor, mapeie todos os campos obrigatórios (Data, Descrição, Valor e Tipo).');
                 return;
             }
-            
+
             // Processar o arquivo novamente para obter todos os dados
             const file = fileInput.files[0];
             const fileName = file.name.toLowerCase();
-            
+
             if (fileName.endsWith('.csv')) {
                 importarDadosCSV(file, indiceData, indiceDescricao, indiceValor, indiceTipo, indiceCategoria, indiceMetodo);
             } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
@@ -1823,37 +1872,37 @@ transacoesRelatorio.forEach(transacao => {
         // Importar dados de CSV
         function importarDadosCSV(file, indiceData, indiceDescricao, indiceValor, indiceTipo, indiceCategoria, indiceMetodo) {
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+
+            reader.onload = function (e) {
                 const conteudo = e.target.result;
                 const linhas = conteudo.split('\n');
-                
+
                 // Pular cabeçalho
                 processarLinhasImportacao(linhas.slice(1), indiceData, indiceDescricao, indiceValor, indiceTipo, indiceCategoria, indiceMetodo);
             };
-            
+
             reader.readAsText(file);
         }
 
         // Importar dados de Excel
         function importarDadosExcel(file, indiceData, indiceDescricao, indiceValor, indiceTipo, indiceCategoria, indiceMetodo) {
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+
+            reader.onload = function (e) {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
-                
+
                 // Pegar primeira planilha
                 const primeiraFolha = workbook.SheetNames[0];
                 const planilha = workbook.Sheets[primeiraFolha];
-                
+
                 // Converter para array
                 const dados = XLSX.utils.sheet_to_json(planilha, { header: 1 });
-                
+
                 // Pular cabeçalho
                 processarLinhasImportacao(dados.slice(1), indiceData, indiceDescricao, indiceValor, indiceTipo, indiceCategoria, indiceMetodo);
             };
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -1863,26 +1912,26 @@ transacoesRelatorio.forEach(transacao => {
             const batch = db.batch();
             let contadorValidos = 0;
             let contadorInvalidos = 0;
-            
+
             linhas.forEach(linha => {
                 // Verificar se é uma linha válida
                 if (!linha || (Array.isArray(linha) && linha.length === 0) || (typeof linha === 'string' && linha.trim() === '')) {
                     return;
                 }
-                
+
                 // Extrair campos para CSV
                 let campos = linha;
                 if (typeof linha === 'string') {
-                                        // Lidar com campos que contêm vírgulas dentro de aspas
+                    // Lidar com campos que contêm vírgulas dentro de aspas
                     const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
                     campos = [];
                     let match;
-                    
+
                     while ((match = regex.exec(linha)) !== null) {
                         campos.push(match[0].replace(/"/g, ''));
                     }
                 }
-                
+
                 // Extrair valores dos campos mapeados
                 const data = campos[indiceData];
                 const descricao = campos[indiceDescricao];
@@ -1890,20 +1939,25 @@ transacoesRelatorio.forEach(transacao => {
                 const tipo = campos[indiceTipo];
                 const categoria = isNaN(indiceCategoria) ? 'outros' : campos[indiceCategoria];
                 const metodo = isNaN(indiceMetodo) ? 'outros' : campos[indiceMetodo];
-                
+
                 // Limpar e validar valor
-                valorStr = valorStr.replace('R$', '').replace(/\s/g, '').replace(',', '.');
-                const valor = parseFloat(valorStr);
-                
+                let valorLimpo = '';
+                if (valorStr !== null && valorStr !== undefined) {
+                    valorLimpo = String(valorStr).replace(/R\$\s*/g, '').replace(/\s/g, '').replace(',', '.');
+                } else {
+                    valorLimpo = '0';
+                }
+                const valor = parseFloat(valorLimpo);
+
                 // Validar campos obrigatórios
                 if (!data || !descricao || isNaN(valor) || valor <= 0 || !tipo) {
                     contadorInvalidos++;
                     return;
                 }
-                
+
                 // Normalizar tipo
                 const tipoNormalizado = tipo.toLowerCase().includes('entrada') ? 'entrada' : 'saida';
-                
+
                 // Normalizar categoria
                 let categoriaNormalizada = 'outros';
                 if (categoria) {
@@ -1912,8 +1966,12 @@ transacoesRelatorio.forEach(transacao => {
                     else if (catLower.includes('aliment')) categoriaNormalizada = 'alimentacao';
                     else if (catLower.includes('transp')) categoriaNormalizada = 'transporte';
                     else if (catLower.includes('mater')) categoriaNormalizada = 'material';
+                    else if (catLower.includes('colab')) categoriaNormalizada = 'colaboracao';
+                    else if (catLower.includes('decor')) categoriaNormalizada = 'decoracao';
+                    else if (catLower.includes('medic') || catLower.includes('remedio')) categoriaNormalizada = 'medicamentos';
                 }
-                
+
+
                 // Normalizar método
                 let metodoNormalizado = 'outros';
                 if (metodo) {
@@ -1924,10 +1982,10 @@ transacoesRelatorio.forEach(transacao => {
                     else if (metLower.includes('transf')) metodoNormalizado = 'transferencia';
                     else if (metLower.includes('cheque')) metodoNormalizado = 'cheque';
                 }
-                
+
                 // Criar referência para novo documento
                 const novaRef = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
-                
+
                 // Adicionar ao batch
                 batch.set(novaRef, {
                     descricao: descricao,
@@ -1939,24 +1997,24 @@ transacoesRelatorio.forEach(transacao => {
                     observacao: 'Importado via upload de arquivo',
                     dataCriacao: new Date().toISOString()
                 });
-                
+
                 contadorValidos++;
             });
-            
+
             // Executar batch se houver transações válidas
             if (contadorValidos > 0) {
                 batch.commit()
                     .then(() => {
                         alert(`Importação concluída!\n${contadorValidos} transações importadas com sucesso.\n${contadorInvalidos} linhas ignoradas por dados inválidos.`);
-                        
+
                         // Limpar e esconder preview
                         document.getElementById('fileInput').value = '';
                         document.getElementById('uploadPreviewContainer').style.display = 'none';
-                        
+
                         // Recarregar dados
                         carregarDashboard();
                         carregarTransacoes();
-                        
+
                         // Voltar para a aba de transações
                         $('#transacoes-tab').tab('show');
                     })
@@ -1979,10 +2037,10 @@ transacoesRelatorio.forEach(transacao => {
                     const data = new Date(dataString);
                     return data.toLocaleDateString('pt-BR');
                 }
-                
+
                 // Tentar outros formatos comuns
                 const partes = dataString.split(/[\/\-\.]/);
-                
+
                 // Formato DD/MM/YYYY ou MM/DD/YYYY
                 if (partes.length === 3) {
                     // Assumir DD/MM/YYYY se o primeiro número for <= 31
@@ -1994,7 +2052,7 @@ transacoesRelatorio.forEach(transacao => {
                         return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
                     }
                 }
-                
+
                 return dataString;
             } catch (e) {
                 return dataString;
@@ -2020,10 +2078,10 @@ transacoesRelatorio.forEach(transacao => {
                 if (/^\d{4}-\d{2}-\d{2}/.test(dataString)) {
                     return dataString.substring(0, 10);
                 }
-                
+
                 // Converter de DD/MM/YYYY para YYYY-MM-DD
                 const partes = dataString.split(/[\/\-\.]/);
-                
+
                 if (partes.length === 3) {
                     // Assumir DD/MM/YYYY se o primeiro número for <= 31
                     if (parseInt(partes[0]) <= 31 && parseInt(partes[1]) <= 12) {
@@ -2034,7 +2092,7 @@ transacoesRelatorio.forEach(transacao => {
                         return `${partes[2]}-${partes[0].padStart(2, '0')}-${partes[1].padStart(2, '0')}`;
                     }
                 }
-                
+
                 // Fallback: usar a data atual
                 const hoje = new Date();
                 return hoje.toISOString().substring(0, 10);
@@ -2051,6 +2109,9 @@ transacoesRelatorio.forEach(transacao => {
                 case 'alimentacao': return 'Alimentação';
                 case 'transporte': return 'Transporte';
                 case 'material': return 'Material';
+                case 'colaboracao': return 'Colaboração';
+                case 'decoracao': return 'Decoração';
+                case 'medicamentos': return 'Medicamentos';
                 case 'outros': return 'Outros';
                 default: return categoria || 'Outros';
             }
