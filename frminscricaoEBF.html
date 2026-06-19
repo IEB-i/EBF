@@ -151,7 +151,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="dtnascCrianca">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="dtnascCrianca" required>
+                    <input type="text" class="form-control" id="dtnascCrianca" placeholder="DD/MM/AAAA" minlength="10" maxlength="10" pattern="\d{2}/\d{2}/\d{4}" title="Digite a data completa no formato DD/MM/AAAA" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="idade">Idade</label>
@@ -320,16 +320,30 @@
             }
         });
 
+        // Máscara para a data de nascimento
+        VMasker(document.getElementById("dtnascCrianca")).maskPattern("99/99/9999");
+
         // Calcular idade automaticamente
-        document.getElementById('dtnascCrianca').addEventListener('change', function () {
-            const birthDate = new Date(this.value);
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
+        document.getElementById('dtnascCrianca').addEventListener('input', function () {
+            if (this.value.length === 10) {
+                const dateParts = this.value.split('/');
+                const birthDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+                
+                // Verifica se a data é válida
+                if (birthDate.getFullYear() == dateParts[2] && birthDate.getMonth() == (dateParts[1] - 1) && birthDate.getDate() == dateParts[0]) {
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    document.getElementById('idade').value = age + " anos";
+                } else {
+                    document.getElementById('idade').value = '';
+                }
+            } else {
+                document.getElementById('idade').value = '';
             }
-            document.getElementById('idade').value = age + " anos";
         });
 
         // Mostrar/esconder campo de outra igreja
@@ -363,6 +377,14 @@
         document.getElementById('ebfForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
+            // Validar data de nascimento com 4 dígitos no ano
+            const dtnasc = document.getElementById('dtnascCrianca').value;
+            if (dtnasc.length !== 10) {
+                alert('Por favor, digite a Data de Nascimento completa, com o ano tendo 4 dígitos (DD/MM/AAAA).');
+                document.getElementById('dtnascCrianca').focus();
+                return;
+            }
+
             // Validar campos de responsáveis
             if (!validarResponsaveis()) {
                 return;
@@ -390,10 +412,15 @@
                     return;
                 }
 
+                // Converter data de nascimento de DD/MM/AAAA para AAAA-MM-DD antes de salvar
+                const dtValue = document.getElementById('dtnascCrianca').value;
+                const dtParts = dtValue.split('/');
+                const dtFormatada = `${dtParts[2]}-${dtParts[1]}-${dtParts[0]}`;
+
                 // Se o nome não existir, continuar com o envio do formulário
                 const formData = {
                     nome: nome,
-                    dtnascCrianca: document.getElementById('dtnascCrianca').value,
+                    dtnascCrianca: dtFormatada,
                     idade: document.getElementById('idade').value,
                     responsavel1: document.getElementById('responsavel1').value,
                     responsavel2: document.getElementById('responsavel2').value,
