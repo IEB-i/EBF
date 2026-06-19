@@ -783,7 +783,7 @@
                 }
 
                 // Atualizar o participante no Firestore
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                     .update({
                         sala: SalaNumero === 'sem' ? null : SalaNumero,
                         observacoesSala: observacoes,
@@ -829,8 +829,8 @@
 
         function carregarParticipantes() {
             // Buscar participantes com Checkin Realizado
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("anoevento", "==", "2025")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
                 .where("tipoInsc", "==", "criancas")
                 .where("statusCheckin", "==", "realizado")
                 .get()
@@ -1026,7 +1026,7 @@
         function removerDoSala(participanteId) {
             if (confirm('Tem certeza que deseja remover este participante do Sala?')) {
                 // Atualizar o participante no Firestore
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                     .update({
                         sala: null,
                         observacoesSala: null,
@@ -1060,7 +1060,7 @@
 
             // Iterar sobre todos os participantes
             todosParticipantes.forEach(participante => {
-                const ref = db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participante.id);
+                const ref = db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participante.id);
 
                 // Adicionar operação ao lote
                 batch.update(ref, {
@@ -1153,7 +1153,7 @@
             XLSX.utils.book_append_sheet(wb, ws, "Distribuição de Sala");
 
             // Gerar arquivo Excel
-            const nomeArquivo = `Distribuicao_Sala_AcampBT2025_${formatarDataArquivo(new Date())}.xlsx`;
+            const nomeArquivo = `Distribuicao_Sala_AcampBT2026_${formatarDataArquivo(new Date())}.xlsx`;
             XLSX.writeFile(wb, nomeArquivo);
         }
 
@@ -1164,7 +1164,7 @@
 
             // Criar blob e download
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const nomeArquivo = `Distribuicao_Sala_AcampBT2025_${formatarDataArquivo(new Date())}.csv`;
+            const nomeArquivo = `Distribuicao_Sala_AcampBT2026_${formatarDataArquivo(new Date())}.csv`;
             saveAs(blob, nomeArquivo);
         }
 

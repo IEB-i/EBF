@@ -172,7 +172,11 @@
 <body>
     <!-- Título -->
     <div class="header">
-        <h2 class="header-title">GESTÃO DO EVENTO</h2>
+        <h2 class="header-title" style="margin: 0; padding: 15px 0;">GESTÃO DO EVENTO</h2>
+        <a href="../index.html" class="btn btn-danger btn-sm"
+            style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <i class="material-icons" style="font-size: 16px;">logout</i> Sair
+        </a>
     </div>
 
     <!-- Conteiner Principal -->
@@ -270,6 +274,19 @@
 
         <!-- Cards das Páginas -->
         <div class="row mb-5">
+            <!-- Card Relatório Gerencial -->
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-graph-up-arrow card-icon" style="color: #800080;"></i>
+                        <h5 class="card-title">Relatório Gerencial</h5>
+                        <p class="card-text">Visualizar indicadores, finanças, demografia e ocupação das salas.</p>
+                        <a href="relatorio.html" class="btn btn-acamp"
+                            style="background: linear-gradient(45deg, #800080, #9400D3);">Acessar</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Link Pagamentos -->
             <div class="col-md-4 mb-4">
                 <div class="card dashboard-card">
@@ -380,8 +397,8 @@
         // Função para carregar estatísticas gerais
         function carregarEstatisticas() {
             // Carregar todas as inscrições e filtrar por tipo
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("anoevento", "==", "2025")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
                 .get()
                 .then((querySnapshot) => {
                     let totalCriancas = 0;

@@ -184,7 +184,7 @@
         <!-- Filtros -->
         <div class="filter-card">
             <form id="filterForm" class="row">
-            <!-- Filtro Status de Pagamento -->
+                <!-- Filtro Status de Pagamento -->
                 <div class="form-group col-md-3">
                     <label for="filterPagamento">Status Pagamento</label>
                     <select class="form-control" id="filterPagamento">
@@ -281,6 +281,35 @@
                             <i class="material-icons align-middle">delete</i> Excluir Participante
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação de Exclusão -->
+        <div class="modal fade" id="confirmarExclusaoModal" tabindex="-1" role="dialog" aria-labelledby="confirmarExclusaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="confirmarExclusaoModalLabel">
+                            <i class="material-icons align-middle mr-1">warning</i> Confirmar Exclusão
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja excluir o trabalhador <strong id="nomeExclusaoDisplay"></strong>?</p>
+                        <div class="alert alert-warning">
+                            <strong>Atenção:</strong> Esta ação também excluirá permanentemente os <b>pagamentos</b>, <b>check-ins</b> e <b>registros no caixa</b> vinculados a este participante.
+                        </div>
+                        <p class="text-danger mb-0"><small>Esta operação não pode ser desfeita.</small></p>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">
+                            <i class="material-icons align-middle mr-1">delete_forever</i> Sim, Excluir Tudo
+                        </button>
                     </div>
                 </div>
             </div>
@@ -388,7 +417,7 @@
                     dadosAtualizacao.formaPagamento = ''; // Limpa a forma de pagamento se status for pendente
                 }
 
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                     .update(dadosAtualizacao)
                     .then(() => {
                         alert('Status de pagamento atualizado com sucesso!');
@@ -428,8 +457,8 @@
 
         // Função para Carregar participante
         function carregarParticipantes() {
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("anoevento", "==", "2025")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
                 .where("tipoInsc", "==", "trabalhadores")
                 .get()
                 .then((querySnapshot) => {
@@ -483,7 +512,7 @@
         }
 
         function verDetalhes(participanteId) {
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                 .get()
                 .then((doc) => {
                     if (doc.exists) {
@@ -497,7 +526,7 @@
                         $('#modalfuncao').text(p.funcao || 'N/A');
 
                         $('#modalrede').text(p.rede || 'N/A');
-                        
+
                         // Informações de Pagamento e Registro
                         $('#modalStatusPagamento').html(`<span class="badge ${p.statusPagamento === 'pago' ? 'badge-pago' : 'badge-pendente'}">${p.statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span>`);
                         $('#modalDataPreenchimento').text(p.dataPreenchimento || 'N/A');
@@ -539,7 +568,7 @@
         }
 
         function aplicarFiltros() {
-           
+
             const filtroPagamento = $('#filterPagamento').val();
 
             dataTable.search('').columns().search('').draw();
@@ -568,23 +597,83 @@
                 return;
             }
 
-            if (confirm("Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.")) {
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
-                    .delete()
+            // Pegar o nome do participante exibido no modal atual
+            const nomeParticipante = $('#modalNome').text();
+            $('#nomeExclusaoDisplay').text(nomeParticipante !== '' ? nomeParticipante : 'selecionado');
+
+            // Mostrar o novo modal de confirmação do Bootstrap
+            $('#confirmarExclusaoModal').modal('show');
+
+            // Configurar a ação do botão de confirmação dentro do novo modal
+            $('#btnConfirmarExclusao').off('click').on('click', function () {
+                const btnConfirmar = $(this);
+                const textoOriginal = btnConfirmar.html();
+                
+                // Mostrar estado de carregamento no botão
+                btnConfirmar.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Excluindo...');
+
+                const batch = db.batch();
+                const deletePromises = [];
+
+                // 1. Deletar a Inscrição Principal
+                const inscricaoRef = db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId);
+                batch.delete(inscricaoRef);
+
+                // 2. Buscar e deletar Pagamentos vinculados (por participanteId)
+                const pagamentosPromise = db.collection("Eventos").doc("EBF2026").collection("pagamentos")
+                    .where("participanteId", "==", participanteId)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            batch.delete(doc.ref);
+                        });
+                    });
+                deletePromises.push(pagamentosPromise);
+
+                // 3. Buscar e deletar Check-ins vinculados (por nome, conforme estrutura atual do check-in)
+                if (nomeParticipante && nomeParticipante !== 'N/A') {
+                    const checkinPromise = db.collection("Eventos").doc("EBF2026").collection("checkin")
+                        .where("nome", "==", nomeParticipante)
+                        .get()
+                        .then(snapshot => {
+                            snapshot.forEach(doc => {
+                                batch.delete(doc.ref);
+                            });
+                        });
+                    deletePromises.push(checkinPromise);
+                }
+
+                // 4. Buscar e deletar Registros no Caixa vinculados (por participanteId)
+                const caixaPromise = db.collection("Eventos").doc("EBF2026").collection("caixa")
+                    .where("participanteId", "==", participanteId)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            batch.delete(doc.ref);
+                        });
+                    });
+                deletePromises.push(caixaPromise);
+
+                // Executar todas as buscas e então commitar o batch
+                Promise.all(deletePromises)
                     .then(() => {
-                        alert("Participante excluído com sucesso!");
+                        return batch.commit();
+                    })
+                    .then(() => {
+                        $('#confirmarExclusaoModal').modal('hide');
                         $('#participanteModal').modal('hide');
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 500);
+                        alert("Participante e dados vinculados (Pagamentos, Check-in, Caixa) foram excluídos com sucesso!");
+                        carregarParticipantes(); // Recarrega a lista
                     })
                     .catch((error) => {
-                        alert("Erro ao excluir participante: " + error.message);
+                        console.error("Erro durante a exclusão em cascata: ", error);
+                        alert("Erro ao excluir dados vinculados: " + error.message);
+                    })
+                    .finally(() => {
+                        // Restaurar estado do botão caso algo dê errado e o modal permaneça aberto
+                        btnConfirmar.prop('disabled', false).html(textoOriginal);
                     });
-            }
-
-            carregarParticipantes(); // Recarrega a lista após exclusão
-
+            });
         }
 
     </script>

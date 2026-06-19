@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EBF 2026</title>
+    <link rel="shortcut icon" href="../assets/3.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <style>
+        body {
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            padding-top: 100px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin-top: 80px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(to right, #FFA500, #800080, #1ac43f);
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            max-width: 150px;
+        }
+
+        .btn-primary.purple {
+            background-color: #800080;
+            border-color: #800080;
+        }
+
+        .btn-primary.purple:hover {
+            background-color: #9400D3;
+            border-color: #9400D3;
+        }
+
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .btn-voltar:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-voltar svg {
+            fill: currentColor;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+            height: auto;
+        }
+
+        .btn-block {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <a href="../index.html" class="btn-voltar" title="Voltar para Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+        </a>
+        <img src="../assets/LogoBranco.png" alt="Logo da EBF 2026">
+    </div>
+
+    <div class="container">
+        <h3 class="text-center mb-2 font-weight-bold" style="color: #800080;">Gestão EBF 2026</h3>
+        <p class="text-center text-muted mb-4">Painel Administrativo</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="senha" class="font-weight-bold">Senha de Acesso</label>
+                <input type="password" class="form-control text-center" id="senha" placeholder="Digite a senha..."
+                    required>
+                <div id="error-msg" class="text-danger mt-2 text-center"
+                    style="display: none; font-size: 0.9rem; font-weight: bold;">
+                    Senha incorreta. Tente novamente.
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary purple btn-block mt-4 py-2 font-weight-bold">
+                ENTRAR
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const senhaInput = document.getElementById('senha').value;
+
+            // Senha fixa conforme solicitado
+            if (senhaInput === 'ebf123') {
+                window.location.href = 'gestao.html';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('senha').value = '';
+                document.getElementById('senha').focus();
+            }
+        });
+    </script>
+</body>
+
+</html>

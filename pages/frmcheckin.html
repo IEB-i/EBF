@@ -123,7 +123,7 @@
         #sala {
             font-weight: bold;
             color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             /* border: 2px solid #333; */
         }
     </style>
@@ -280,9 +280,9 @@
             }
 
             // Buscar acampantes com status "pago" no Firestore e que não fizeram check-in
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
                 .where("statusPagamento", "==", "pago")
-                .where("anoevento", "==", "2025")
+                .where("anoevento", "==", "2026")
                 .where("tipoInsc", "==", "criancas")   // Tipo de inscrição é "criancas"
                 .orderBy("nome")
                 .get()
@@ -334,9 +334,9 @@
             const nomeAcampante = this.value;
             if (nomeAcampante) {
                 // Buscar dados do acampante selecionado
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes")
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes")
                     .where("nome", "==", nomeAcampante)
-                    .where("anoevento", "==", "2025")
+                    .where("anoevento", "==", "2026")
                     .get()
                     .then((querySnapshot) => {
                         if (!querySnapshot.empty) {
@@ -404,29 +404,29 @@
         // Enviar formulário
         document.getElementById('checkinForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             // Adicionar loading state
             const submitBtn = document.getElementById('cadastrarBtn');
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = 'Processando...';
-            
+
             // MELHORAR - Validação do formulário:
             function validarFormulario() {
                 const nome = document.getElementById('nome').value;
                 const assinatura = signaturePad.isEmpty();
-                
+
                 if (!nome) {
                     alert('Por favor, selecione um participante.');
                     document.getElementById('nome').focus();
                     return false;
                 }
-                
+
                 if (assinatura) {
                     alert('Por favor, forneça a assinatura do responsável.');
                     return false;
                 }
-                
+
                 return true;
             }
 
@@ -449,13 +449,13 @@
                 responsavel: document.getElementById('responsavel').value,
                 telefone1: document.getElementById('telefone1').value,
                 sala: document.getElementById('sala').value,
-                
+
                 // Autorizações (apenas os campos que existem no HTML)
                 autorizacaoParticipacao: document.getElementById('autorizacaoParticipacao').checked,
                 autorizacaoEmergencia: document.getElementById('autorizacaoEmergencia').checked,
                 autorizacaoFotos: document.getElementById('autorizacaoFotos').checked,
                 autorizacaoMedicamentos: document.getElementById('autorizacaoMedicamentos').checked,
-                
+
                 // Dados do check-in
                 dataPreenchimento: document.getElementById('dataPreenchimento').value,
                 assinatura: document.getElementById('assinaturaData').value,
@@ -464,14 +464,14 @@
             };
 
             // Salvar no Firestore
-            db.collection("Eventos").doc("EBF2025").collection("checkin").add(formData)
+            db.collection("Eventos").doc("EBF2026").collection("checkin").add(formData)
                 .then((docRef) => {
                     console.log("Check-in realizado com ID: ", docRef.id);
 
                     // Atualizar status na coleção de inscrições
-                    db.collection("Eventos").doc("EBF2025").collection("inscricoes")
+                    db.collection("Eventos").doc("EBF2026").collection("inscricoes")
                         .where("nome", "==", formData.nome)
-                        .where("anoevento", "==", "2025")
+                        .where("anoevento", "==", "2026")
                         .where("tipoInsc", "==", "criancas")
                         .get()
                         .then((querySnapshot) => {
@@ -486,7 +486,7 @@
                                     });
                                     promises.push(updatePromise);
                                 });
-                                
+
                                 // Aguardar todas as atualizações
                                 return Promise.all(promises);
                             } else {
@@ -507,7 +507,7 @@
                 .catch((error) => {
                     console.error("Erro ao realizar check-in: ", error);
                     let mensagem = 'Erro ao realizar check-in. ';
-    
+
                     if (error.code === 'permission-denied') {
                         mensagem += 'Sem permissão para salvar dados.';
                     } else if (error.code === 'unavailable') {
@@ -515,7 +515,7 @@
                     } else {
                         mensagem += 'Por favor, tente novamente.';
                     }
-    
+
                     alert(mensagem);
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalText;

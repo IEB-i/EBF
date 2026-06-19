@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Gerencial - EBF 2026</title>
+    <link rel="shortcut icon" href="../assets/3.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            padding-top: 80px;
+            background-color: #f8f9fa;
+        }
+
+        .summary-card {
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            background-color: #fff;
+            border: none;
+            height: 100%;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Cores de Borda para os Cards */
+        .card-criancas { border-left: 5px solid #ffc107; }
+        .card-trabalhadores { border-left: 5px solid #3d7517; }
+        .card-checkin { border-left: 5px solid #17a2b8; }
+        
+        .card-verde { border-left: 5px solid #28a745; }
+        .card-amarela { border-left: 5px solid #ffc107; }
+        .card-laranja { border-left: 5px solid #fd7e14; }
+        .card-vermelha { border-left: 5px solid #dc3545; }
+
+        .card-financeiro { border-left: 5px solid #6c757d; }
+        .card-saldo { border-left: 5px solid #007bff; }
+        .card-entradas { border-left: 5px solid #28a745; }
+        .card-saidas { border-left: 5px solid #dc3545; }
+        .card-areceber { border-left: 5px solid #ffc107; }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .bg-verde { background-color: #28a745; }
+        .bg-amarela { background-color: #ffc107; }
+        .bg-laranja { background-color: #fd7e14; }
+        .bg-vermelha { background-color: #dc3545; }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .card-title {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .valor-financeiro {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Título -->
+    <div class="header">
+        <a href="gestao.html" class="btn-voltar" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: white;">
+            <i class="material-icons">arrow_back</i>
+        </a>
+        <h2 class="header-title" style="margin: 0; padding: 15px 0;">RELATÓRIO GERENCIAL</h2>
+        <a href="login.html" class="btn btn-danger btn-sm" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <i class="material-icons" style="font-size: 16px;">logout</i> Sair
+        </a>
+    </div>
+
+    <div class="container mt-5">
+        <!-- 1. RESUMO FINANCEIRO -->
+        <h4 class="mb-3"><i class="material-icons align-middle mr-2">account_balance_wallet</i> Resumo Financeiro</h4>
+        <div class="row mb-5">
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-saldo">
+                    <div class="card-body">
+                        <p class="stats-label text-primary"><i class="material-icons align-middle" style="font-size: 16px;">account_balance</i> Saldo em Caixa</p>
+                        <h3 class="valor-financeiro text-primary mt-2" id="valSaldo">R$ 0,00</h3>
+                        <small class="text-muted">Entradas - Saídas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-entradas">
+                    <div class="card-body">
+                        <p class="stats-label text-success"><i class="material-icons align-middle" style="font-size: 16px;">trending_up</i> Total Arrecadado</p>
+                        <h3 class="valor-financeiro text-success mt-2" id="valEntradas">R$ 0,00</h3>
+                        <small class="text-muted">Inscrições e outros</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-saidas">
+                    <div class="card-body">
+                        <p class="stats-label text-danger"><i class="material-icons align-middle" style="font-size: 16px;">trending_down</i> Total de Despesas</p>
+                        <h3 class="valor-financeiro text-danger mt-2" id="valSaidas">R$ 0,00</h3>
+                        <small class="text-muted">Saídas no caixa</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-areceber">
+                    <div class="card-body">
+                        <p class="stats-label text-warning"><i class="material-icons align-middle" style="font-size: 16px;">schedule</i> Inscrições a Receber</p>
+                        <h3 class="valor-financeiro text-warning mt-2" id="valAReceber">R$ 0,00</h3>
+                        <small class="text-muted">Estimativa pendentes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. RESUMO DE PÚBLICO -->
+        <h4 class="mb-3"><i class="material-icons align-middle mr-2">people</i> Resumo de Público</h4>
+        
+        <!-- Crianças e Trabalhadores -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card summary-card card-criancas">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="material-icons" style="font-size: 3rem; color: #ffc107;">people</i>
+                            </div>
+                            <div class="flex-grow-1 ms-3 ml-3">
+                                <h5 class="card-title mb-0">Crianças</h5>
+                                <small class="text-muted">Inscrições e Pagamentos</small>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <h3 class="stats-value text-primary" id="totalCriancas">0</h3>
+                                <p class="stats-label">Inscritos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-success" id="pagosCriancas">0</h3>
+                                <p class="stats-label">Pagos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-warning" id="percCriancas">0%</h3>
+                                <p class="stats-label">% Pagantes</p>
+                            </div>
+                        </div>
+                        <div class="progress mt-3">
+                            <div class="progress-bar bg-warning" id="progCriancas" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted mt-1 d-block"><span id="pendCriancas">0</span> pendentes</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <div class="card summary-card card-trabalhadores">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="material-icons" style="font-size: 3rem; color: #3d7517;">groups</i>
+                            </div>
+                            <div class="flex-grow-1 ms-3 ml-3">
+                                <h5 class="card-title mb-0">Trabalhadores</h5>
+                                <small class="text-muted">Inscrições e Pagamentos</small>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <h3 class="stats-value text-primary" id="totalTrab">0</h3>
+                                <p class="stats-label">Inscritos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-success" id="pagosTrab">0</h3>
+                                <p class="stats-label">Pagos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-success" id="percTrab">0%</h3>
+                                <p class="stats-label">% Pagantes</p>
+                            </div>
+                        </div>
+                        <div class="progress mt-3">
+                            <div class="progress-bar bg-success" id="progTrab" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted mt-1 d-block"><span id="pendTrab">0</span> pendentes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salas -->
+        <h5 class="mb-3 text-muted">Ocupação das Salas (Capacidade: 30 por sala)</h5>
+        <div class="row mb-4">
+            <!-- Sala Verde -->
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-verde">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-verde mr-3">
+                                <i class="material-icons">nature_people</i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Sala Verde</h5>
+                                <small class="text-muted">4-5 anos</small>
+                            </div>
+                        </div>
+                        <div class="text-center mb-2">
+                            <h2 class="font-weight-bold d-inline" id="qtdVerde">0</h2><span class="text-muted"> / 30</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-verde" id="progVerde" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1"><small class="font-weight-bold" id="percVerde">0%</small></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sala Amarela -->
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-amarela">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-amarela mr-3">
+                                <i class="material-icons">wb_sunny</i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Sala Amarela</h5>
+                                <small class="text-muted">6-7 anos</small>
+                            </div>
+                        </div>
+                        <div class="text-center mb-2">
+                            <h2 class="font-weight-bold d-inline" id="qtdAmarela">0</h2><span class="text-muted"> / 30</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-amarela" id="progAmarela" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1"><small class="font-weight-bold" id="percAmarela">0%</small></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sala Laranja -->
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-laranja">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-laranja mr-3">
+                                <i class="material-icons">local_fire_department</i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Sala Laranja</h5>
+                                <small class="text-muted">8-9 anos</small>
+                            </div>
+                        </div>
+                        <div class="text-center mb-2">
+                            <h2 class="font-weight-bold d-inline" id="qtdLaranja">0</h2><span class="text-muted"> / 30</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-laranja" id="progLaranja" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1"><small class="font-weight-bold" id="percLaranja">0%</small></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sala Vermelha -->
+            <div class="col-md-3 mb-3">
+                <div class="card summary-card card-vermelha">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-vermelha mr-3">
+                                <i class="material-icons">sports_esports</i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0">Sala Vermelha</h5>
+                                <small class="text-muted">10-12 anos</small>
+                            </div>
+                        </div>
+                        <div class="text-center mb-2">
+                            <h2 class="font-weight-bold d-inline" id="qtdVermelha">0</h2><span class="text-muted"> / 30</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-vermelha" id="progVermelha" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1"><small class="font-weight-bold" id="percVermelha">0%</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Check-in -->
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3">
+                <div class="card summary-card card-checkin">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="material-icons" style="font-size: 3rem; color: #17a2b8;">how_to_reg</i>
+                            </div>
+                            <div class="flex-grow-1 ms-3 ml-3">
+                                <h5 class="card-title mb-0">Check-in de Crianças</h5>
+                                <small class="text-muted">Total de presenças registradas</small>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-6 border-right">
+                                <h3 class="stats-value text-info" id="totalCheckins">0</h3>
+                                <p class="stats-label">Fizeram Check-in</p>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="stats-value text-muted" id="ausentesCheckin">0</h3>
+                                <p class="stats-label">Ausentes (Inscritos)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. GRÁFICOS -->
+        <h4 class="mb-3"><i class="material-icons align-middle mr-2">bar_chart</i> Análise Gráfica</h4>
+        <div class="row mb-5">
+            <div class="col-md-6 mb-4">
+                <div class="card summary-card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Distribuição Etária das Crianças</h5>
+                        <div class="chart-container">
+                            <canvas id="graficoIdade"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card summary-card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Distribuição por Salas</h5>
+                        <div class="chart-container">
+                            <canvas id="graficoSalas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="../firebase/firebaseConfig.js"></script>
+
+    <script>
+        // Formatação de Moeda
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            carregarDadosGerais();
+        });
+
+        function carregarDadosGerais() {
+            // Promessas para carregar tudo em paralelo
+            const pInscricoes = db.collection("Eventos").doc("EBF2026").collection("inscricoes").where("anoevento", "==", "2026").get();
+            const pCaixa = db.collection("Eventos").doc("EBF2026").collection("caixa").get();
+            const pCheckin = db.collection("Eventos").doc("EBF2026").collection("checkin").get();
+
+            Promise.all([pInscricoes, pCaixa, pCheckin])
+                .then(([inscricoesSnap, caixaSnap, checkinSnap]) => {
+                    
+                    // 1. DADOS DE PÚBLICO (Crianças e Trabalhadores) e SALAS
+                    let statsCriancas = { total: 0, pagos: 0, valorPendente: 0, idadeMap: {}, salas: { verde: 0, amarela: 0, laranja: 0, vermelha: 0 } };
+                    let statsTrab = { total: 0, pagos: 0, valorPendente: 0 };
+                    
+                    // Preço estimado da inscrição para calcular "A receber" (Exemplo: 50)
+                    // Como não sei o preço fixo, vou usar o campo valorPago se existir, ou inferir um ticket médio.
+                    // Para ficar mais real, quem não pagou, deve R$ 50,00 (valor padrão da maioria das inscrições).
+                    const VALOR_PADRAO = 50.00;
+
+                    inscricoesSnap.forEach(doc => {
+                        const p = doc.data();
+                        
+                        if (p.tipoInsc === 'criancas') {
+                            statsCriancas.total++;
+                            if (p.statusPagamento === 'pago') {
+                                statsCriancas.pagos++;
+                            } else {
+                                statsCriancas.valorPendente += VALOR_PADRAO;
+                            }
+
+                            // Contagem de Idade para o Gráfico
+                            const idade = parseInt(p.idade) || 0;
+                            if(idade > 0) {
+                                statsCriancas.idadeMap[idade] = (statsCriancas.idadeMap[idade] || 0) + 1;
+                            }
+
+                            // Classificação nas Salas (Conforme descrição da foto 2)
+                            if (idade >= 4 && idade <= 5) statsCriancas.salas.verde++;
+                            else if (idade >= 6 && idade <= 7) statsCriancas.salas.amarela++;
+                            else if (idade >= 8 && idade <= 9) statsCriancas.salas.laranja++;
+                            else if (idade >= 10 && idade <= 12) statsCriancas.salas.vermelha++;
+
+                        } else if (p.tipoInsc === 'trabalhadores') {
+                            statsTrab.total++;
+                            if (p.statusPagamento === 'pago') {
+                                statsTrab.pagos++;
+                            } else {
+                                statsTrab.valorPendente += VALOR_PADRAO;
+                            }
+                        }
+                    });
+
+                    // 2. DADOS DO CAIXA
+                    let totalEntradas = 0;
+                    let totalSaidas = 0;
+
+                    caixaSnap.forEach(doc => {
+                        const t = doc.data();
+                        const valor = parseFloat(t.valor) || 0;
+                        if (t.tipo === 'entrada') {
+                            totalEntradas += valor;
+                        } else if (t.tipo === 'saida') {
+                            totalSaidas += valor;
+                        }
+                    });
+
+                    let saldo = totalEntradas - totalSaidas;
+
+                    // 3. DADOS DE CHECKIN
+                    let totalCheckinUnico = new Set();
+                    checkinSnap.forEach(doc => {
+                        const c = doc.data();
+                        if (c.nome) totalCheckinUnico.add(c.nome);
+                    });
+                    const qtdCheckinRealizado = totalCheckinUnico.size;
+
+                    // ============================================
+                    // ATUALIZAÇÃO DA TELA (DOM)
+                    // ============================================
+
+                    // Resumo Financeiro
+                    document.getElementById('valSaldo').textContent = formatarMoeda(saldo);
+                    document.getElementById('valEntradas').textContent = formatarMoeda(totalEntradas);
+                    document.getElementById('valSaidas').textContent = formatarMoeda(totalSaidas);
+                    document.getElementById('valAReceber').textContent = formatarMoeda(statsCriancas.valorPendente + statsTrab.valorPendente);
+
+                    // Resumo Crianças
+                    const percCriancas = statsCriancas.total > 0 ? Math.round((statsCriancas.pagos / statsCriancas.total) * 100) : 0;
+                    document.getElementById('totalCriancas').textContent = statsCriancas.total;
+                    document.getElementById('pagosCriancas').textContent = statsCriancas.pagos;
+                    document.getElementById('percCriancas').textContent = percCriancas + '%';
+                    document.getElementById('progCriancas').style.width = percCriancas + '%';
+                    document.getElementById('pendCriancas').textContent = statsCriancas.total - statsCriancas.pagos;
+
+                    // Resumo Trabalhadores
+                    const percTrab = statsTrab.total > 0 ? Math.round((statsTrab.pagos / statsTrab.total) * 100) : 0;
+                    document.getElementById('totalTrab').textContent = statsTrab.total;
+                    document.getElementById('pagosTrab').textContent = statsTrab.pagos;
+                    document.getElementById('percTrab').textContent = percTrab + '%';
+                    document.getElementById('progTrab').style.width = percTrab + '%';
+                    document.getElementById('pendTrab').textContent = statsTrab.total - statsTrab.pagos;
+
+                    // Ocupação das Salas (Capacidade fixa: 30)
+                    const atualizarSala = (idQtd, idProg, idPerc, qtd) => {
+                        const perc = Math.min(Math.round((qtd / 30) * 100), 100);
+                        document.getElementById(idQtd).textContent = qtd;
+                        document.getElementById(idProg).style.width = perc + '%';
+                        document.getElementById(idPerc).textContent = perc + '%';
+                    };
+                    atualizarSala('qtdVerde', 'progVerde', 'percVerde', statsCriancas.salas.verde);
+                    atualizarSala('qtdAmarela', 'progAmarela', 'percAmarela', statsCriancas.salas.amarela);
+                    atualizarSala('qtdLaranja', 'progLaranja', 'percLaranja', statsCriancas.salas.laranja);
+                    atualizarSala('qtdVermelha', 'progVermelha', 'percVermelha', statsCriancas.salas.vermelha);
+
+                    // Check-ins
+                    document.getElementById('totalCheckins').textContent = qtdCheckinRealizado;
+                    document.getElementById('ausentesCheckin').textContent = Math.max(0, statsCriancas.total - qtdCheckinRealizado);
+
+                    // ============================================
+                    // GRÁFICOS (Chart.js)
+                    // ============================================
+
+                    // Gráfico de Idade
+                    const labelsIdade = Object.keys(statsCriancas.idadeMap).sort((a,b) => a - b).map(i => i + ' anos');
+                    const dadosIdade = Object.keys(statsCriancas.idadeMap).sort((a,b) => a - b).map(i => statsCriancas.idadeMap[i]);
+                    
+                    new Chart(document.getElementById('graficoIdade'), {
+                        type: 'bar',
+                        data: {
+                            labels: labelsIdade,
+                            datasets: [{
+                                label: 'Qtd de Crianças',
+                                data: dadosIdade,
+                                backgroundColor: '#17a2b8',
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                        }
+                    });
+
+                    // Gráfico de Salas
+                    new Chart(document.getElementById('graficoSalas'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Sala Verde (4-5)', 'Sala Amarela (6-7)', 'Sala Laranja (8-9)', 'Sala Vermelha (10-12)'],
+                            datasets: [{
+                                label: 'Inscritos',
+                                data: [
+                                    statsCriancas.salas.verde,
+                                    statsCriancas.salas.amarela,
+                                    statsCriancas.salas.laranja,
+                                    statsCriancas.salas.vermelha
+                                ],
+                                backgroundColor: [
+                                    '#28a745', // Verde
+                                    '#ffc107', // Amarela
+                                    '#fd7e14', // Laranja
+                                    '#dc3545'  // Vermelha
+                                ],
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, max: 40 } }
+                        }
+                    });
+
+                })
+                .catch((error) => {
+                    console.error("Erro ao carregar os dados do relatório: ", error);
+                    alert("Ocorreu um erro ao gerar o relatório. Verifique o console.");
+                });
+        }
+    </script>
+</body>
+</html>

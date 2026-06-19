@@ -764,7 +764,7 @@
         // CORREÇÃO 1: Função sincronizarPagamentos (por volta da linha 800)
         function sincronizarPagamentos() {
             // Buscar pagamentos confirmados que não estão no caixa
-            db.collection("Eventos").doc("EBF2025").collection("pagamentos")
+            db.collection("Eventos").doc("EBF2026").collection("pagamentos")
                 .where("status", "==", "confirmado")
                 .get()
                 .then((pagamentosSnapshot) => {
@@ -776,13 +776,13 @@
                         const pagamento = doc.data();
 
                         // Verificar se já existe no caixa
-                        const promise = db.collection("Eventos").doc("EBF2025").collection("caixa")
+                        const promise = db.collection("Eventos").doc("EBF2026").collection("caixa")
                             .where("pagamentoId", "==", doc.id)
                             .get()
                             .then((caixaSnapshot) => {
                                 if (caixaSnapshot.empty) {
                                     // Não existe no caixa, criar entrada
-                                    const novaRef = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
+                                    const novaRef = db.collection("Eventos").doc("EBF2026").collection("caixa").doc();
 
                                     batch.set(novaRef, {
                                         descricao: `Inscrição - ${pagamento.participanteNome}`,
@@ -911,7 +911,7 @@
 
         // Função para carregar o dashboard
         function carregarDashboard() {
-            db.collection("Eventos").doc("EBF2025").collection("caixa")
+            db.collection("Eventos").doc("EBF2026").collection("caixa")
                 .get()
                 .then((querySnapshot) => {
                     let totalTransacoes = querySnapshot.size;
@@ -1029,7 +1029,7 @@
 
         // Função para carregar transações
         function carregarTransacoes() {
-            db.collection("Eventos").doc("EBF2025").collection("caixa")
+            db.collection("Eventos").doc("EBF2026").collection("caixa")
                 .orderBy("data", "desc")
                 .get()
                 .then((querySnapshot) => {
@@ -1103,7 +1103,7 @@
 
         // Função para carregar o dashboard (modificada)
         function carregarDashboard() {
-            db.collection("Eventos").doc("EBF2025").collection("caixa")
+            db.collection("Eventos").doc("EBF2026").collection("caixa")
                 .get()
                 .then((querySnapshot) => {
                     let totalTransacoes = querySnapshot.size;
@@ -1191,7 +1191,7 @@
             }
 
             // Adicionar transação ao Firestore
-            db.collection("Eventos").doc("EBF2025").collection("caixa").add({
+            db.collection("Eventos").doc("EBF2026").collection("caixa").add({
                 descricao: descricao,
                 data: data,
                 valor: valor,
@@ -1229,7 +1229,7 @@
         function excluirTransacao() {
             const id = $('#confirmarExclusao').data('id');
 
-            db.collection("Eventos").doc("EBF2025").collection("caixa").doc(id)
+            db.collection("Eventos").doc("EBF2026").collection("caixa").doc(id)
                 .delete()
                 .then(() => {
                     alert('Transação excluída com sucesso!');
@@ -1286,7 +1286,7 @@
             }
 
             // Atualizar transação no Firestore
-            db.collection("Eventos").doc("EBF2025").collection("caixa").doc(id)
+            db.collection("Eventos").doc("EBF2026").collection("caixa").doc(id)
                 .update({
                     descricao: descricao,
                     data: data,
@@ -1984,7 +1984,7 @@
                 }
 
                 // Criar referência para novo documento
-                const novaRef = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
+                const novaRef = db.collection("Eventos").doc("EBF2026").collection("caixa").doc();
 
                 // Adicionar ao batch
                 batch.set(novaRef, {

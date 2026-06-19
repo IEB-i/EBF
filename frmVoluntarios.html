@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOLUNTÁRIOS EBF 2025</title>
+    <title>VOLUNTÁRIOS EBF 2026</title>
     <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
@@ -18,6 +19,7 @@
             color: #333;
             padding-top: 100px;
         }
+
         .container {
             max-width: 800px;
             margin-top: 20px;
@@ -26,6 +28,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             background: linear-gradient(45deg, #800080, #FFA500);
             padding: 10px;
@@ -35,28 +38,34 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .header img {
             max-width: 150px;
         }
+
         .divider {
             width: 75%;
             height: 2px;
             background-color: #000;
             margin: 30px auto;
         }
+
         .btn-primary {
             background: linear-gradient(45deg, #800080, #FFA500);
             border: none;
         }
+
         .btn-primary:hover {
             background: linear-gradient(45deg, #9400D3, #FF8C00);
         }
+
         .form-control:focus {
             border-color: #800080;
             box-shadow: 0 0 0 0.2rem rgba(128, 0, 128, 0.25);
         }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -64,11 +73,13 @@
             height: 24px;
             margin-left: 10px;
         }
+
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -80,6 +91,7 @@
             transition: .4s;
             border-radius: 24px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -91,12 +103,15 @@
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider {
+
+        input:checked+.slider {
             background: linear-gradient(45deg, #800080, #1ac43f);
         }
-        input:checked + .slider:before {
+
+        input:checked+.slider:before {
             transform: translateX(16px);
         }
+
         .info-box {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -104,40 +119,46 @@
             padding: 15px;
             margin-bottom: 20px;
         }
+
         .whatsapp-link {
             color: #25D366;
             text-decoration: none;
         }
+
         .whatsapp-link:hover {
             text-decoration: underline;
         }
+
         .dropdown-rede {
             background-color: white;
             color: black;
         }
     </style>
 </head>
+
 <body>
     <div class="header">
-        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2025">
+        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2026">
     </div>
     <div class="container">
-        <h2 class="text-center mb-4 font-weight-bold">VOLUNTÁRIOS EBF 2025</h2>
-        
+        <h2 class="text-center mb-4 font-weight-bold">VOLUNTÁRIOS EBF 2026</h2>
+
         <div class="info-box">
             <p><strong>Pré-requisito:</strong> Maior de 14 anos</p>
             <p><strong>Para realizar o Pagamento:</strong>
-            <p><strong>No Pix:</strong> R$ 30,00 - Chave: 83991118901<br>
-            Nome: Maria Adeildes Ferreira Carneiro<br>
-            Enviar comprovante para WhatsApp de
+            <p><strong>No Pix:</strong> R$ 20,00 - Chave: 83991118901<br>
+                Nome: Maria Adeildes Ferreira Carneiro<br>
+                Enviar comprovante para WhatsApp de
                 <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
-            <p><strong>No Cartão (Com Taxa da Maquininha):</strong> R$ 30,00 + TAXAS<br>
-            Entrar em contato com
-        <a href="https://wa.me/558391118901" class="whatsapp-link"><strong>Adeildes</strong> (83) 99111-8901</a>.</p>
+            <p><strong>No Cartão (Com Taxa da Maquininha):</strong> R$ 20,00 + TAXAS<br>
+                Entrar em contato com
+                <a href="https://wa.me/558391118901" class="whatsapp-link"><strong>Adeildes</strong> (83)
+                    99111-8901</a>.
+            </p>
         </div>
 
         <div class="divider"></div>
-        
+
         <form id="ebfForm">
             <div class="form-group">
                 <label for="nome">Nome</label>
@@ -230,7 +251,7 @@
 
             <div class="form-group">
                 <label for="anoevento">Ano EBF</label>
-                <input type="text" class="form-control" id="anoevento" value="2025" readonly>
+                <input type="text" class="form-control" id="anoevento" value="2026" readonly>
             </div>
             <div class="form-group">
                 <label for="dtpreenchimento">Data de Preenchimento</label>
@@ -258,7 +279,7 @@
 
         // Função para verificar se o nome já existe
         function checkNomeExistente(nome) {
-            return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
+            return db.collection("Eventos").doc("EBF2026").collection("inscricoes")
                 .where("nome", "==", nome)
                 .get()
                 .then((querySnapshot) => {
@@ -271,7 +292,7 @@
         }
 
         // Adicionar evento para verificar nome existente
-        document.getElementById('nome').addEventListener('blur', function() {
+        document.getElementById('nome').addEventListener('blur', function () {
             const nome = this.value.trim().toUpperCase();
             if (nome) {
                 checkNomeExistente(nome).then(exists => {
@@ -292,7 +313,7 @@
         // Adicionar evento de input para campos de texto
         const textInputs = document.querySelectorAll('input[type="text"]');
         textInputs.forEach(input => {
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 toUpperCase(this);
             });
         });
@@ -301,7 +322,7 @@
         VMasker(document.getElementById("telefone")).maskPattern("(99) 99999-9999");
 
         // Calcular idade automaticamente
-        document.getElementById('dtnasc').addEventListener('change', function() {
+        document.getElementById('dtnasc').addEventListener('change', function () {
             const birthDate = new Date(this.value);
             const today = new Date();
             let age = today.getFullYear() - birthDate.getFullYear();
@@ -316,7 +337,7 @@
         document.getElementById('dtpreenchimento').value = new Date().toLocaleDateString('pt-BR');
 
         // Adicionar evento para mudar a cor do dropdown
-        document.getElementById('rede').addEventListener('change', function() {
+        document.getElementById('rede').addEventListener('change', function () {
             const colorMap = {
                 'Laranja': { bg: 'orange', text: 'black' },
                 'Roxa': { bg: 'purple', text: 'white' },
@@ -337,7 +358,7 @@
             }
         });
 
-        document.getElementById('ebfForm').addEventListener('submit', function(e) {
+        document.getElementById('ebfForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const nome = document.getElementById('nome').value.trim().toUpperCase();
@@ -382,7 +403,7 @@
                     tipoInsc: 'trabalhadores'
                 };
 
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigadoVoluntario.html';
@@ -395,7 +416,8 @@
                     });
             });
         });
-    
+
     </script>
 </body>
+
 </html>

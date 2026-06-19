@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSCRIÇÕES EBF 2025</title>
+    <title>INSCRIÇÕES EBF 2026</title>
     <link rel="shortcut icon" href="./assets/3.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
@@ -124,20 +124,22 @@
 
 <body>
     <div class="header">
-        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2025">
+        <img src="./assets/LogoBranco.png" alt="Logo da EBF 2026">
     </div>
     <div class="container">
-        <h2 class="text-center mb-4 font-weight-bold">INSCRIÇÕES EBF 2025</h2>
+        <h2 class="text-center mb-4 font-weight-bold">INSCRIÇÕES EBF 2026</h2>
 
         <div class="info-box">
             <p><strong>Para realizar o Pagamento:</strong>
-            <p><strong>No Pix:</strong> R$ 120,00 - Chave: 83991118901<br>
-            Nome: Maria Adeildes Ferreira Carneiro<br>
-            Enviar comprovante para WhatsApp de
+            <p><strong>No Pix:</strong> R$ 140,00 - Chave: 83991118901<br>
+                Nome: Maria Adeildes Ferreira Carneiro<br>
+                Enviar comprovante para WhatsApp de
                 <a href="https://wa.me/558391118901" class="whatsapp-link">Adeildes (83) 99111-8901</a>.
-            <p><strong>No Cartão (Com Taxa da Maquininha):</strong> R$ 120,00 + TAXAS<br>
-            Entrar em contato com
-        <a href="https://wa.me/558391118901" class="whatsapp-link"><strong>Adeildes</strong> (83) 99111-8901</a>.</p>
+            <p><strong>No Cartão (Com Taxa da Maquininha):</strong> R$ 140,00 + TAXAS<br>
+                Entrar em contato com
+                <a href="https://wa.me/558391118901" class="whatsapp-link"><strong>Adeildes</strong> (83)
+                    99111-8901</a>.
+            </p>
         </div>
 
         <div class="divider"></div>
@@ -242,9 +244,9 @@
 
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
-            return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
+            return db.collection("Eventos").doc("EBF2026").collection("inscricoes")
                 .where("nome", "==", nome)
-                .where("anoevento", "==", "2025")
+                .where("anoevento", "==", "2026")
                 .get()
                 .then((querySnapshot) => {
                     return !querySnapshot.empty;
@@ -257,7 +259,7 @@
             if (nome) {
                 verificarNomeExistente(nome).then(existe => {
                     if (existe) {
-                        alert('Este nome já está cadastrado para a EBF 2025.');
+                        alert('Este nome já está cadastrado para a EBF 2026.');
                         this.value = ''; // Limpa o campo
                         this.focus(); // Redireciona o cursor para o campo
                         document.getElementById('cadastrarBtn').disabled = true;
@@ -384,7 +386,7 @@
             const nome = document.getElementById('nome').value.trim().toUpperCase();
             verificarNomeExistente(nome).then(existe => {
                 if (existe) {
-                    alert('Este nome já está cadastrado para a EBF 2025. Não é possível prosseguir com o cadastro.');
+                    alert('Este nome já está cadastrado para a EBF 2026. Não é possível prosseguir com o cadastro.');
                     return;
                 }
 
@@ -405,13 +407,13 @@
                     alergia: document.getElementById('alergia').checked,
                     quaisAlergias: document.getElementById('quaisAlergias').value,
                     dataPreenchimento: document.getElementById('dataPreenchimento').value,
-                    anoevento: '2025',
+                    anoevento: '2026',
                     statusPagamento: 'pendente',
                     dtRegistro: new Date().toLocaleDateString('pt-BR'),
                     tipoInsc: 'criancas'
                 };
 
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").add(formData)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         window.location.href = 'obrigado.html';

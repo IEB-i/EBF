@@ -348,6 +348,35 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Confirmação de Exclusão -->
+        <div class="modal fade" id="confirmarExclusaoModal" tabindex="-1" role="dialog" aria-labelledby="confirmarExclusaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="confirmarExclusaoModalLabel">
+                            <i class="material-icons align-middle mr-1">warning</i> Confirmar Exclusão
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja excluir a criança <strong id="nomeExclusaoDisplay"></strong>?</p>
+                        <div class="alert alert-warning">
+                            <strong>Atenção:</strong> Esta ação também excluirá permanentemente os <b>pagamentos</b>, <b>check-ins</b> e <b>registros no caixa</b> vinculados a este participante.
+                        </div>
+                        <p class="text-danger mb-0"><small>Esta operação não pode ser desfeita.</small></p>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">
+                            <i class="material-icons align-middle mr-1">delete_forever</i> Sim, Excluir Tudo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -398,7 +427,7 @@
                         extend: 'excel',
                         text: 'Exportar Excel',
                         className: 'btn btn-export d-none',
-                        title: 'Lista de Crianças Inscritas - EBF 2025',
+                        title: 'Lista de Crianças Inscritas - EBF 2026',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5, 7, 8], // Incluir as colunas ocultas na exportação (índices 7 e 8)
                             format: {
@@ -413,14 +442,14 @@
                         },
                         customize: function (xlsx) {
                             var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                            
+
                             // Personalizar cabeçalhos
                             var headerRow = sheet.getElementsByTagName('row')[0];
                             var cells = headerRow.getElementsByTagName('c');
-                            
+
                             // Definir novos cabeçalhos para a exportação
                             var headers = ['Nome', 'Idade', 'Responsável', 'Cel. Responsável', 'Igreja', 'Pagamento', 'Data Preenchimento', 'Data Pagamento'];
-                            
+
                             for (var i = 0; i < cells.length && i < headers.length; i++) {
                                 var cell = cells[i];
                                 var textNode = cell.getElementsByTagName('v')[0];
@@ -488,7 +517,7 @@
                     dadosAtualizacao.formaPagamento = ''; // Limpa a forma de pagamento se status for pendente
                 }
 
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                     .update(dadosAtualizacao)
                     .then(() => {
                         alert('Status de pagamento atualizado com sucesso!');
@@ -528,8 +557,8 @@
 
         // Função para Carregar participante
         function carregarParticipantes() {
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("anoevento", "==", "2025")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
                 .where("tipoInsc", "==", "criancas")
                 .get()
                 .then((querySnapshot) => {
@@ -545,7 +574,7 @@
 
                     querySnapshot.forEach((doc) => {
                         const participante = doc.data();
-                        
+
                         // Adicionar aos dados do gráfico
                         dadosParticipantes.push(participante);
 
@@ -599,7 +628,7 @@
         }
 
         function verDetalhes(participanteId) {
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                 .get()
                 .then((doc) => {
                     if (doc.exists) {
@@ -696,34 +725,94 @@
                 return;
             }
 
-            if (confirm("Tem certeza que deseja excluir este participante? Esta ação não pode ser desfeita.")) {
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
-                    .delete()
+            // Pegar o nome do participante exibido no modal atual
+            const nomeParticipante = $('#modalNome').text();
+            $('#nomeExclusaoDisplay').text(nomeParticipante !== '' ? nomeParticipante : 'selecionada');
+
+            // Mostrar o novo modal de confirmação do Bootstrap
+            $('#confirmarExclusaoModal').modal('show');
+
+            // Configurar a ação do botão de confirmação dentro do novo modal
+            $('#btnConfirmarExclusao').off('click').on('click', function () {
+                const btnConfirmar = $(this);
+                const textoOriginal = btnConfirmar.html();
+                
+                // Mostrar estado de carregamento no botão
+                btnConfirmar.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Excluindo...');
+
+                const batch = db.batch();
+                const deletePromises = [];
+
+                // 1. Deletar a Inscrição Principal
+                const inscricaoRef = db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId);
+                batch.delete(inscricaoRef);
+
+                // 2. Buscar e deletar Pagamentos vinculados (por participanteId)
+                const pagamentosPromise = db.collection("Eventos").doc("EBF2026").collection("pagamentos")
+                    .where("participanteId", "==", participanteId)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            batch.delete(doc.ref);
+                        });
+                    });
+                deletePromises.push(pagamentosPromise);
+
+                // 3. Buscar e deletar Check-ins vinculados (por nome, conforme estrutura atual do check-in)
+                if (nomeParticipante && nomeParticipante !== 'N/A') {
+                    const checkinPromise = db.collection("Eventos").doc("EBF2026").collection("checkin")
+                        .where("nome", "==", nomeParticipante)
+                        .get()
+                        .then(snapshot => {
+                            snapshot.forEach(doc => {
+                                batch.delete(doc.ref);
+                            });
+                        });
+                    deletePromises.push(checkinPromise);
+                }
+
+                // 4. Buscar e deletar Registros no Caixa vinculados (por participanteId)
+                const caixaPromise = db.collection("Eventos").doc("EBF2026").collection("caixa")
+                    .where("participanteId", "==", participanteId)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            batch.delete(doc.ref);
+                        });
+                    });
+                deletePromises.push(caixaPromise);
+
+                // Executar todas as buscas e então commitar o batch
+                Promise.all(deletePromises)
                     .then(() => {
-                        alert("Participante excluído com sucesso!");
+                        return batch.commit();
+                    })
+                    .then(() => {
+                        $('#confirmarExclusaoModal').modal('hide');
                         $('#participanteModal').modal('hide');
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 500);
+                        alert("Participante e dados vinculados (Pagamentos, Check-in, Caixa) foram excluídos com sucesso!");
+                        carregarParticipantes(); // Recarrega a lista
                     })
                     .catch((error) => {
-                        alert("Erro ao excluir participante: " + error.message);
+                        console.error("Erro durante a exclusão em cascata: ", error);
+                        alert("Erro ao excluir dados vinculados: " + error.message);
+                    })
+                    .finally(() => {
+                        // Restaurar estado do botão caso algo dê errado e o modal permaneça aberto
+                        btnConfirmar.prop('disabled', false).html(textoOriginal);
                     });
-            }
-
-            carregarParticipantes(); // Recarrega a lista após exclusão
-
+            });
         }
 
         // Função para criar gráfico de faixa etária
         function criarGraficoFaixaEtaria(dados) {
             const ctx = document.getElementById('faixaEtariaChart').getContext('2d');
-            
+
             // Destruir gráfico existente se houver
             if (faixaEtariaChart) {
                 faixaEtariaChart.destroy();
             }
-            
+
             // Definir faixas etárias baseadas no check-in
             const faixas = {
                 '2-5 anos': 0,
@@ -732,7 +821,7 @@
                 '10-12 anos': 0,
                 'Sem Faixa': 0
             };
-            
+
             const coresInfo = {
                 '2-5 anos': { cor: '#4CAF50', nome: 'Verde', emoji: '🟢' },
                 '6-7 anos': { cor: '#dfca0d', nome: 'Amarela', emoji: '🟡' },
@@ -759,7 +848,7 @@
                     }
                 }
             });
-            
+
             faixaEtariaChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -832,7 +921,7 @@
                             },
                             padding: 12,
                             callbacks: {
-                                title: function(context) {
+                                title: function (context) {
                                     const faixa = context[0].label;
                                     const info = coresInfo[faixa];
                                     if (faixa === 'Sem Faixa') {
@@ -840,7 +929,7 @@
                                     }
                                     return `${info.emoji} Sala ${info.nome}`;
                                 },
-                                label: function(context) {
+                                label: function (context) {
                                     const valor = context.parsed.y;
                                     const total = Object.values(faixas).reduce((a, b) => a + b, 0);
                                     const percentual = total > 0 ? ((valor / total) * 100).toFixed(1) : 0;
@@ -896,32 +985,32 @@
                         delay: (context) => {
                             return context.dataIndex * 200;
                         },
-                        onComplete: function() {
+                        onComplete: function () {
                             // Desenhar valores em cima das barras após a animação
                             const chart = this;
                             const ctx = chart.ctx;
-                            
+
                             ctx.font = 'bold 19px Montserrat';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
-                            
+
                             chart.data.datasets.forEach((dataset, i) => {
                                 const meta = chart.getDatasetMeta(i);
                                 meta.data.forEach((bar, index) => {
                                     const data = dataset.data[index];
                                     const faixa = chart.data.labels[index];
                                     const info = coresInfo[faixa];
-                                    
+
                                     if (data > 0) {
                                         // Cor do texto baseada na cor da barra
                                         ctx.fillStyle = info.cor;
                                         ctx.strokeStyle = '#fff';
                                         ctx.lineWidth = 3;
-                                        
+
                                         const text = `${data}`;
                                         const x = bar.x;
                                         const y = bar.y - 8;
-                                        
+
                                         // Contorno branco para melhor legibilidade
                                         ctx.strokeText(text, x, y);
                                         ctx.fillText(text, x, y);
@@ -948,12 +1037,12 @@
         // Função para criar gráfico de pagamentos por dia
         function criarGraficoPagamentosPorDia(dados) {
             const ctx = document.getElementById('pagamentosPorDiaChart').getContext('2d');
-            
+
             // Destruir gráfico existente se houver
             if (pagamentosPorDiaChart) {
                 pagamentosPorDiaChart.destroy();
             }
-            
+
             // Definir períodos
             const periodos = {
                 'Até 09/07': 0,
@@ -961,14 +1050,14 @@
                 'Dia 11/07': 0,
                 'Dia 12/07': 0
             };
-            
+
             // Contar pagamentos por período - APENAS OS QUE PAGARAM
             dados.forEach(participante => {
                 if (participante.statusPagamento === 'pago' && participante.dataPagamento) {
                     const dataPagamento = new Date(participante.dataPagamento);
                     const dia = dataPagamento.getDate();
                     const mes = dataPagamento.getMonth() + 1; // getMonth() retorna 0-11
-                    
+
                     // Verificar se é julho (mês 7)
                     if (mes === 7) {
                         if (dia <= 9) {
@@ -983,7 +1072,7 @@
                     }
                 }
             });
-            
+
             pagamentosPorDiaChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1049,10 +1138,10 @@
                             },
                             padding: 12,
                             callbacks: {
-                                title: function(context) {
+                                title: function (context) {
                                     return `📅 ${context[0].label}`;
                                 },
-                                label: function(context) {
+                                label: function (context) {
                                     const valor = context.parsed.y;
                                     const total = Object.values(periodos).reduce((a, b) => a + b, 0);
                                     const percentual = total > 0 ? ((valor / total) * 100).toFixed(1) : 0;
@@ -1106,29 +1195,29 @@
                         delay: (context) => {
                             return context.dataIndex * 200;
                         },
-                        onComplete: function() {
+                        onComplete: function () {
                             // Desenhar valores em cima das barras após a animação
                             const chart = this;
                             const ctx = chart.ctx;
-                            
+
                             ctx.font = 'bold 19px Montserrat';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
-                            
+
                             chart.data.datasets.forEach((dataset, i) => {
                                 const meta = chart.getDatasetMeta(i);
                                 meta.data.forEach((bar, index) => {
                                     const data = dataset.data[index];
-                                    
+
                                     if (data > 0) {
                                         ctx.fillStyle = dataset.borderColor[index];
                                         ctx.strokeStyle = '#fff';
                                         ctx.lineWidth = 3;
-                                        
+
                                         const text = `${data}`;
                                         const x = bar.x;
                                         const y = bar.y - 8;
-                                        
+
                                         // Contorno branco para melhor legibilidade
                                         ctx.strokeText(text, x, y);
                                         ctx.fillText(text, x, y);

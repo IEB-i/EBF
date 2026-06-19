@@ -322,7 +322,8 @@
                             <div class="col-4">
                                 <h3 class="stats-value text-success" id="pagosTrabalhadores">0</h3>
                                 <p class="stats-label">Trabalhador</p>
-                                <small class="text-muted d-block">R$ <span id="valorPagoTrabalhadores">0,00</span></small>
+                                <small class="text-muted d-block">R$ <span
+                                        id="valorPagoTrabalhadores">0,00</span></small>
                             </div>
                         </div>
                     </div>
@@ -462,23 +463,28 @@
     </div>
 
     <!-- Modal de Confirmação de Estorno -->
-    <div class="modal fade" id="estornoModal" tabindex="-1" role="dialog" aria-labelledby="estornoModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="estornoModalLabel">Confirmar Estorno</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">×</span>
+    <div class="modal fade" id="estornoModal" tabindex="-1" role="dialog" aria-labelledby="estornoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="estornoModalLabel">
+                        <i class="material-icons align-middle mr-1">warning</i> Confirmar Estorno
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <p>Você tem certeza que deseja estornar o pagamento de <strong id="estornoNome"></strong>?</p>
-                    <p>Esta ação irá marcar o pagamento como pendente.</p>
+                    <div class="alert alert-warning">
+                        <strong>Atenção:</strong> Esta ação irá marcar a inscrição do participante como <b>pendente</b> e registrará uma movimentação de estorno no <b>controle de caixa</b>.
+                    </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmarEstorno">Confirmar Estorno</button>
+                    <button type="button" class="btn btn-danger" id="confirmarEstorno">
+                        <i class="material-icons align-middle mr-1">undo</i> Confirmar Estorno
+                    </button>
                 </div>
             </div>
         </div>
@@ -620,7 +626,7 @@
 
                 // Atualizar participante com informações de pagamento
                 console.log("Atualizando status do participante para 'pago'...");
-                db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                     .update({
                         statusPagamento: 'pago',
                         formaPagamento: formaPagamento,
@@ -632,7 +638,7 @@
                         console.log("Registrando pagamento na coleção de pagamentos...");
 
                         // Registrar pagamento na coleção de pagamentos
-                        return db.collection("Eventos").doc("EBF2025").collection("pagamentos").add({
+                        return db.collection("Eventos").doc("EBF2026").collection("pagamentos").add({
                             participanteId: participanteId,
                             participanteNome: $('#participante option:selected').text(),
                             valor: valorPagamento,
@@ -645,7 +651,7 @@
                         console.log("Pagamento registrado com sucesso, ID:", docRef.id);
 
                         // ADICIONAR: Registrar automaticamente no caixa
-                        return db.collection("Eventos").doc("EBF2025").collection("caixa").add({
+                        return db.collection("Eventos").doc("EBF2026").collection("caixa").add({
                             descricao: `Inscrição - ${$('#participante option:selected').text()}`,
                             data: new Date().toISOString().substring(0, 10),
                             valor: valorPagamento,
@@ -676,13 +682,19 @@
 
             // Confirmar estorno de pagamento
             $('#confirmarEstorno').on('click', function () {
+                const btnConfirmar = $(this);
+                const textoOriginal = btnConfirmar.html();
+                
+                // Mostrar estado de carregamento no botão
+                btnConfirmar.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processando...');
+
                 const pagamentoId = $(this).data('pagamento');
                 const participanteId = $(this).data('participante');
 
                 console.log("Iniciando estorno do pagamento:", pagamentoId);
 
                 // Atualizar status do pagamento
-                db.collection("Eventos").doc("EBF2025").collection("pagamentos").doc(pagamentoId)
+                db.collection("Eventos").doc("EBF2026").collection("pagamentos").doc(pagamentoId)
                     .update({
                         status: 'estornado',
                         dataEstorno: new Date().toISOString()
@@ -691,7 +703,7 @@
                         console.log("Status do pagamento atualizado para 'estornado'");
 
                         // Atualizar status do participante
-                        return db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                        return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                             .update({
                                 statusPagamento: 'pendente',
                                 dataPagamento: null,
@@ -704,7 +716,7 @@
                         console.log("Buscando entrada correspondente no caixa...");
 
                         // Buscar e tratar entrada correspondente no caixa
-                        return db.collection("Eventos").doc("EBF2025").collection("caixa")
+                        return db.collection("Eventos").doc("EBF2026").collection("caixa")
                             .where("pagamentoId", "==", pagamentoId)
                             .where("referenciaOrigem", "==", "pagamento")
                             .get();
@@ -719,7 +731,7 @@
                                 const transacaoCaixa = doc.data();
 
                                 // Opção 1: Criar transação de estorno (RECOMENDADO para auditoria)
-                                const novaRefEstorno = db.collection("Eventos").doc("EBF2025").collection("caixa").doc();
+                                const novaRefEstorno = db.collection("Eventos").doc("EBF2026").collection("caixa").doc();
 
                                 batch.set(novaRefEstorno, {
                                     descricao: `ESTORNO - ${transacaoCaixa.descricao}`,
@@ -766,6 +778,10 @@
                     .catch((error) => {
                         console.error("Erro ao estornar pagamento: ", error);
                         alert("Erro ao estornar pagamento. Tente novamente.");
+                    })
+                    .finally(() => {
+                        // Restaurar o botão
+                        btnConfirmar.prop('disabled', false).html(textoOriginal);
                     });
             });
 
@@ -773,7 +789,7 @@
 
         function carregarDashboard() {
             // Primeiro, vamos buscar os pagamentos confirmados
-            db.collection("Eventos").doc("EBF2025").collection("pagamentos")
+            db.collection("Eventos").doc("EBF2026").collection("pagamentos")
                 .where("status", "==", "confirmado")
                 .get()
                 .then((pagamentosSnapshot) => {
@@ -793,8 +809,8 @@
                     $('#valorPago').text(formatarMoeda(valorTotalPago)); // FORMATAÇÃO APLICADA
 
                     // Agora vamos buscar os dados de inscrições para os outros cards
-                    return db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                        .where("anoevento", "==", "2025")
+                    return db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                        .where("anoevento", "==", "2026")
                         .get();
                 })
                 .then((querySnapshot) => {
@@ -810,7 +826,7 @@
 
                     querySnapshot.forEach((doc) => {
                         const participante = doc.data();
-                        
+
                         if (participante.tipoInsc === 'criancas') {
                             totalCriancas++;
                             if (participante.statusPagamento === 'pago') {
@@ -862,7 +878,7 @@
 
         function buscarFormasPagamento() {
             // Buscar pagamentos confirmados
-            db.collection("Eventos").doc("EBF2025").collection("pagamentos")
+            db.collection("Eventos").doc("EBF2026").collection("pagamentos")
                 .where("status", "==", "confirmado")
                 .get()
                 .then((querySnapshot) => {
@@ -893,8 +909,8 @@
             selectParticipante.html('<option value="">Selecione um participante</option>');
 
             // Buscar participantes com pagamento pendente
-            db.collection("Eventos").doc("EBF2025").collection("inscricoes")
-                .where("anoevento", "==", "2025")
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes")
+                .where("anoevento", "==", "2026")
                 .where("statusPagamento", "in", ["pendente", null])  // Apenas pendentes ou sem status
                 .orderBy("nome")
                 .get()
@@ -923,7 +939,7 @@
             tabelaPagamentos.html('');
 
             // Buscar pagamentos
-            db.collection("Eventos").doc("EBF2025").collection("pagamentos")
+            db.collection("Eventos").doc("EBF2026").collection("pagamentos")
                 .orderBy("dataPagamento", "desc")
                 .get()
                 .then((querySnapshot) => {
@@ -1140,7 +1156,7 @@
                 }
 
                 // Atualizar o pagamento no Firestore
-                db.collection("Eventos").doc("EBF2025").collection("pagamentos").doc(pagamentoId)
+                db.collection("Eventos").doc("EBF2026").collection("pagamentos").doc(pagamentoId)
                     .update({
                         valor: valorPagamento,
                         formaPagamento: formaPagamento,
@@ -1148,7 +1164,7 @@
                     })
                     .then(() => {
                         // Atualizar o participante com as novas informações
-                        return db.collection("Eventos").doc("EBF2025").collection("inscricoes").doc(participanteId)
+                        return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
                             .update({
                                 formaPagamento: formaPagamento,
                                 valorPago: valorPagamento
