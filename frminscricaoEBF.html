@@ -242,15 +242,22 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Carregar configurações de status das faixas etárias
+        // Carregar configurações e contagens de vagas otimizadas
         let configuracaoStatus = {};
+        let configuracaoMetas = {};
+        let contagemInscricoes = {};
+        let dadosCarregados = false;
+
         db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").get()
-            .then((doc) => {
-                if (doc.exists && doc.data().status_faixa_etaria) {
-                    configuracaoStatus = doc.data().status_faixa_etaria;
-                }
-            })
-            .catch(err => console.error("Erro ao carregar configurações:", err));
+        .then((configDoc) => {
+            if (configDoc.exists) {
+                const data = configDoc.data();
+                configuracaoStatus = data.status_faixa_etaria || {};
+                configuracaoMetas = data.metas_faixa_etaria || {};
+                contagemInscricoes = data.contagem_faixa_etaria || {};
+            }
+            dadosCarregados = true;
+        }).catch(err => console.error("Erro ao carregar configurações:", err));
 
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
@@ -349,7 +356,7 @@
                     }
                     document.getElementById('idade').value = age + " anos";
 
-                    // Verificar faixa etária e status
+                    // Verificar faixa etária, status e limite de vagas
                     let faixa = "";
                     if (age >= 4 && age <= 5) faixa = "4 a 5 anos";
                     else if (age >= 6 && age <= 7) faixa = "6 a 7 anos";
@@ -357,8 +364,14 @@
                     else if (age >= 10 && age <= 12) faixa = "10 a 12 anos";
 
                     if (faixa !== "") {
+                        const meta = configuracaoMetas[faixa] || 0;
+                        const atual = contagemInscricoes[faixa] || 0;
+
                         if (configuracaoStatus[faixa] === false) {
                             alert(`As inscrições para a faixa etária de ${faixa} estão encerradas.`);
+                            document.getElementById('cadastrarBtn').disabled = true;
+                        } else if (meta > 0 && atual >= meta) {
+                            alert(`As vagas para a faixa etária de ${faixa} estão esgotadas! (${atual}/${meta} vagas preenchidas).`);
                             document.getElementById('cadastrarBtn').disabled = true;
                         } else {
                             document.getElementById('cadastrarBtn').disabled = false;
@@ -487,6 +500,16 @@
                 db.collection("Eventos").doc("EBF2026").collection("inscricoes").add(formData)
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
+                        
+                        // Atualizar o contador no banco
+                        if (faixaEtariaClassificacao !== "") {
+                            const updateContador = {};
+                            updateContador[`contagem_faixa_etaria.${faixaEtariaClassificacao}`] = firebase.firestore.FieldValue.increment(1);
+                            // Usar set com merge caso o objeto contagem_faixa_etaria não exista ainda
+                            return db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set(updateContador, { merge: true });
+                        }
+                    })
+                    .then(() => {
                         window.location.href = 'obrigado.html';
                         this.reset();
                         // Resetar campos adicionais

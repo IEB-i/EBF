@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Setup Contadores</title>
+</head>
+<body>
+    <h2>Configurando contadores...</h2>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC31C1X13eqVAOq_o5K2evI8q3GOfnpOpo",
+            authDomain: "iebi-2e84e.firebaseapp.com",
+            projectId: "iebi-2e84e",
+            storageBucket: "iebi-2e84e.appspot.com",
+            messagingSenderId: "634456198202",
+            appId: "1:634456198202:web:8b4de1b4def23a49303903"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        db.collection("Eventos").doc("EBF2026").collection("inscricoes").where("anoevento", "==", "2026").get()
+            .then((inscricoesSnapshot) => {
+                const contagem = {
+                    "4 a 5 anos": 0,
+                    "6 a 7 anos": 0,
+                    "8 a 9 anos": 0,
+                    "10 a 12 anos": 0
+                };
+
+                inscricoesSnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    if (p.tipoInsc === 'criancas') {
+                        let f = p.faixaEtaria;
+                        if (!f && p.idade) {
+                            const idNum = parseInt(p.idade.toString().replace(/\D/g, ''));
+                            if (!isNaN(idNum)) {
+                                if (idNum >= 4 && idNum <= 5) f = "4 a 5 anos";
+                                else if (idNum >= 6 && idNum <= 7) f = "6 a 7 anos";
+                                else if (idNum >= 8 && idNum <= 9) f = "8 a 9 anos";
+                                else if (idNum >= 10 && idNum <= 12) f = "10 a 12 anos";
+                            }
+                        }
+                        if (f && contagem[f] !== undefined) {
+                            contagem[f]++;
+                        }
+                    }
+                });
+
+                console.log("Contagens calculadas: ", contagem);
+
+                return db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set({
+                    contagem_faixa_etaria: contagem
+                }, { merge: true });
+            })
+            .then(() => {
+                console.log("Contadores atualizados no banco com sucesso!");
+                document.body.innerHTML += "<p>Sucesso! Contadores iniciados. Pode fechar este arquivo e apagá-lo.</p>";
+                setTimeout(() => window.close(), 2000);
+            })
+            .catch((error) => {
+                console.error("Erro escrevendo documento: ", error);
+                document.body.innerHTML += "<p>Erro: " + error + "</p>";
+            });
+    </script>
+</body>
+</html>
