@@ -242,6 +242,16 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Carregar configurações de status das faixas etárias
+        let configuracaoStatus = {};
+        db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").get()
+            .then((doc) => {
+                if (doc.exists && doc.data().status_faixa_etaria) {
+                    configuracaoStatus = doc.data().status_faixa_etaria;
+                }
+            })
+            .catch(err => console.error("Erro ao carregar configurações:", err));
+
         // Função para verificar se o nome já existe
         function verificarNomeExistente(nome) {
             return db.collection("Eventos").doc("EBF2026").collection("inscricoes")
@@ -338,11 +348,32 @@
                         age--;
                     }
                     document.getElementById('idade').value = age + " anos";
+
+                    // Verificar faixa etária e status
+                    let faixa = "";
+                    if (age >= 4 && age <= 5) faixa = "4 a 5 anos";
+                    else if (age >= 6 && age <= 7) faixa = "6 a 7 anos";
+                    else if (age >= 8 && age <= 9) faixa = "8 a 9 anos";
+                    else if (age >= 10 && age <= 12) faixa = "10 a 12 anos";
+
+                    if (faixa !== "") {
+                        if (configuracaoStatus[faixa] === false) {
+                            alert(`As inscrições para a faixa etária de ${faixa} estão encerradas.`);
+                            document.getElementById('cadastrarBtn').disabled = true;
+                        } else {
+                            document.getElementById('cadastrarBtn').disabled = false;
+                        }
+                    } else {
+                        document.getElementById('cadastrarBtn').disabled = false;
+                    }
+
                 } else {
                     document.getElementById('idade').value = '';
+                    document.getElementById('cadastrarBtn').disabled = false;
                 }
             } else {
                 document.getElementById('idade').value = '';
+                document.getElementById('cadastrarBtn').disabled = false;
             }
         });
 
@@ -417,11 +448,24 @@
                 const dtParts = dtValue.split('/');
                 const dtFormatada = `${dtParts[2]}-${dtParts[1]}-${dtParts[0]}`;
 
+                // Calcular a faixa etária
+                let faixaEtariaClassificacao = "";
+                const idadeValorStr = document.getElementById('idade').value;
+                const idadeNum = parseInt(idadeValorStr.replace(/\D/g, ''));
+                if (!isNaN(idadeNum)) {
+                    if (idadeNum >= 4 && idadeNum <= 5) faixaEtariaClassificacao = "4 a 5 anos";
+                    else if (idadeNum >= 6 && idadeNum <= 7) faixaEtariaClassificacao = "6 a 7 anos";
+                    else if (idadeNum >= 8 && idadeNum <= 9) faixaEtariaClassificacao = "8 a 9 anos";
+                    else if (idadeNum >= 10 && idadeNum <= 12) faixaEtariaClassificacao = "10 a 12 anos";
+                    else faixaEtariaClassificacao = "Outra (" + idadeNum + " anos)";
+                }
+
                 // Se o nome não existir, continuar com o envio do formulário
                 const formData = {
                     nome: nome,
                     dtnascCrianca: dtFormatada,
                     idade: document.getElementById('idade').value,
+                    faixaEtaria: faixaEtariaClassificacao,
                     responsavel1: document.getElementById('responsavel1').value,
                     responsavel2: document.getElementById('responsavel2').value,
                     foneResponsavel: document.getElementById('foneResponsavel').value,

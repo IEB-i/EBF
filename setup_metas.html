@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Setup Metas</title>
+</head>
+<body>
+    <h2>Configurando metas...</h2>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC31C1X13eqVAOq_o5K2evI8q3GOfnpOpo",
+            authDomain: "iebi-2e84e.firebaseapp.com",
+            projectId: "iebi-2e84e",
+            storageBucket: "iebi-2e84e.appspot.com",
+            messagingSenderId: "634456198202",
+            appId: "1:634456198202:web:8b4de1b4def23a49303903"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set({
+            metas_faixa_etaria: {
+                "4 a 5 anos": 0,
+                "6 a 7 anos": 0,
+                "8 a 9 anos": 0,
+                "10 a 12 anos": 0
+            }
+        }, { merge: true })
+        .then(() => {
+            console.log("Documento atualizado com sucesso!");
+            document.body.innerHTML += "<p>Sucesso! Pode fechar este arquivo e apagá-lo.</p>";
+        })
+        .catch((error) => {
+            console.error("Erro escrevendo documento: ", error);
+            document.body.innerHTML += "<p>Erro: " + error + "</p>";
+        });
+    </script>
+</body>
+</html>
