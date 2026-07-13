@@ -133,9 +133,10 @@
                         <form id="configForm">
                             <!-- Headers -->
                             <div class="row font-weight-bold text-muted mb-3 d-none d-md-flex pb-2 border-bottom">
-                                <div class="col-md-4 pl-4">Faixa Etária</div>
-                                <div class="col-md-4">Meta (Vagas)</div>
-                                <div class="col-md-4 text-center">Status (Aberta/Fechada)</div>
+                                <div class="col-md-3 pl-4">Faixa Etária</div>
+                                <div class="col-md-3">Meta (Vagas)</div>
+                                <div class="col-md-3 text-center">Pagos Atuais</div>
+                                <div class="col-md-3 text-center">Status</div>
                             </div>
 
                             <div id="faixasContainer">
@@ -176,7 +177,8 @@
         const faixasPadrao = ["4 a 5 anos", "6 a 7 anos", "8 a 9 anos", "10 a 12 anos"];
         let configuracoesAtuais = {
             metas_faixa_etaria: {},
-            status_faixa_etaria: {}
+            status_faixa_etaria: {},
+            contagem_faixa_etaria: {}
         };
 
         document.addEventListener('DOMContentLoaded', carregarConfiguracoes);
@@ -188,6 +190,7 @@
                         const data = doc.data();
                         configuracoesAtuais.metas_faixa_etaria = data.metas_faixa_etaria || {};
                         configuracoesAtuais.status_faixa_etaria = data.status_faixa_etaria || {};
+                        configuracoesAtuais.contagem_faixa_etaria = data.contagem_faixa_etaria || {};
                     }
                     renderizarFormulario();
                 })
@@ -203,20 +206,25 @@
 
             faixasPadrao.forEach((faixa, index) => {
                 const meta = configuracoesAtuais.metas_faixa_etaria[faixa] || 0;
+                const contador = configuracoesAtuais.contagem_faixa_etaria[faixa] || 0;
                 // Default true se não existir
                 const aberta = configuracoesAtuais.status_faixa_etaria[faixa] !== false; 
                 
                 html += `
                     <div class="row age-row pl-3">
-                        <div class="col-md-4 d-flex align-items-center mb-2 mb-md-0">
+                        <div class="col-md-3 d-flex align-items-center mb-2 mb-md-0">
                             <i class="material-icons text-warning mr-2">child_care</i>
                             <span class="font-weight-bold" style="font-size: 1.1rem;">${faixa}</span>
                         </div>
-                        <div class="col-md-4 mb-2 mb-md-0 pr-md-5">
+                        <div class="col-md-3 mb-2 mb-md-0 pr-md-3">
                             <label class="d-md-none text-muted small font-weight-bold">Meta (Vagas)</label>
                             <input type="number" class="form-control meta-input" data-faixa="${faixa}" value="${meta}" min="0">
                         </div>
-                        <div class="col-md-4 d-flex align-items-center justify-content-md-center">
+                        <div class="col-md-3 mb-2 mb-md-0 d-flex align-items-center justify-content-md-center">
+                            <label class="d-md-none text-muted small font-weight-bold mr-2">Pagos Atuais:</label>
+                            <span class="badge badge-success" style="font-size: 1.1rem; padding: 8px 12px;">${contador}</span>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center justify-content-md-center">
                             <label class="d-md-none text-muted small mr-3 mb-0 font-weight-bold">Status</label>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="${!aberta ? 'text-danger font-weight-bold' : 'text-muted'} mr-2" id="label-fechada-${index}">Fechada</span>

@@ -501,13 +501,8 @@
                     .then((docRef) => {
                         console.log("Documento escrito com ID: ", docRef.id);
                         
-                        // Atualizar o contador no banco
-                        if (faixaEtariaClassificacao !== "") {
-                            const updateContador = {};
-                            updateContador[`contagem_faixa_etaria.${faixaEtariaClassificacao}`] = firebase.firestore.FieldValue.increment(1);
-                            // Usar set com merge caso o objeto contagem_faixa_etaria não exista ainda
-                            return db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set(updateContador, { merge: true });
-                        }
+                        // O contador não é mais incrementado aqui, pois agora dependemos dos pagamentos confirmados
+                        return Promise.resolve();
                     })
                     .then(() => {
                         window.location.href = 'obrigado.html';

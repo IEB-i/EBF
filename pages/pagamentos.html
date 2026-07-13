@@ -626,12 +626,35 @@
 
                 // Atualizar participante com informações de pagamento
                 console.log("Atualizando status do participante para 'pago'...");
-                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
-                    .update({
-                        statusPagamento: 'pago',
-                        formaPagamento: formaPagamento,
-                        dataPagamento: new Date().toISOString(),
-                        valorPago: valorPagamento
+                db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId).get()
+                    .then((docPart) => {
+                        if (docPart.exists) {
+                            const p = docPart.data();
+                            if (p.tipoInsc === 'criancas' && p.statusPagamento !== 'pago') {
+                                let faixa = p.faixaEtaria;
+                                if (!faixa && p.idade) {
+                                    const idadeNum = parseInt(p.idade.toString().replace(/\D/g, ''));
+                                    if (!isNaN(idadeNum)) {
+                                        if (idadeNum >= 4 && idadeNum <= 5) faixa = "4 a 5 anos";
+                                        else if (idadeNum >= 6 && idadeNum <= 7) faixa = "6 a 7 anos";
+                                        else if (idadeNum >= 8 && idadeNum <= 9) faixa = "8 a 9 anos";
+                                        else if (idadeNum >= 10 && idadeNum <= 12) faixa = "10 a 12 anos";
+                                    }
+                                }
+                                if (faixa) {
+                                    const updateContador = {};
+                                    updateContador[`contagem_faixa_etaria.${faixa}`] = firebase.firestore.FieldValue.increment(1);
+                                    db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set(updateContador, { merge: true });
+                                }
+                            }
+                        }
+                        return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
+                            .update({
+                                statusPagamento: 'pago',
+                                formaPagamento: formaPagamento,
+                                dataPagamento: new Date().toISOString(),
+                                valorPago: valorPagamento
+                            });
                     })
                     .then(() => {
                         console.log("Status do participante atualizado com sucesso");
@@ -703,12 +726,35 @@
                         console.log("Status do pagamento atualizado para 'estornado'");
 
                         // Atualizar status do participante
-                        return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
-                            .update({
-                                statusPagamento: 'pendente',
-                                dataPagamento: null,
-                                formaPagamento: null,
-                                valorPago: null
+                        return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId).get()
+                            .then((docPart) => {
+                                if (docPart.exists) {
+                                    const p = docPart.data();
+                                    if (p.tipoInsc === 'criancas' && p.statusPagamento === 'pago') {
+                                        let faixa = p.faixaEtaria;
+                                        if (!faixa && p.idade) {
+                                            const idadeNum = parseInt(p.idade.toString().replace(/\D/g, ''));
+                                            if (!isNaN(idadeNum)) {
+                                                if (idadeNum >= 4 && idadeNum <= 5) faixa = "4 a 5 anos";
+                                                else if (idadeNum >= 6 && idadeNum <= 7) faixa = "6 a 7 anos";
+                                                else if (idadeNum >= 8 && idadeNum <= 9) faixa = "8 a 9 anos";
+                                                else if (idadeNum >= 10 && idadeNum <= 12) faixa = "10 a 12 anos";
+                                            }
+                                        }
+                                        if (faixa) {
+                                            const updateContador = {};
+                                            updateContador[`contagem_faixa_etaria.${faixa}`] = firebase.firestore.FieldValue.increment(-1);
+                                            db.collection("Eventos").doc("EBF2026").collection("configuracoes").doc("geral").set(updateContador, { merge: true });
+                                        }
+                                    }
+                                }
+                                return db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
+                                    .update({
+                                        statusPagamento: 'pendente',
+                                        dataPagamento: null,
+                                        formaPagamento: null,
+                                        valorPago: null
+                                    });
                             });
                     })
                     .then(() => {
