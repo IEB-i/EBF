@@ -340,8 +340,11 @@
                     </div>
                     <!-- Botões -->
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-warning mr-2" id="btnAbrirEdicao">
+                            <i class="material-icons align-middle">edit</i> Editar
+                        </button>
                         <button type="button" class="btn btn-danger mr-auto" id="btnExcluirParticipante">
-                            <i class="material-icons align-middle">delete</i> Excluir Participante
+                            <i class="material-icons align-middle">delete</i> Excluir
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     </div>
@@ -373,6 +376,107 @@
                         <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">
                             <i class="material-icons align-middle mr-1">delete_forever</i> Sim, Excluir Tudo
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Edição -->
+        <div class="modal fade" id="editarParticipanteModal" tabindex="-1" role="dialog" aria-labelledby="editarParticipanteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content border-warning">
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title" id="editarParticipanteModalLabel">
+                            <i class="material-icons align-middle mr-1">edit</i> Editar Dados da Criança
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formEditarParticipante">
+                            <input type="hidden" id="editParticipanteId">
+                            
+                            <h6 class="text-primary mt-2 border-bottom pb-1">Informações Pessoais</h6>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" id="editNome" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Data de Nasc.</label>
+                                    <input type="date" class="form-control" id="editDtNasc" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Idade</label>
+                                    <input type="text" class="form-control" id="editIdade" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label>Tem Alergia?</label>
+                                    <select class="form-control" id="editAlergia">
+                                        <option value="Não">Não</option>
+                                        <option value="Sim">Sim</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label>Quais Alergias?</label>
+                                    <input type="text" class="form-control" id="editQuaisAlergias">
+                                </div>
+                            </div>
+
+                            <h6 class="text-primary mt-3 border-bottom pb-1">Informações do Responsável</h6>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label>Responsável 1</label>
+                                    <input type="text" class="form-control" id="editResponsavel1" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Responsável 2</label>
+                                    <input type="text" class="form-control" id="editResponsavel2">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Celular Responsável</label>
+                                    <input type="text" class="form-control" id="editFoneResponsavel" required>
+                                </div>
+                            </div>
+
+                            <h6 class="text-primary mt-3 border-bottom pb-1">Informações Igreja/Endereço</h6>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Igreja</label>
+                                    <select class="form-control" id="editIgreja">
+                                        <option value="IEB-i">IEB-i</option>
+                                        <option value="Outra">Outra</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6" id="divEditOutraIgreja" style="display: none;">
+                                    <label>Outra Igreja</label>
+                                    <input type="text" class="form-control" id="editOutraIgreja">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Endereço</label>
+                                    <input type="text" class="form-control" id="editEndereco">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Bairro</label>
+                                    <input type="text" class="form-control" id="editBairro">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Cidade</label>
+                                    <input type="text" class="form-control" id="editCidade">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning" id="btnSalvarEdicao">
+                            <i class="material-icons align-middle mr-1">save</i> Salvar Alterações
+                        </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -587,6 +691,46 @@
                     excluirParticipante(participanteId);
                 }
             });
+
+            // Configuração do botão Editar e lógica de edição
+            $('#btnAbrirEdicao').on('click', function() {
+                const participanteId = $('#btnExcluirParticipante').data('id');
+                if(!participanteId) return;
+                
+                abrirModalEdicao(participanteId);
+            });
+
+            $('#editIgreja').on('change', function() {
+                if($(this).val() === 'Outra') {
+                    $('#divEditOutraIgreja').show();
+                } else {
+                    $('#divEditOutraIgreja').hide();
+                }
+            });
+
+            // Calcula a idade automaticamente baseada na data de nascimento (YYYY-MM-DD no input type="date")
+            $('#editDtNasc').on('change input', function() {
+                const val = $(this).val();
+                if (val && val.length === 10) {
+                    const dateParts = val.split('-');
+                    const birthDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    $('#editIdade').val(age + " anos");
+                } else {
+                    $('#editIdade').val('');
+                }
+            });
+
+            $('#formEditarParticipante').on('submit', function(e) {
+                e.preventDefault();
+                salvarEdicao();
+            });
         });
 
         // Função para Carregar participante
@@ -709,6 +853,82 @@
                 .catch((error) => {
                     console.error("Erro ao buscar detalhes: ", error);
                     alert("Erro ao buscar detalhes do participante.");
+                });
+        }
+
+        // Função para abrir o modal de Edição preenchido
+        function abrirModalEdicao(participanteId) {
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(participanteId)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const p = doc.data();
+                        
+                        $('#editParticipanteId').val(doc.id);
+                        $('#editNome').val(p.nome || '');
+                        $('#editDtNasc').val(p.dtnasc || '');
+                        $('#editIdade').val(p.idade || '');
+                        $('#editAlergia').val(p.alergia || 'Não');
+                        $('#editQuaisAlergias').val(p.quaisAlergias || '');
+                        $('#editResponsavel1').val(p.responsavel1 || '');
+                        $('#editResponsavel2').val(p.responsavel2 || '');
+                        $('#editFoneResponsavel').val(p.foneResponsavel || '');
+                        $('#editIgreja').val(p.igreja === 'Outra' ? 'Outra' : (p.igreja || 'IEB-i'));
+                        $('#editOutraIgreja').val(p.outraIgreja || '');
+                        
+                        if ($('#editIgreja').val() === 'Outra') {
+                            $('#divEditOutraIgreja').show();
+                        } else {
+                            $('#divEditOutraIgreja').hide();
+                        }
+
+                        $('#editEndereco').val(p.endereco || '');
+                        $('#editBairro').val(p.bairro || '');
+                        $('#editCidade').val(p.cidade || '');
+
+                        // Esconder o modal atual e abrir o novo
+                        $('#participanteModal').modal('hide');
+                        $('#editarParticipanteModal').modal('show');
+                    }
+                });
+        }
+
+        // Função para salvar a edição
+        function salvarEdicao() {
+            const id = $('#editParticipanteId').val();
+            const btn = $('#btnSalvarEdicao');
+            
+            btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...');
+
+            const dadosEdicao = {
+                nome: $('#editNome').val(),
+                dtnasc: $('#editDtNasc').val(),
+                idade: $('#editIdade').val(),
+                alergia: $('#editAlergia').val(),
+                quaisAlergias: $('#editQuaisAlergias').val(),
+                responsavel1: $('#editResponsavel1').val(),
+                responsavel2: $('#editResponsavel2').val(),
+                foneResponsavel: $('#editFoneResponsavel').val(),
+                igreja: $('#editIgreja').val(),
+                outraIgreja: $('#editIgreja').val() === 'Outra' ? $('#editOutraIgreja').val() : '',
+                endereco: $('#editEndereco').val(),
+                bairro: $('#editBairro').val(),
+                cidade: $('#editCidade').val()
+            };
+
+            db.collection("Eventos").doc("EBF2026").collection("inscricoes").doc(id)
+                .update(dadosEdicao)
+                .then(() => {
+                    btn.prop('disabled', false).html('<i class="material-icons align-middle mr-1">save</i> Salvar Alterações');
+                    $('#editarParticipanteModal').modal('hide');
+                    alert("Dados atualizados com sucesso!");
+                    carregarParticipantes();
+                    verDetalhes(id); // Opcional: Reabre o modal de detalhes com os dados atualizados
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar edição: ", error);
+                    alert("Erro ao salvar os dados. Tente novamente.");
+                    btn.prop('disabled', false).html('<i class="material-icons align-middle mr-1">save</i> Salvar Alterações');
                 });
         }
 

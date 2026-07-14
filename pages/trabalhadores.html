@@ -216,6 +216,14 @@
                             <th>Idade</th>
                             <th>Celular</th>
                             <th>Pagamento</th>
+                            <!-- Colunas extras para exportação -->
+                            <th>Data Nasc.</th>
+                            <th>Rede</th>
+                            <th>Função/Equipe</th>
+                            <th>Aut. Imagem</th>
+                            <th>Data Preench.</th>
+                            <th>Data Registro</th>
+                            <!-- Fim Colunas Extras -->
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -350,13 +358,16 @@
                 scrollY: '350px', // Altura fixa para a área de rolagem
                 scrollCollapse: true, // Mantém o colapso da altura
                 fixedHeader: true, // Mantém o cabeçalho fixo durante a rolagem
+                columnDefs: [
+                    { targets: [4, 5, 6, 7, 8, 9], visible: false } // Esconde as colunas extras da tela
+                ],
                 buttons: [
                     {
                         extend: 'excel',
                         text: 'Exportar Excel',
                         className: 'btn btn-export d-none',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // Exporta todas exceto a última (Ações)
                         }
                     },
                 ]
@@ -474,10 +485,16 @@
 
                         // Linhas ao DataTable
                         dataTable.row.add([
-                            participante.nome,
-                            participante.idade,
-                            participante.telefone,
+                            participante.nome || '',
+                            participante.idade || '',
+                            participante.telefone || '',
                             `<span class="badge ${participante.statusPagamento === 'pago' ? 'badge-pago' : 'badge-pendente'}">${participante.statusPagamento === 'pago' ? 'Pago' : 'Pendente'}</span>`,
+                            formatarData(participante.dtnasc) || '',
+                            participante.rede || '',
+                            participante.funcao || '',
+                            participante.autorizaimagem ? 'Sim' : 'Não',
+                            participante.dtpreenchimento || '',
+                            formatarDataHora(participante.dtRegistro) || '',
                             `<button class="btn btn-info btn-sm" onclick="verDetalhes('${doc.id}')">Ver</button>`
                         ]);
 

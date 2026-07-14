@@ -162,11 +162,12 @@
             </div>
         </div>
 
-        <!-- 2. RESUMO DE PÚBLICO -->
-        <h4 class="mb-3"><i class="material-icons align-middle mr-2">people</i> Resumo de Público</h4>
+        <!-- 2. PÚBLICO INFANTIL -->
+        <hr class="my-5">
+        <h4 class="mb-4 text-info"><i class="material-icons align-middle mr-2">child_care</i> Público Infantil (Crianças)</h4>
         
-        <!-- Crianças e Trabalhadores -->
         <div class="row mb-4">
+            <!-- Card Crianças -->
             <div class="col-md-6 mb-3">
                 <div class="card summary-card card-criancas">
                     <div class="card-body">
@@ -200,37 +201,29 @@
                     </div>
                 </div>
             </div>
-            
+            <!-- Check-in Crianças -->
             <div class="col-md-6 mb-3">
-                <div class="card summary-card card-trabalhadores">
+                <div class="card summary-card card-checkin">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0">
-                                <i class="material-icons" style="font-size: 3rem; color: #3d7517;">groups</i>
+                                <i class="material-icons" style="font-size: 3rem; color: #17a2b8;">how_to_reg</i>
                             </div>
                             <div class="flex-grow-1 ms-3 ml-3">
-                                <h5 class="card-title mb-0">Trabalhadores</h5>
-                                <small class="text-muted">Inscrições e Pagamentos</small>
+                                <h5 class="card-title mb-0">Check-in de Crianças</h5>
+                                <small class="text-muted">Total de presenças registradas</small>
                             </div>
                         </div>
                         <div class="row text-center">
-                            <div class="col-4">
-                                <h3 class="stats-value text-primary" id="totalTrab">0</h3>
-                                <p class="stats-label">Inscritos</p>
+                            <div class="col-6 border-right">
+                                <h3 class="stats-value text-info" id="totalCheckins">0</h3>
+                                <p class="stats-label">Fizeram Check-in</p>
                             </div>
-                            <div class="col-4">
-                                <h3 class="stats-value text-success" id="pagosTrab">0</h3>
-                                <p class="stats-label">Pagos</p>
-                            </div>
-                            <div class="col-4">
-                                <h3 class="stats-value text-success" id="percTrab">0%</h3>
-                                <p class="stats-label">% Pagantes</p>
+                            <div class="col-6">
+                                <h3 class="stats-value text-muted" id="ausentesCheckin">0</h3>
+                                <p class="stats-label">Ausentes (Inscritos)</p>
                             </div>
                         </div>
-                        <div class="progress mt-3">
-                            <div class="progress-bar bg-success" id="progTrab" role="progressbar" style="width: 0%"></div>
-                        </div>
-                        <small class="text-muted mt-1 d-block"><span id="pendTrab">0</span> pendentes</small>
                     </div>
                 </div>
             </div>
@@ -333,37 +326,7 @@
             </div>
         </div>
 
-        <!-- Check-in -->
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
-                <div class="card summary-card card-checkin">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="flex-shrink-0">
-                                <i class="material-icons" style="font-size: 3rem; color: #17a2b8;">how_to_reg</i>
-                            </div>
-                            <div class="flex-grow-1 ms-3 ml-3">
-                                <h5 class="card-title mb-0">Check-in de Crianças</h5>
-                                <small class="text-muted">Total de presenças registradas</small>
-                            </div>
-                        </div>
-                        <div class="row text-center">
-                            <div class="col-6 border-right">
-                                <h3 class="stats-value text-info" id="totalCheckins">0</h3>
-                                <p class="stats-label">Fizeram Check-in</p>
-                            </div>
-                            <div class="col-6">
-                                <h3 class="stats-value text-muted" id="ausentesCheckin">0</h3>
-                                <p class="stats-label">Ausentes (Inscritos)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. GRÁFICOS -->
-        <h4 class="mb-3"><i class="material-icons align-middle mr-2">bar_chart</i> Análise Gráfica</h4>
+        <h5 class="mb-3 text-muted">Análise Gráfica (Crianças)</h5>
         <div class="row mb-5">
             <div class="col-md-6 mb-4">
                 <div class="card summary-card border-0">
@@ -381,6 +344,72 @@
                         <h5 class="card-title text-center">Distribuição por Salas</h5>
                         <div class="chart-container">
                             <canvas id="graficoSalas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. EQUIPE DE TRABALHADORES -->
+        <hr class="my-5">
+        <h4 class="mb-4 text-success"><i class="material-icons align-middle mr-2">groups</i> Equipe de Trabalhadores</h4>
+        
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3">
+                <div class="card summary-card card-trabalhadores">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="material-icons" style="font-size: 3rem; color: #3d7517;">work</i>
+                            </div>
+                            <div class="flex-grow-1 ms-3 ml-3">
+                                <h5 class="card-title mb-0">Trabalhadores</h5>
+                                <small class="text-muted">Resumo de Voluntários</small>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <h3 class="stats-value text-primary" id="totalTrab">0</h3>
+                                <p class="stats-label">Inscritos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-success" id="pagosTrab">0</h3>
+                                <p class="stats-label">Pagos</p>
+                            </div>
+                            <div class="col-4">
+                                <h3 class="stats-value text-success" id="percTrab">0%</h3>
+                                <p class="stats-label">% Pagantes</p>
+                            </div>
+                        </div>
+                        <div class="progress mt-3">
+                            <div class="progress-bar bg-success" id="progTrab" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted mt-1 d-block"><span id="pendTrab">0</span> pendentes</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Equipes -->
+            <div class="col-md-8 mb-3">
+                <div class="card summary-card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Distribuição por Equipes de Serviço</h5>
+                        <div class="chart-container">
+                            <canvas id="graficoEquipes"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <!-- Gráfico de Redes -->
+            <div class="col-md-8 offset-md-2 mb-3">
+                <div class="card summary-card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Distribuição por Rede</h5>
+                        <div class="chart-container">
+                            <canvas id="graficoRedes"></canvas>
                         </div>
                     </div>
                 </div>
@@ -415,7 +444,7 @@
                     
                     // 1. DADOS DE PÚBLICO (Crianças e Trabalhadores) e SALAS
                     let statsCriancas = { total: 0, pagos: 0, valorPendente: 0, idadeMap: {}, salas: { verde: 0, amarela: 0, laranja: 0, vermelha: 0 } };
-                    let statsTrab = { total: 0, pagos: 0, valorPendente: 0 };
+                    let statsTrab = { total: 0, pagos: 0, valorPendente: 0, equipesMap: {}, redesMap: {} };
                     
                     // Preço estimado da inscrição para calcular "A receber" (Exemplo: 50)
                     // Como não sei o preço fixo, vou usar o campo valorPago se existir, ou inferir um ticket médio.
@@ -451,6 +480,21 @@
                                 statsTrab.pagos++;
                             } else {
                                 statsTrab.valorPendente += VALOR_PADRAO;
+                            }
+
+                            // Processar equipes (funcao)
+                            if (p.funcao) {
+                                const equipes = p.funcao.split(', ');
+                                equipes.forEach(eq => {
+                                    if (eq) {
+                                        statsTrab.equipesMap[eq] = (statsTrab.equipesMap[eq] || 0) + 1;
+                                    }
+                                });
+                            }
+
+                            // Processar Redes
+                            if (p.rede) {
+                                statsTrab.redesMap[p.rede] = (statsTrab.redesMap[p.rede] || 0) + 1;
                             }
                         }
                     });
@@ -544,8 +588,25 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
-                            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-                        }
+                            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                            layout: { padding: { top: 20 } }
+                        },
+                        plugins: [{
+                            id: 'dataLabels',
+                            afterDatasetsDraw(chart) {
+                                const { ctx, data } = chart;
+                                ctx.save();
+                                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                                    const value = data.datasets[0].data[index];
+                                    ctx.font = 'bold 12px Montserrat, sans-serif';
+                                    ctx.fillStyle = '#333';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                });
+                                ctx.restore();
+                            }
+                        }]
                     });
 
                     // Gráfico de Salas
@@ -574,8 +635,116 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
-                            scales: { y: { beginAtZero: true, max: 40 } }
-                        }
+                            scales: { y: { beginAtZero: true, max: 40 } },
+                            layout: { padding: { top: 20 } }
+                        },
+                        plugins: [{
+                            id: 'dataLabelsSalas',
+                            afterDatasetsDraw(chart) {
+                                const { ctx, data } = chart;
+                                ctx.save();
+                                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                                    const value = data.datasets[0].data[index];
+                                    ctx.font = 'bold 12px Montserrat, sans-serif';
+                                    ctx.fillStyle = '#333';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                });
+                                ctx.restore();
+                            }
+                        }]
+                    });
+
+                    // Gráfico de Equipes de Serviço (Trabalhadores)
+                    const labelsEquipes = Object.keys(statsTrab.equipesMap).sort((a,b) => statsTrab.equipesMap[b] - statsTrab.equipesMap[a]);
+                    const dadosEquipes = labelsEquipes.map(eq => statsTrab.equipesMap[eq]);
+
+                    new Chart(document.getElementById('graficoEquipes'), {
+                        type: 'bar',
+                        data: {
+                            labels: labelsEquipes,
+                            datasets: [{
+                                label: 'Trabalhadores',
+                                data: dadosEquipes,
+                                backgroundColor: '#3d7517',
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                            layout: { padding: { top: 20 } }
+                        },
+                        plugins: [{
+                            id: 'dataLabelsEquipes',
+                            afterDatasetsDraw(chart) {
+                                const { ctx, data } = chart;
+                                ctx.save();
+                                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                                    const value = data.datasets[0].data[index];
+                                    ctx.font = 'bold 12px Montserrat, sans-serif';
+                                    ctx.fillStyle = '#333';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                });
+                                ctx.restore();
+                            }
+                        }]
+                    });
+
+                    // Gráfico de Redes (Trabalhadores)
+                    const labelsRedes = Object.keys(statsTrab.redesMap).sort((a,b) => statsTrab.redesMap[b] - statsTrab.redesMap[a]);
+                    const dadosRedes = labelsRedes.map(r => statsTrab.redesMap[r]);
+                    
+                    const colorMap = {
+                        'Laranja': 'orange',
+                        'Roxa': 'purple',
+                        'Black': '#333333',
+                        'Azul': '#007bff',
+                        'Amarela': '#ffc107',
+                        'Verde': '#28a745',
+                        'Vermelha': '#dc3545'
+                    };
+                    const bgColorsRedes = labelsRedes.map(r => colorMap[r] || '#6c757d');
+
+                    new Chart(document.getElementById('graficoRedes'), {
+                        type: 'bar',
+                        data: {
+                            labels: labelsRedes,
+                            datasets: [{
+                                label: 'Trabalhadores',
+                                data: dadosRedes,
+                                backgroundColor: bgColorsRedes,
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                            layout: { padding: { top: 20 } }
+                        },
+                        plugins: [{
+                            id: 'dataLabelsRedes',
+                            afterDatasetsDraw(chart) {
+                                const { ctx, data } = chart;
+                                ctx.save();
+                                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                                    const value = data.datasets[0].data[index];
+                                    ctx.font = 'bold 12px Montserrat, sans-serif';
+                                    ctx.fillStyle = '#333';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(value, bar.x, bar.y - 5);
+                                });
+                                ctx.restore();
+                            }
+                        }]
                     });
 
                 })
