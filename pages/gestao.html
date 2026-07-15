@@ -282,7 +282,7 @@
                                 <i class="material-icons" style="font-size: 3rem; color: #800080;">flag</i>
                             </div>
                             <div class="flex-grow-1 ms-3 ml-3">
-                                <h5 class="card-title mb-0">Metas de Inscrições por Faixa Etária</h5>
+                                <h5 class="card-title mb-0">Inscrições por Faixa Etária</h5>
                                 <small class="text-muted">Acompanhamento de vagas pagas (Crianças)</small>
                             </div>
                         </div>
@@ -411,7 +411,8 @@
                         <i class="bi bi-gear card-icon" style="color: #6c757d;"></i>
                         <h5 class="card-title">Configurações</h5>
                         <p class="card-text">Gerenciar metas e abertura/fechamento das inscrições.</p>
-                        <a href="configuracoes.html" class="btn btn-secondary" style="border-radius: 5px; padding: 8px 15px; transition: all 0.3s;">Acessar</a>
+                        <a href="configuracoes.html" class="btn btn-secondary"
+                            style="border-radius: 5px; padding: 8px 15px; transition: all 0.3s;">Acessar</a>
                     </div>
                 </div>
             </div>
@@ -419,11 +420,13 @@
     </div>
 
     <!-- Modal Relatório Faixa Etária -->
-    <div class="modal fade" id="modalFaixaEtaria" tabindex="-1" role="dialog" aria-labelledby="modalFaixaEtariaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalFaixaEtaria" tabindex="-1" role="dialog" aria-labelledby="modalFaixaEtariaLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalFaixaEtariaLabel" style="font-weight: 700; color: #800080;">Relação - Faixa Etária</h5>
+                    <h5 class="modal-title" id="modalFaixaEtariaLabel" style="font-weight: 700; color: #800080;">Relação
+                        - Faixa Etária</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -431,8 +434,9 @@
                 <div class="modal-body">
                     <h6 class="text-success font-weight-bold mb-2">Pagos (<span id="countPagosFaixa">0</span>)</h6>
                     <ul id="listaPagosFaixa" class="list-group mb-4" style="font-size: 0.9rem;"></ul>
-                    
-                    <h6 class="text-warning font-weight-bold mb-2">Pendentes (<span id="countPendentesFaixa">0</span>)</h6>
+
+                    <h6 class="text-warning font-weight-bold mb-2">Pendentes (<span id="countPendentesFaixa">0</span>)
+                    </h6>
                     <ul id="listaPendentesFaixa" class="list-group" style="font-size: 0.9rem;"></ul>
                 </div>
             </div>
@@ -469,14 +473,14 @@
                         "8 a 9 anos": 0,
                         "10 a 12 anos": 0
                     };
-                    
+
                     let contagemInscritos = {
                         "4 a 5 anos": 0,
                         "6 a 7 anos": 0,
                         "8 a 9 anos": 0,
                         "10 a 12 anos": 0
                     };
-                    
+
                     let listaPorFaixa = {
                         "4 a 5 anos": { pagos: [], pendentes: [] },
                         "6 a 7 anos": { pagos: [], pendentes: [] },
@@ -488,7 +492,7 @@
                         const data = configSnapshot.data();
                         if (data.metas_faixa_etaria) metas = data.metas_faixa_etaria;
                     }
-                    
+
                     inscricoesSnapshot.forEach((doc) => {
                         const p = doc.data();
                         if (p.tipoInsc === 'criancas') {
@@ -514,16 +518,16 @@
                             }
                         }
                     });
-                    
+
                     window.dadosFaixaEtaria = listaPorFaixa;
 
                     // Renderizar
                     const container = document.getElementById('metasContainer');
                     if (!container) return;
-                    
+
                     let html = '';
                     const faixas = ["4 a 5 anos", "6 a 7 anos", "8 a 9 anos", "10 a 12 anos"];
-                    
+
                     const cores = {
                         "4 a 5 anos": "#4CAF50",
                         "6 a 7 anos": "#FFC107",
@@ -536,12 +540,12 @@
                         const pagos = contagemPagos[faixa] || 0;
                         const meta = metas[faixa] || 0;
                         const cor = cores[faixa];
-                        
+
                         let percentual = 0;
                         if (meta > 0) {
                             percentual = Math.min(Math.round((pagos / meta) * 100), 100);
                         }
-                        
+
                         html += `
                             <div class="col-md-3 text-center mb-3" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="abrirModalFaixa('${faixa}')" title="Clique para ver a relação de crianças">
                                 <p class="stats-label mb-1 font-weight-bold" style="font-size: 1rem; color: ${cor};">${faixa}</p>
@@ -556,7 +560,7 @@
                             </div>
                         `;
                     });
-                    
+
                     container.innerHTML = html;
                 })
                 .catch(error => {
@@ -637,31 +641,31 @@
         }
 
         // Função para abrir o modal de relação por faixa etária
-        window.abrirModalFaixa = function(faixa) {
+        window.abrirModalFaixa = function (faixa) {
             if (!window.dadosFaixaEtaria || !window.dadosFaixaEtaria[faixa]) return;
-            
+
             document.getElementById('modalFaixaEtariaLabel').textContent = 'Relação - ' + faixa;
-            
+
             const dados = window.dadosFaixaEtaria[faixa];
-            
+
             const listaPagos = document.getElementById('listaPagosFaixa');
             const listaPendentes = document.getElementById('listaPendentesFaixa');
-            
+
             document.getElementById('countPagosFaixa').textContent = dados.pagos.length;
             document.getElementById('countPendentesFaixa').textContent = dados.pendentes.length;
-            
+
             listaPagos.innerHTML = '';
             dados.pagos.sort((a, b) => a.localeCompare(b)).forEach(nome => {
                 listaPagos.innerHTML += '<li class="list-group-item py-1">' + nome + '</li>';
             });
-            if(dados.pagos.length === 0) listaPagos.innerHTML = '<li class="list-group-item py-1 text-muted">Nenhum pagamento registrado</li>';
-            
+            if (dados.pagos.length === 0) listaPagos.innerHTML = '<li class="list-group-item py-1 text-muted">Nenhum pagamento registrado</li>';
+
             listaPendentes.innerHTML = '';
             dados.pendentes.sort((a, b) => a.localeCompare(b)).forEach(nome => {
                 listaPendentes.innerHTML += '<li class="list-group-item py-1">' + nome + '</li>';
             });
-            if(dados.pendentes.length === 0) listaPendentes.innerHTML = '<li class="list-group-item py-1 text-muted">Nenhuma pendência</li>';
-            
+            if (dados.pendentes.length === 0) listaPendentes.innerHTML = '<li class="list-group-item py-1 text-muted">Nenhuma pendência</li>';
+
             $('#modalFaixaEtaria').modal('show');
         };
 
