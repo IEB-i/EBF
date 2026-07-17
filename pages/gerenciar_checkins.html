@@ -171,6 +171,14 @@
                 transform: rotate(360deg);
             }
         }
+
+        .card-selecionado {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2) !important;
+            outline: 2px solid #333;
+            outline-offset: 2px;
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 
@@ -210,6 +218,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row mt-4" id="cardsSalasContainer">
+            <!-- Cards das salas serão carregados aqui -->
         </div>
 
         <div class="row mt-4">
@@ -352,6 +364,7 @@
         let graficoIdades; // Renomeado de graficoDias
         let todosAcampantes = [];
         let filtroAtual = 'todos';
+        let filtroSala = 'todas';
 
         $(document).ready(function () {
             // Carregar dados
@@ -425,12 +438,32 @@
                     let totalCheckins = 0;
                     let totalPendentes = 0;
 
+                    let statsSalas = {
+                        '4-5 anos': { nome: 'Sala Verde', pagantes: 0, checkins: 0, cor: '#28a745' },
+                        '6-7 anos': { nome: 'Sala Amarela', pagantes: 0, checkins: 0, cor: '#ffc107' },
+                        '8-9 anos': { nome: 'Sala Laranja', pagantes: 0, checkins: 0, cor: '#fd7e14' },
+                        '10-12 anos': { nome: 'Sala Vermelha', pagantes: 0, checkins: 0, cor: '#dc3545' },
+                        'Outras idades': { nome: 'Outras', pagantes: 0, checkins: 0, cor: '#6c757d' }
+                    };
+
                     querySnapshot.forEach((doc) => {
                         const acampante = doc.data();
                         if (acampante.statusCheckin === 'realizado') {
                             totalCheckins++;
                         } else {
                             totalPendentes++;
+                        }
+
+                        let faixa = 'Outras idades';
+                        if (acampante.idade) {
+                            faixa = calcularFaixaEtaria(acampante.idade);
+                        }
+                        
+                        if (statsSalas[faixa]) {
+                            statsSalas[faixa].pagantes++;
+                            if (acampante.statusCheckin === 'realizado') {
+                                statsSalas[faixa].checkins++;
+                            }
                         }
                     });
 
@@ -439,11 +472,65 @@
                     $('#totalPendentes').text(totalPendentes);
 
                     atualizarGraficoStatus(totalCheckins, totalPendentes);
+                    renderizarCardsSalas(statsSalas);
                     buscarDadosFaixaEtaria();
                 })
                 .catch((error) => {
                     console.error("Erro ao carregar dashboard: ", error);
                 });
+        }
+
+        function renderizarCardsSalas(statsSalas) {
+            const container = $('#cardsSalasContainer');
+            container.empty();
+
+            Object.keys(statsSalas).forEach(faixa => {
+                const sala = statsSalas[faixa];
+                const cardId = `card-sala-${faixa.replace(/\s+/g, '-')}`;
+                const cardHtml = `
+                    <div class="col-md col-sm-6 mb-3">
+                        <div class="card dashboard-card h-100 card-sala" id="${cardId}" style="border-top: 4px solid ${sala.cor}; cursor: pointer;" onclick="setFiltroSala('${faixa}')">
+                            <div class="card-body text-center p-3">
+                                <h6 class="card-title font-weight-bold mb-1" style="color: ${sala.cor};">${sala.nome}</h6>
+                                <small class="text-muted d-block mb-2">${faixa}</small>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="text-center" style="width: 50%;">
+                                        <h4 class="mb-0 text-success">${sala.checkins}</h4>
+                                        <small class="text-muted" style="font-size: 0.7rem; line-height: 1;">Check-ins</small>
+                                    </div>
+                                    <div class="text-center border-left" style="width: 50%;">
+                                        <h4 class="mb-0">${sala.pagantes}</h4>
+                                        <small class="text-muted" style="font-size: 0.7rem; line-height: 1;">Pagantes</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(cardHtml);
+            });
+
+            if (filtroSala !== 'todas') {
+                $(`#card-sala-${filtroSala.replace(/\s+/g, '-')}`).addClass('card-selecionado');
+            }
+        }
+
+        function setFiltroSala(faixa) {
+            if (filtroSala === faixa) {
+                filtroSala = 'todas';
+                $('.card-sala').removeClass('card-selecionado');
+            } else {
+                filtroSala = faixa;
+                $('.card-sala').removeClass('card-selecionado');
+                $(`#card-sala-${faixa.replace(/\s+/g, '-')}`).addClass('card-selecionado');
+            }
+            
+            const searchTerm = $('#searchInput').val().toLowerCase();
+            filtrarAcampantes(searchTerm, filtroAtual);
+
+            $('html, body').animate({
+                scrollTop: $("#checkinsTable").offset().top - 100
+            }, 500);
         }
 
         function carregarCheckins() {
@@ -518,6 +605,13 @@
                 acampantesFiltrados = acampantesFiltrados.filter(a => a.statusCheckin === 'realizado');
             } else if (filtro === 'pendentes') {
                 acampantesFiltrados = acampantesFiltrados.filter(a => a.statusCheckin !== 'realizado');
+            }
+
+            if (filtroSala !== 'todas') {
+                acampantesFiltrados = acampantesFiltrados.filter(a => {
+                    const faixa = a.idade ? calcularFaixaEtaria(a.idade) : 'Outras idades';
+                    return faixa === filtroSala;
+                });
             }
 
             if (termo) {
